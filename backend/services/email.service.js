@@ -6,6 +6,8 @@ const isEmailConfigured = () =>
   process.env.EMAIL_PASS &&
   process.env.EMAIL_PASS !== 'your_gmail_app_password';
 
+exports.isEmailConfigured = isEmailConfigured;
+
 const createTransporter = () => {
   return nodemailer.createTransport({
     host: process.env.EMAIL_HOST || 'smtp.gmail.com',

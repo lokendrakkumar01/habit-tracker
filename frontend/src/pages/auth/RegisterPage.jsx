@@ -62,6 +62,8 @@ export default function RegisterPage() {
         : 'border-white/10 hover:border-white/20'
     }`;
 
+  const isEmailVerify = successMessage?.toLowerCase().includes('verify') || successMessage?.toLowerCase().includes('email');
+
   if (done) {
     return (
       <motion.div
@@ -77,10 +79,21 @@ export default function RegisterPage() {
         >
           <FiCheck size={36} className="text-green-400" />
         </motion.div>
-        <h3 className="text-xl font-bold text-white mb-2">Check your email! 📬</h3>
-        <p className="text-white/50 text-sm mb-6">
-          We sent a verification link to <span className="text-violet-400">{form.email}</span>.<br/>
-          Click it to activate your account.
+        <h3 className="text-xl font-bold text-white mb-2">
+          {isEmailVerify ? 'Check your email! 📬' : 'Registration Successful! 🎉'}
+        </h3>
+        <p className="text-white/50 text-sm mb-6 animate-pulse">
+          {isEmailVerify ? (
+            <>
+              We sent a verification link to <span className="text-violet-400">{form.email}</span>.<br/>
+              Click it to activate your account.
+            </>
+          ) : (
+            <>
+              Your account has been created successfully.<br/>
+              You can now sign in using your credentials.
+            </>
+          )}
         </p>
         <Link
           to="/login"

@@ -36,16 +36,18 @@ exports.register = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Email already registered' });
     }
 
-    // In dev mode, auto-verify so users can login immediately without email setup
+    const emailConfigured = emailService.isEmailConfigured ? emailService.isEmailConfigured() : false;
+
+    // Auto-verify if email is not configured or in development
     const user = await User.create({
       name,
       email,
       password,
-      isVerified: isDev, // Auto-verify in development
+      isVerified: isDev || !emailConfigured,
     });
 
-    if (!isDev) {
-      // Only send verification email in production
+    if (!isDev && emailConfigured) {
+      // Only send verification email in production when email is configured
       const verificationToken = user.generateVerificationToken();
       await user.save({ validateBeforeSave: false });
       const verifyUrl = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
@@ -57,7 +59,7 @@ exports.register = async (req, res, next) => {
       });
     }
 
-    // Dev mode: return token directly (auto-verified)
+    // Return token/success directly if email verification is skipped
     res.status(201).json({
       success: true,
       message: 'Registration successful! You can now log in.',
@@ -86,8 +88,10 @@ exports.login = async (req, res, next) => {
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 
-    // Only enforce email verification in production
-    if (!isDev && !user.isVerified) {
+    const emailConfigured = emailService.isEmailConfigured ? emailService.isEmailConfigured() : false;
+
+    // Only enforce email verification in production AND when email is configured
+    if (!isDev && emailConfigured && !user.isVerified) {
       return res.status(401).json({
         success: false,
         message: 'Please verify your email before logging in.',
