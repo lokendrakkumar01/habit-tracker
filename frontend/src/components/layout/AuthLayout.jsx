@@ -1,13 +1,16 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 export default function AuthLayout() {
+  const location = useLocation();
+  const isRegister = location.pathname.includes('register');
+
   return (
     <div
       className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-12"
       style={{
         background:
-          'radial-gradient(ellipse at 20% 20%, rgba(124,58,237,0.12) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(99,102,241,0.1) 0%, transparent 50%), #020617',
+          'radial-gradient(ellipse at 20% 20%, rgba(124,58,237,0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(99,102,241,0.12) 0%, transparent 50%), #020617',
       }}
     >
       {/* ── Animated orbs ── */}
@@ -46,10 +49,11 @@ export default function AuthLayout() {
         initial={{ opacity: 0, y: 24, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 w-full max-w-md"
+        className="relative z-10 w-full"
+        style={{ maxWidth: isRegister ? '440px' : '420px' }}
       >
         {/* Logo */}
-        <div className="mb-8 flex flex-col items-center gap-2">
+        <div className="mb-7 flex flex-col items-center gap-2">
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -76,7 +80,7 @@ export default function AuthLayout() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
             className="text-sm"
-            style={{ color: 'rgba(255,255,255,0.3)' }}
+            style={{ color: 'rgba(255,255,255,0.35)' }}
           >
             Build better habits, one day at a time
           </motion.p>
@@ -89,11 +93,11 @@ export default function AuthLayout() {
           transition={{ delay: 0.15, duration: 0.4, ease: 'easeOut' }}
           className="rounded-2xl p-8"
           style={{
-            background: 'rgba(30,41,59,0.5)',
+            background: 'rgba(15,23,42,0.7)',
             border: '1px solid rgba(255,255,255,0.1)',
             backdropFilter: 'blur(24px)',
             WebkitBackdropFilter: 'blur(24px)',
-            boxShadow: '0 25px 50px rgba(0,0,0,0.5)',
+            boxShadow: '0 25px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05)',
           }}
         >
           <Outlet />
@@ -104,7 +108,7 @@ export default function AuthLayout() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="mt-6 text-center text-xs"
+          className="mt-5 text-center text-xs"
           style={{ color: 'rgba(255,255,255,0.2)' }}
         >
           © {new Date().getFullYear()} HabitFlow. All rights reserved.

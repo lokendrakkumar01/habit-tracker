@@ -14,12 +14,11 @@ export default function LoginPage() {
   const navigate  = useNavigate();
   const { loading, error } = useSelector((s) => s.auth);
 
-  const [form, setForm]             = useState({ email: '', password: '' });
-  const [showPwd, setShowPwd]       = useState(false);
+  const [form, setForm]           = useState({ email: '', password: '' });
+  const [showPwd, setShowPwd]     = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const [focused, setFocused]       = useState('');
+  const [focused, setFocused]     = useState('');
 
-  /* Clear redux error when it pops */
   useEffect(() => {
     if (error) { toast.error(error); dispatch(clearError()); }
   }, [error, dispatch]);
@@ -29,20 +28,13 @@ export default function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.email || !form.password) { toast.error('Fill in all fields'); return; }
+    if (!form.email || !form.password) { toast.error('Please fill in all fields'); return; }
     const res = await dispatch(loginUser({ ...form, rememberMe }));
     if (loginUser.fulfilled.match(res)) {
       toast.success('Welcome back! 🎉');
       navigate('/dashboard', { replace: true });
     }
   };
-
-  const inputClass = (name) =>
-    `w-full bg-white/5 border rounded-xl px-4 py-3 pl-11 text-white text-sm placeholder-white/30 outline-none transition-all duration-300 ${
-      focused === name
-        ? 'border-violet-500 shadow-[0_0_0_3px_rgba(139,92,246,0.15)]'
-        : 'border-white/10 hover:border-white/20'
-    }`;
 
   return (
     <motion.div
@@ -51,108 +43,138 @@ export default function LoginPage() {
       transition={{ duration: 0.4 }}
     >
       {/* Header */}
-      <div className="mb-8 text-center">
-        <h2 className="text-2xl font-bold text-white">Welcome back 👋</h2>
-        <p className="mt-1 text-sm text-white/40">Sign in to continue your journey</p>
+      <div className="mb-7 text-center">
+        <h2 className="text-2xl font-bold text-white mb-1">Welcome back 👋</h2>
+        <p className="text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>
+          Sign in to continue your journey
+        </p>
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-        {/* Email */}
-        <div className="relative">
-          <FiMail
-            size={16}
-            className={`absolute left-3.5 top-1/2 -translate-y-1/2 transition-colors ${
-              focused === 'email' ? 'text-violet-400' : 'text-white/30'
-            }`}
-          />
-          <input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            placeholder="Email address"
-            value={form.email}
-            onChange={handleChange}
-            onFocus={() => setFocused('email')}
-            onBlur={() => setFocused('')}
-            className={inputClass('email')}
-          />
+      <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+
+        {/* Email Field */}
+        <div>
+          <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.5)' }}>
+            Email Address
+          </label>
+          <div className="relative">
+            <FiMail
+              size={16}
+              className="absolute left-3.5 top-1/2 -translate-y-1/2 transition-colors"
+              style={{ color: focused === 'email' ? '#a78bfa' : 'rgba(255,255,255,0.3)' }}
+            />
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              placeholder="you@example.com"
+              value={form.email}
+              onChange={handleChange}
+              onFocus={() => setFocused('email')}
+              onBlur={() => setFocused('')}
+              className="w-full rounded-xl py-3 pl-10 pr-4 text-sm text-white outline-none transition-all duration-200"
+              style={{
+                background: 'rgba(255,255,255,0.06)',
+                border: focused === 'email'
+                  ? '1px solid rgba(139,92,246,0.7)'
+                  : '1px solid rgba(255,255,255,0.1)',
+                boxShadow: focused === 'email' ? '0 0 0 3px rgba(139,92,246,0.12)' : 'none',
+              }}
+            />
+          </div>
         </div>
 
-        {/* Password */}
-        <div className="relative">
-          <FiLock
-            size={16}
-            className={`absolute left-3.5 top-1/2 -translate-y-1/2 transition-colors ${
-              focused === 'password' ? 'text-violet-400' : 'text-white/30'
-            }`}
-          />
-          <input
-            id="password"
-            name="password"
-            type={showPwd ? 'text' : 'password'}
-            autoComplete="current-password"
-            placeholder="Password"
-            value={form.password}
-            onChange={handleChange}
-            onFocus={() => setFocused('password')}
-            onBlur={() => setFocused('')}
-            className={`${inputClass('password')} pr-11`}
-          />
-          <button
-            type="button"
-            onClick={() => setShowPwd((v) => !v)}
-            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/70 transition-colors"
-          >
-            {showPwd ? <FiEyeOff size={16} /> : <FiEye size={16} />}
-          </button>
+        {/* Password Field */}
+        <div>
+          <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.5)' }}>
+            Password
+          </label>
+          <div className="relative">
+            <FiLock
+              size={16}
+              className="absolute left-3.5 top-1/2 -translate-y-1/2 transition-colors"
+              style={{ color: focused === 'password' ? '#a78bfa' : 'rgba(255,255,255,0.3)' }}
+            />
+            <input
+              id="password"
+              name="password"
+              type={showPwd ? 'text' : 'password'}
+              autoComplete="current-password"
+              placeholder="Enter your password"
+              value={form.password}
+              onChange={handleChange}
+              onFocus={() => setFocused('password')}
+              onBlur={() => setFocused('')}
+              className="w-full rounded-xl py-3 pl-10 pr-11 text-sm text-white outline-none transition-all duration-200"
+              style={{
+                background: 'rgba(255,255,255,0.06)',
+                border: focused === 'password'
+                  ? '1px solid rgba(139,92,246,0.7)'
+                  : '1px solid rgba(255,255,255,0.1)',
+                boxShadow: focused === 'password' ? '0 0 0 3px rgba(139,92,246,0.12)' : 'none',
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPwd((v) => !v)}
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 transition-colors p-1"
+              style={{ color: 'rgba(255,255,255,0.3)' }}
+              tabIndex={-1}
+            >
+              {showPwd ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+            </button>
+          </div>
         </div>
 
-        {/* Remember / Forgot */}
+        {/* Remember / Forgot row */}
         <div className="flex items-center justify-between">
           <label className="flex items-center gap-2 cursor-pointer select-none">
-            <div
+            <button
+              type="button"
               onClick={() => setRememberMe((v) => !v)}
-              className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${
-                rememberMe
-                  ? 'bg-violet-600 border-violet-600'
-                  : 'border-white/20 bg-white/5'
-              }`}
+              className="w-4 h-4 rounded border flex items-center justify-center transition-all flex-shrink-0"
+              style={{
+                background: rememberMe ? '#7c3aed' : 'rgba(255,255,255,0.05)',
+                border: rememberMe ? '1px solid #7c3aed' : '1px solid rgba(255,255,255,0.2)',
+              }}
             >
               {rememberMe && (
-                <svg viewBox="0 0 10 8" className="w-2.5 h-2 fill-white">
-                  <path d="M1 4l2.5 2.5L9 1" stroke="white" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+                <svg viewBox="0 0 10 8" className="w-2.5 h-2 fill-none stroke-white" strokeWidth="1.8" strokeLinecap="round">
+                  <path d="M1 4l2.5 2.5L9 1" />
                 </svg>
               )}
-            </div>
-            <span className="text-xs text-white/50">Remember me</span>
+            </button>
+            <span className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>Remember me</span>
           </label>
           <Link
             to="/forgot-password"
-            className="text-xs text-violet-400 hover:text-violet-300 transition-colors font-medium"
+            className="text-xs font-medium transition-colors"
+            style={{ color: '#a78bfa' }}
           >
             Forgot password?
           </Link>
         </div>
 
-        {/* Submit */}
+        {/* Submit Button */}
         <motion.button
           type="submit"
           disabled={loading}
-          whileHover={{ scale: 1.01 }}
-          whileTap={{ scale: 0.98 }}
-          className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-white text-sm transition-all"
+          whileHover={{ scale: loading ? 1 : 1.01 }}
+          whileTap={{ scale: loading ? 1 : 0.98 }}
+          className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-white text-sm transition-all"
           style={{
-            background: 'linear-gradient(135deg, #7c3aed, #4f46e5)',
-            boxShadow: '0 4px 20px rgba(124,58,237,0.4)',
+            background: loading ? 'rgba(124,58,237,0.5)' : 'linear-gradient(135deg, #7c3aed, #4f46e5)',
+            boxShadow: loading ? 'none' : '0 4px 20px rgba(124,58,237,0.4)',
           }}
         >
           {loading ? (
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
-              className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full"
+              className="w-5 h-5 border-2 rounded-full"
+              style={{ borderColor: 'rgba(255,255,255,0.3)', borderTopColor: '#fff' }}
             />
           ) : (
             <>Sign In <FiArrowRight size={15} /></>
@@ -162,27 +184,32 @@ export default function LoginPage() {
 
       {/* Divider */}
       <div className="my-5 flex items-center gap-3">
-        <div className="flex-1 h-px bg-white/10" />
-        <span className="text-xs text-white/30 uppercase tracking-widest">or</span>
-        <div className="flex-1 h-px bg-white/10" />
+        <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.1)' }} />
+        <span className="text-xs uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.3)' }}>or</span>
+        <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.1)' }} />
       </div>
 
-      {/* Google */}
+      {/* Google Sign In */}
       <motion.button
         type="button"
         whileHover={{ scale: 1.01 }}
         whileTap={{ scale: 0.98 }}
         onClick={() => { window.location.href = `${API_URL}/auth/google`; }}
-        className="w-full flex items-center justify-center gap-3 py-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white text-sm font-medium transition-all"
+        className="w-full flex items-center justify-center gap-3 py-3 rounded-xl text-sm font-medium transition-all"
+        style={{
+          border: '1px solid rgba(255,255,255,0.12)',
+          background: 'rgba(255,255,255,0.05)',
+          color: '#fff',
+        }}
       >
         <FaGoogle size={16} className="text-red-400" />
         Continue with Google
       </motion.button>
 
       {/* Register link */}
-      <p className="mt-6 text-center text-xs text-white/40">
+      <p className="mt-6 text-center text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>
         Don&apos;t have an account?{' '}
-        <Link to="/register" className="text-violet-400 hover:text-violet-300 font-semibold transition-colors">
+        <Link to="/register" className="font-semibold transition-colors" style={{ color: '#a78bfa' }}>
           Create one free
         </Link>
       </p>

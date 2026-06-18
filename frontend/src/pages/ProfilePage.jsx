@@ -9,6 +9,7 @@ import {
 } from 'react-icons/fi';
 import api from '../services/api';
 import { format } from 'date-fns';
+import { useNotifications } from '../hooks/useNotifications';
 
 const ACHIEVEMENTS = [
   { type: 'first_habit', badge: '🌱', title: 'First Step', desc: 'Created your first habit' },
@@ -27,6 +28,7 @@ const LEVEL_NAMES = ['Beginner', 'Novice', 'Apprentice', 'Practitioner', 'Expert
 export default function ProfilePage() {
   const dispatch = useDispatch();
   const { user } = useSelector((s) => s.auth);
+  const notif = useNotifications();
   const [tab, setTab] = useState('profile');
   const [form, setForm] = useState({
     name: '',
@@ -35,6 +37,7 @@ export default function ProfilePage() {
       notifications: { email: true, browser: true }
     }
   });
+  const [browserNotifEnabled, setBrowserNotifEnabled] = useState(notif.isReminderEnabled());
 
   const [passwordForm, setPasswordForm] = useState({
     currentPassword: '',
@@ -332,22 +335,39 @@ export default function ProfilePage() {
                 <div className="flex items-center justify-between py-2">
                   <div className="space-y-0.5">
                     <p className="text-sm font-semibold">Browser Reminders</p>
-                    <p className="text-xs text-slate-400">Get push notifications for habit completions</p>
+                    <p className="text-xs text-slate-400">
+                      {notif.permission === 'denied'
+                        ? '⚠️ Blocked in browser — enable in site settings'
+                        : browserNotifEnabled
+                        ? '🔔 Daily reminders are active'
+                        : 'Get push notifications for habit completions'}
+                    </p>
                   </div>
                   <button
-                    onClick={() => setForm(f => ({
-                      ...f,
-                      settings: {
-                        ...f.settings,
-                        notifications: { ...f.settings.notifications, browser: !f.settings.notifications.browser }
+                    onClick={async () => {
+                      if (browserNotifEnabled) {
+                        notif.cancelReminder();
+                        setBrowserNotifEnabled(false);
+                        setForm(f => ({ ...f, settings: { ...f.settings, notifications: { ...f.settings.notifications, browser: false } } }));
+                        toast.success('Browser reminders disabled');
+                      } else {
+                        const perm = await notif.requestPermission();
+                        if (perm === 'granted') {
+                          notif.scheduleDailyReminder('09:00');
+                          setBrowserNotifEnabled(true);
+                          setForm(f => ({ ...f, settings: { ...f.settings, notifications: { ...f.settings.notifications, browser: true } } }));
+                          toast.success('Browser reminders enabled! 🔔 Daily at 9:00 AM');
+                        } else {
+                          toast.error('Permission denied. Please allow notifications in browser settings.');
+                        }
                       }
-                    }))}
+                    }}
                     className={`w-12 h-6 rounded-full transition-all relative ${
-                      form.settings.notifications.browser ? 'bg-violet-600' : 'bg-slate-800'
+                      browserNotifEnabled ? 'bg-violet-600' : 'bg-slate-800'
                     }`}
                   >
                     <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all ${
-                      form.settings.notifications.browser ? 'left-7' : 'left-1'
+                      browserNotifEnabled ? 'left-7' : 'left-1'
                     }`} />
                   </button>
                 </div>

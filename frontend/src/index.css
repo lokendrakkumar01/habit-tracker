@@ -83,7 +83,27 @@ body {
 ::-webkit-scrollbar-thumb { background: #475569; border-radius: 9999px; }
 ::-webkit-scrollbar-thumb:hover { background: #64748b; }
 
-input, textarea, select { outline: none; }
+/* ===== INPUTS - Better placeholder visibility ===== */
+input::placeholder,
+textarea::placeholder {
+  color: rgba(148, 163, 184, 0.5);
+  font-size: 0.875rem;
+}
+
+input, textarea, select {
+  outline: none;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #f1f5f9;
+}
+
+/* Remove browser autofill blue background */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 30px #0f172a inset !important;
+  -webkit-text-fill-color: #f1f5f9 !important;
+  caret-color: #f1f5f9;
+}
 
 /* ===== GLASS EFFECTS ===== */
 .glass {
