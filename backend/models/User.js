@@ -52,6 +52,7 @@ const userSchema = new mongoose.Schema(
     xp: { type: Number, default: 0 },
     level: { type: Number, default: 1 },
     badges: [{ type: String }],
+    streakFreezesCount: { type: Number, default: 1 },
     achievements: [
       {
         type: { type: String },

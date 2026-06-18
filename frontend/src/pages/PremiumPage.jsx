@@ -1,9 +1,9 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { FiCheck, FiX, FiStar, FiChevronDown, FiChevronUp, FiAward, FiArrowRight } from 'react-icons/fi';
-import { FaCrown } from 'react-icons/fa';
+import { FiCheck, FiX, FiStar, FiChevronDown, FiChevronUp, FiAward, FiCreditCard } from 'react-icons/fi';
+import { FaCrown, FaStripe, FaRegCreditCard } from 'react-icons/fa';
+import confetti from 'canvas-confetti';
 import toast from 'react-hot-toast';
 import api from '../services/api';
 import { fetchMe } from '../features/auth/authSlice';
@@ -40,20 +40,58 @@ export default function PremiumPage() {
   const { user } = useSelector((s) => s.auth);
   const [billingCycle, setBillingCycle] = useState('yearly');
   const [openFaq, setOpenFaq] = useState(null);
+  const [checkoutModal, setCheckoutModal] = useState(false);
+  const [paymentGateway, setPaymentGateway] = useState('stripe');
+  const [cardNumber, setCardNumber] = useState('4242 •••• •••• 4242');
+  const [processing, setProcessing] = useState(false);
+
   const isPremium = user?.subscription?.plan === 'premium';
 
   const monthlyPrice = 9.99;
   const yearlyPrice = 79.99;
   const yearlyMonthly = (yearlyPrice / 12).toFixed(2);
 
-  const handleSubscribe = async () => {
-    const loadToast = toast.loading('Upgrading your account to Premium...');
+  const handleOpenCheckout = () => {
+    setCheckoutModal(true);
+  };
+
+  const handleCompleteCheckout = async () => {
+    setProcessing(true);
+    const loadToast = toast.loading('Initializing payment session...');
     try {
-      await api.put('/users/subscribe');
+      // 1. Create Checkout Session
+      const checkoutRes = await api.post('/payments/checkout', {
+        plan: 'premium',
+        billingCycle,
+        gateway: paymentGateway
+      });
+
+      const { sessionId, amount } = checkoutRes.data;
+      toast.loading(`Processing $${amount} payment via ${paymentGateway === 'stripe' ? 'Stripe Secure' : 'Razorpay Gateway'}...`, { id: loadToast });
+
+      // Simulate a small network latency
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // 2. Verify Payment
+      const verifyRes = await api.post('/payments/verify', {
+        sessionId,
+        status: 'success'
+      });
+
       toast.success('Welcome to HabitFlow Premium! 👑✨', { id: loadToast });
+      confetti({
+        particleCount: 150,
+        spread: 80,
+        origin: { y: 0.6 },
+        colors: ['#fbbf24', '#f59e0b', '#6366f1', '#a78bfa']
+      });
+
+      setCheckoutModal(false);
       dispatch(fetchMe());
     } catch (e) {
-      toast.error('Failed to subscribe. Please try again.', { id: loadToast });
+      toast.error('Payment verification failed. Please try again.', { id: loadToast });
+    } finally {
+      setProcessing(false);
     }
   };
 
@@ -152,7 +190,7 @@ export default function PremiumPage() {
                       <span>{feat}</span>
                     </div>
                   ))}
-                  <div className="flex items-center gap-2.5 text-xs text-slate-600">
+                  <div className="flex items-center gap-2.5 text-xs text-slate-650">
                     <FiX className="flex-shrink-0" />
                     <span>Advanced calendar heatmap</span>
                   </div>
@@ -200,7 +238,7 @@ export default function PremiumPage() {
               
               <motion.button
                 whileTap={{ scale: 0.98 }}
-                onClick={handleSubscribe}
+                onClick={handleOpenCheckout}
                 className="w-full rounded-xl bg-violet-600 hover:bg-violet-500 py-3 text-sm font-bold text-white shadow-xl shadow-violet-500/20 transition-all flex items-center justify-center gap-2"
               >
                 <FiStar className="fill-white" size={14} /> Upgrade Now
@@ -275,6 +313,113 @@ export default function PremiumPage() {
           </div>
         </div>
       )}
+
+      {/* CHECKOUT MODAL */}
+      <AnimatePresence>
+        {checkoutModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="w-full max-w-md bg-slate-900 border border-white/15 rounded-2xl overflow-hidden shadow-2xl p-6 space-y-6"
+            >
+              <div className="flex justify-between items-center border-b border-white/5 pb-3">
+                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                  <FaCrown className="text-amber-400" /> Secure Checkout
+                </h3>
+                <button
+                  onClick={() => setCheckoutModal(false)}
+                  className="p-1 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white"
+                >
+                  <FiX size={18} />
+                </button>
+              </div>
+
+              {/* Order summary */}
+              <div className="p-4 rounded-xl bg-slate-950/60 border border-white/5 space-y-2">
+                <div className="flex justify-between text-xs text-slate-400">
+                  <span>Product</span>
+                  <span>HabitFlow Elite Premium</span>
+                </div>
+                <div className="flex justify-between text-xs text-slate-400">
+                  <span>Billing Cycle</span>
+                  <span className="capitalize">{billingCycle}</span>
+                </div>
+                <div className="border-t border-white/5 my-2 pt-2 flex justify-between text-sm font-bold text-white">
+                  <span>Total Amount</span>
+                  <span className="text-amber-400">${billingCycle === 'yearly' ? yearlyPrice : monthlyPrice}</span>
+                </div>
+              </div>
+
+              {/* Gateway selector */}
+              <div className="space-y-2">
+                <label className="text-xs text-slate-400 font-semibold uppercase block">Payment Method</label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    onClick={() => setPaymentGateway('stripe')}
+                    className={`py-3 rounded-xl font-bold text-sm border flex justify-center items-center gap-2 transition ${
+                      paymentGateway === 'stripe'
+                        ? 'border-violet-500 bg-violet-500/10 text-violet-400'
+                        : 'border-white/5 bg-slate-950/40 text-slate-400'
+                    }`}
+                  >
+                    <FaStripe size={24} />
+                  </button>
+                  <button
+                    onClick={() => setPaymentGateway('razorpay')}
+                    className={`py-3 rounded-xl font-bold text-[13px] border flex justify-center items-center gap-1.5 transition ${
+                      paymentGateway === 'razorpay'
+                        ? 'border-indigo-500 bg-indigo-500/10 text-indigo-400'
+                        : 'border-white/5 bg-slate-950/40 text-slate-400'
+                    }`}
+                  >
+                    💳 Razorpay UPI
+                  </button>
+                </div>
+              </div>
+
+              {/* Simulated Card inputs */}
+              <div className="space-y-3">
+                <label className="text-xs text-slate-400 font-semibold uppercase block">Card Information</label>
+                <div className="relative">
+                  <FaRegCreditCard className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+                  <input
+                    type="text"
+                    className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-slate-950/60 border border-white/5 text-sm outline-none focus:border-violet-500 transition"
+                    value={cardNumber}
+                    onChange={(e) => setCardNumber(e.target.value)}
+                    placeholder="Card Number"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-950/60 border border-white/5 text-sm outline-none focus:border-violet-500 transition"
+                    placeholder="MM / YY"
+                    defaultValue="12 / 29"
+                  />
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-950/60 border border-white/5 text-sm outline-none focus:border-violet-500 transition"
+                    placeholder="CVC"
+                    defaultValue="000"
+                  />
+                </div>
+              </div>
+
+              <button
+                onClick={handleCompleteCheckout}
+                disabled={processing}
+                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 font-bold text-white text-sm hover:from-violet-500 hover:to-indigo-500 transition shadow-xl shadow-violet-500/10 disabled:opacity-60 flex items-center justify-center gap-2"
+              >
+                <FiCreditCard />
+                {processing ? 'Processing Payment...' : `Pay $${billingCycle === 'yearly' ? yearlyPrice : monthlyPrice}`}
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

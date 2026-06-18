@@ -18,6 +18,9 @@ const analyticsRoutes = require('./routes/analytics.routes');
 const goalRoutes = require('./routes/goal.routes');
 const journalRoutes = require('./routes/journal.routes');
 const adminRoutes = require('./routes/admin.routes');
+const aiRoutes = require('./routes/ai.routes');
+const socialRoutes = require('./routes/social.routes');
+const paymentRoutes = require('./routes/payment.routes');
 
 const app = express();
 
@@ -39,17 +42,21 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (mobile apps, curl, etc.)
+    // Allow requests with no origin (mobile apps, curl, Postman, etc.)
     if (!origin) return callback(null, true);
-    // Allow any onrender.com subdomain
+    // Allow any onrender.com subdomain (backend hosting)
     if (origin.endsWith('.onrender.com')) return callback(null, true);
-    // Allow configured origins
+    // Allow Vercel deployments
+    if (origin.endsWith('.vercel.app')) return callback(null, true);
+    // Allow Netlify deployments
+    if (origin.endsWith('.netlify.app')) return callback(null, true);
+    // Allow configured origins from .env
     if (allowedOrigins.includes(origin)) return callback(null, true);
     callback(new Error(`CORS: origin ${origin} not allowed`));
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
 }));
 
 // Rate Limiting
@@ -92,7 +99,18 @@ app.use(passport.initialize());
 
 // Health check
 app.get('/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString(), env: process.env.NODE_ENV });
+  const mongoose = require('mongoose');
+  const dbStatus = mongoose.connection.readyState;
+  const dbStates = { 0: 'disconnected', 1: 'connected', 2: 'connecting', 3: 'disconnecting' };
+  res.json({
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    env: process.env.NODE_ENV,
+    database: dbStates[dbStatus] || 'unknown',
+    uptime: Math.floor(process.uptime()) + 's',
+    memory: Math.round(process.memoryUsage().heapUsed / 1024 / 1024) + 'MB',
+    version: '2.0.0',
+  });
 });
 
 // API Routes
@@ -103,6 +121,9 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/goals', goalRoutes);
 app.use('/api/journals', journalRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/ai', aiRoutes);
+app.use('/api/social', socialRoutes);
+app.use('/api/payments', paymentRoutes);
 
 // 404 handler
 app.all('*', (req, res) => {

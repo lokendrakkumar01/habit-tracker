@@ -2,6 +2,8 @@ import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import confetti from 'canvas-confetti';
+import toast from 'react-hot-toast';
 import {
   BarChart,
   Bar,
@@ -17,6 +19,9 @@ import {
   fetchWeeklyData,
 } from '../features/analytics/analyticsSlice';
 import { fetchHabits, completeHabit } from '../features/habits/habitSlice';
+import { fetchMe } from '../features/auth/authSlice';
+import api from '../services/api';
+import AICoachView from '../components/dashboard/AICoachView';
 
 // ─────────────────────────────────────────────
 // Helpers
@@ -159,12 +164,7 @@ const BadgePill = ({ badge }) => (
     className="flex flex-col items-center gap-1 rounded-2xl border border-white/10 bg-white/5 p-3 text-center"
   >
     <span className="text-3xl">{badge.icon || '🏆'}</span>
-    <span className="text-xs font-medium text-gray-300">{badge.name}</span>
-    {badge.earnedAt && (
-      <span className="text-[10px] text-gray-500">
-        {new Date(badge.earnedAt).toLocaleDateString()}
-      </span>
-    )}
+    <span className="text-xs font-medium text-gray-300">{badge.name || badge}</span>
   </motion.div>
 );
 
@@ -206,9 +206,29 @@ const DashboardPage = () => {
   }, [dispatch]);
 
   const handleComplete = useCallback(
-    (id) => dispatch(completeHabit(id)),
+    (id) => {
+      dispatch(completeHabit(id)).then(() => {
+        confetti({
+          particleCount: 80,
+          spread: 60,
+          origin: { y: 0.8 },
+          colors: ['#6366f1', '#a78bfa', '#34d399']
+        });
+        dispatch(fetchDashboardStats());
+      });
+    },
     [dispatch]
   );
+
+  const handleRedeemFreeze = async () => {
+    try {
+      const res = await api.post('/users/profile/freeze');
+      dispatch(fetchMe());
+      toast.success(res.data.message || 'Streak Freeze redeemed!');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to redeem Streak Freeze');
+    }
+  };
 
   const statCards = [
     {
@@ -233,11 +253,11 @@ const DashboardPage = () => {
       sub: 'Keep going!',
     },
     {
-      label: 'Longest Streak',
-      value: dashboardStats?.longestStreak ? `${dashboardStats.longestStreak}d` : '0d',
-      icon: '🏆',
-      accent: '#f97316',
-      sub: 'Personal best',
+      label: 'Streak Freezes',
+      value: `${user?.streakFreezesCount ?? 0}`,
+      icon: '❄️',
+      accent: '#38bdf8',
+      sub: 'Protects streaks',
     },
     {
       label: 'XP Points',
@@ -311,83 +331,91 @@ const DashboardPage = () => {
           </div>
         </motion.section>
 
-        {/* ── Two-column: Habits + Chart ── */}
-        <div className="grid gap-6 lg:grid-cols-2">
-          {/* Today's Habits */}
-          <motion.section variants={itemVariants}>
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-bold text-white">Today's Habits</h2>
-              <button
-                onClick={() => navigate('/habits')}
-                className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors"
-              >
-                View all →
-              </button>
-            </div>
-            <motion.div
-              className="space-y-3"
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              {habits.length === 0 && (
-                <motion.div
-                  variants={itemVariants}
-                  className="rounded-2xl border border-dashed border-white/10 bg-white/3 py-12 text-center"
+        {/* ── Three-column Grid Layout ── */}
+        <div className="grid gap-8 lg:grid-cols-3">
+          {/* Left Columns (Habits & Charts) */}
+          <div className="lg:col-span-2 space-y-10">
+            {/* Today's Habits */}
+            <motion.section variants={itemVariants}>
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="text-lg font-bold text-white">Today's Habits</h2>
+                <button
+                  onClick={() => navigate('/habits')}
+                  className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors"
                 >
-                  <p className="text-4xl">🌱</p>
-                  <p className="mt-2 text-sm text-gray-400">No habits yet. Add one to get started!</p>
-                </motion.div>
-              )}
-              {habits.slice(0, 8).map((habit) => (
-                <HabitRow key={habit._id} habit={habit} onComplete={handleComplete} />
-              ))}
-            </motion.div>
-          </motion.section>
+                  View all →
+                </button>
+              </div>
+              <motion.div
+                className="space-y-3"
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                {habits.length === 0 && (
+                  <motion.div
+                    variants={itemVariants}
+                    className="rounded-2xl border border-dashed border-white/10 bg-white/3 py-12 text-center"
+                  >
+                    <p className="text-4xl">🌱</p>
+                    <p className="mt-2 text-sm text-gray-400">No habits yet. Add one to get started!</p>
+                  </motion.div>
+                )}
+                {habits.slice(0, 8).map((habit) => (
+                  <HabitRow key={habit._id} habit={habit} onComplete={handleComplete} />
+                ))}
+              </motion.div>
+            </motion.section>
 
-          {/* Weekly Progress Chart */}
-          <motion.section variants={itemVariants}>
-            <h2 className="mb-4 text-lg font-bold text-white">Weekly Progress</h2>
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-md shadow-lg">
-              {chartData.length === 0 ? (
-                <div className="flex h-52 items-center justify-center text-gray-500 text-sm">
-                  No weekly data yet
-                </div>
-              ) : (
-                <ResponsiveContainer width="100%" height={220}>
-                  <BarChart data={chartData} barCategoryGap="30%">
-                    <defs>
-                      <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#6366f1" stopOpacity={0.95} />
-                        <stop offset="100%" stopColor="#a78bfa" stopOpacity={0.6} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#ffffff0f" vertical={false} />
-                    <XAxis
-                      dataKey="day"
-                      tick={{ fill: '#9ca3af', fontSize: 12 }}
-                      axisLine={false}
-                      tickLine={false}
-                    />
-                    <YAxis
-                      unit="%"
-                      domain={[0, 100]}
-                      tick={{ fill: '#6b7280', fontSize: 11 }}
-                      axisLine={false}
-                      tickLine={false}
-                      width={36}
-                    />
-                    <Tooltip content={<CustomTooltip />} cursor={{ fill: '#ffffff08' }} />
-                    <Bar dataKey="completion" radius={[8, 8, 0, 0]} maxBarSize={40}>
-                      {chartData.map((_, i) => (
-                        <Cell key={i} fill={BAR_COLORS[i % BAR_COLORS.length]} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              )}
-            </div>
-          </motion.section>
+            {/* Weekly Progress Chart */}
+            <motion.section variants={itemVariants}>
+              <h2 className="mb-4 text-lg font-bold text-white">Weekly Progress</h2>
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-md shadow-lg">
+                {chartData.length === 0 ? (
+                  <div className="flex h-52 items-center justify-center text-gray-500 text-sm">
+                    No weekly data yet
+                  </div>
+                ) : (
+                  <ResponsiveContainer width="100%" height={220}>
+                    <BarChart data={chartData} barCategoryGap="30%">
+                      <defs>
+                        <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#6366f1" stopOpacity={0.95} />
+                          <stop offset="100%" stopColor="#a78bfa" stopOpacity={0.6} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#ffffff0f" vertical={false} />
+                      <XAxis
+                        dataKey="day"
+                        tick={{ fill: '#9ca3af', fontSize: 12 }}
+                        axisLine={false}
+                        tickLine={false}
+                      />
+                      <YAxis
+                        unit="%"
+                        domain={[0, 100]}
+                        tick={{ fill: '#6b7280', fontSize: 11 }}
+                        axisLine={false}
+                        tickLine={false}
+                        width={36}
+                      />
+                      <Tooltip content={<CustomTooltip />} cursor={{ fill: '#ffffff08' }} />
+                      <Bar dataKey="completion" radius={[8, 8, 0, 0]} maxBarSize={40}>
+                        {chartData.map((_, i) => (
+                          <Cell key={i} fill={BAR_COLORS[i % BAR_COLORS.length]} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                )}
+              </div>
+            </motion.section>
+          </div>
+
+          {/* Right Column (AI Productivity Coach) */}
+          <div className="space-y-10">
+            <AICoachView />
+          </div>
         </div>
 
         {/* ── Achievement Badges ── */}
@@ -420,6 +448,11 @@ const DashboardPage = () => {
               icon="➕"
               label="Add Habit"
               onClick={() => navigate('/habits?new=true')}
+            />
+            <QuickAction
+              icon="❄️"
+              label="Redeem Streak Freeze (200 XP)"
+              onClick={handleRedeemFreeze}
             />
             <QuickAction
               icon="📊"

@@ -189,3 +189,25 @@ exports.unsubscribe = async (req, res, next) => {
     next(error);
   }
 };
+
+// @POST /api/users/profile/freeze
+exports.redeemStreakFreeze = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (user.xp < 200) {
+      return res.status(400).json({ success: false, message: 'You need at least 200 XP to redeem a Streak Freeze' });
+    }
+    user.xp -= 200;
+    user.streakFreezesCount = (user.streakFreezesCount || 0) + 1;
+    await user.save({ validateBeforeSave: false });
+    res.json({
+      success: true,
+      message: 'Streak Freeze redeemed successfully! 200 XP consumed.',
+      streakFreezesCount: user.streakFreezesCount,
+      xp: user.xp,
+      user
+    });
+  } catch (error) {
+    next(error);
+  }
+};

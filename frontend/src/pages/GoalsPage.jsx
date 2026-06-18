@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { FiTarget, FiPlus, FiEdit2, FiTrash2, FiChevronDown, FiChevronUp, FiCheck, FiFlag, FiX, FiCalendar, FiList } from 'react-icons/fi';
 import { MdTrendingUp, MdOutlineCelebration } from 'react-icons/md';
 import api from '../services/api';
+import confetti from 'canvas-confetti';
 
 const COLORS = ['#6366f1', '#10b981', '#f59e0b', '#f97316', '#ec4899', '#14b8a6'];
 const ICONS = ['🎯', '💪', '📚', '🏆', '💰', '🌿', '🎨', '🚀', '⚡', '🌟'];
@@ -78,7 +79,23 @@ export default function GoalsPage() {
   const handleToggleMilestone = async (goalId, milestoneId) => {
     try {
       await api.put(`/goals/${goalId}/milestones/${milestoneId}/toggle`);
-      fetchGoals();
+      const res = await api.get('/goals');
+      setGoals(res.data.goals || []);
+
+      const updatedGoal = (res.data.goals || []).find(g => g._id === goalId);
+      if (updatedGoal) {
+        const ms = updatedGoal.milestones || [];
+        const progress = ms.length ? Math.round((ms.filter(m => m.completed).length / ms.length) * 100) : 0;
+        if (progress === 100) {
+          confetti({
+            particleCount: 150,
+            spread: 80,
+            origin: { y: 0.6 },
+            colors: ['#10b981', '#34d399', '#6366f1', '#fbbf24']
+          });
+          toast.success('Goal Milestones Complete! 🏆');
+        }
+      }
     } catch { toast.error('Failed to update milestone'); }
   };
 

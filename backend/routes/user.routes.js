@@ -17,5 +17,6 @@ router.get('/leaderboard', userController.getLeaderboard);
 router.get('/search', userController.searchUsers);
 router.post('/friend-request/:userId', userController.sendFriendRequest);
 router.post('/friend-request/:userId/accept', userController.acceptFriendRequest);
+router.post('/profile/freeze', userController.redeemStreakFreeze);
 
 module.exports = router;
