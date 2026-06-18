@@ -7,10 +7,12 @@ import {
 } from 'react-icons/md';
 import {
   FiActivity, FiBarChart2, FiCalendar, FiFlag, FiBook,
-  FiUsers, FiStar, FiUser, FiShield, FiBell, FiSun, FiMoon, FiLogOut,
+  FiUsers, FiStar, FiUser, FiShield, FiBell, FiSun, FiMoon, FiLogOut, FiDownload,
 } from 'react-icons/fi';
 import { toggleSidebarCollapse } from '../../features/ui/uiSlice';
 import { logoutUser } from '../../features/auth/authSlice';
+import { useDarkMode } from '../../hooks/useDarkMode';
+import { exportHabitsToCSV } from '../../utils/exportCSV';
 
 const NAV = [
   { to: '/dashboard', label: 'Dashboard', icon: MdDashboard },
@@ -57,7 +59,7 @@ function SidebarLink({ to, label, icon: Icon, collapsed }) {
           </motion.span>
         )}
       </AnimatePresence>
-      {/* Tooltip for collapsed */}
+      {/* Tooltip for collapsed mode */}
       {collapsed && (
         <div className="pointer-events-none absolute left-full ml-2 z-50 hidden rounded-lg px-2.5 py-1.5 text-xs text-white shadow-xl border group-hover:block whitespace-nowrap"
           style={{ background: 'rgba(15,23,42,0.95)', border: '1px solid rgba(255,255,255,0.1)' }}>
@@ -73,15 +75,24 @@ export default function AppLayout() {
   const navigate   = useNavigate();
   const location   = useLocation();
   const user       = useSelector((s) => s.auth?.user);
+  const habits     = useSelector((s) => s.habits?.habits ?? []);
   const collapsed  = useSelector((s) => s.ui?.sidebarCollapsed ?? false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [darkMode, setDarkMode]     = useState(true);
+  const { darkMode, toggleDarkMode } = useDarkMode();
 
   const pageTitle = PAGE_TITLES[Object.keys(PAGE_TITLES).find((p) => location.pathname.startsWith(p)) || ''] || 'HabitFlow';
 
   const handleLogout = () => {
     dispatch(logoutUser());
     navigate('/login', { replace: true });
+  };
+
+  const handleExportCSV = () => {
+    if (habits.length === 0) {
+      alert('No habits to export!');
+      return;
+    }
+    exportHabitsToCSV(habits);
   };
 
   const SidebarContent = ({ isMobile = false }) => (
@@ -123,7 +134,7 @@ export default function AppLayout() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="mx-3 mb-4 rounded-xl p-3 flex items-center gap-3"
             style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <div className="h-9 w-9 rounded-full flex items-center justify-center text-sm font-bold text-white flex-shrink-0"
+            <div className="h-9 w-9 rounded-full flex items-center justify-center text-sm font-bold text-white flex-shrink-0 overflow-hidden"
               style={{ background: 'linear-gradient(135deg,#7c3aed,#4f46e5)' }}>
               {user?.avatar
                 ? <img src={user.avatar} alt={user.name} className="w-full h-full rounded-full object-cover" />
@@ -131,7 +142,7 @@ export default function AppLayout() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-white truncate">{user?.name || 'User'}</p>
-              <p className="text-xs truncate" style={{ color: 'rgba(255,255,255,0.35)' }}>Level {user?.level || 1}</p>
+              <p className="text-xs truncate" style={{ color: 'rgba(255,255,255,0.35)' }}>Level {user?.level || 1} · {(user?.xp || 0).toLocaleString()} XP</p>
             </div>
             <button onClick={handleLogout} title="Logout"
               className="text-red-400 hover:text-red-300 transition-colors p-1 rounded-lg hover:bg-red-500/10">
@@ -142,9 +153,11 @@ export default function AppLayout() {
       </AnimatePresence>
       {(collapsed && !isMobile) && (
         <div className="flex justify-center mb-4">
-          <div className="h-9 w-9 rounded-full flex items-center justify-center text-sm font-bold text-white"
+          <div className="h-9 w-9 rounded-full flex items-center justify-center text-sm font-bold text-white overflow-hidden"
             style={{ background: 'linear-gradient(135deg,#7c3aed,#4f46e5)' }}>
-            {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+            {user?.avatar
+              ? <img src={user.avatar} alt={user.name} className="w-full h-full rounded-full object-cover" />
+              : user?.name?.charAt(0)?.toUpperCase() || 'U'}
           </div>
         </div>
       )}
@@ -193,7 +206,7 @@ export default function AppLayout() {
         )}
       </AnimatePresence>
 
-      {/* ── Main ── */}
+      {/* ── Main Content ── */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Navbar */}
         <header className="flex h-16 items-center justify-between px-4 lg:px-6 z-20 flex-shrink-0"
@@ -206,27 +219,38 @@ export default function AppLayout() {
           </div>
 
           <div className="flex items-center gap-2">
-            {/* Theme */}
-            <button onClick={() => setDarkMode((d) => !d)}
+            {/* CSV Export */}
+            <button
+              onClick={handleExportCSV}
+              title="Export habits to CSV"
+              className="h-9 px-3 flex items-center gap-1.5 rounded-xl transition-all text-white/40 hover:text-white text-xs font-medium"
+              style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
+            >
+              <FiDownload size={14} />
+              <span className="hidden sm:inline">Export</span>
+            </button>
+
+            {/* Dark / Light Mode */}
+            <button onClick={toggleDarkMode}
+              title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
               className="h-9 w-9 flex items-center justify-center rounded-xl transition-all text-white/40 hover:text-white"
               style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
               {darkMode ? <FiSun size={16} /> : <FiMoon size={16} />}
             </button>
 
             {/* Notifications */}
-            <button className="relative h-9 w-9 flex items-center justify-center rounded-xl transition-all text-white/40 hover:text-white"
+            <button
+              onClick={() => navigate('/profile')}
+              title="Notifications"
+              className="relative h-9 w-9 flex items-center justify-center rounded-xl transition-all text-white/40 hover:text-white"
               style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
               <FiBell size={16} />
-              <span className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full text-[9px] font-bold text-white flex items-center justify-center"
-                style={{ background: 'linear-gradient(135deg,#7c3aed,#4f46e5)' }}>
-                3
-              </span>
             </button>
 
             {/* Avatar */}
             <button onClick={() => navigate('/profile')}
-              className="h-9 w-9 flex items-center justify-center rounded-xl overflow-hidden text-sm font-bold text-white transition-all hover:ring-2"
-              style={{ background: 'linear-gradient(135deg,#7c3aed,#4f46e5)', '--tw-ring-color': '#7c3aed' }}>
+              className="h-9 w-9 flex items-center justify-center rounded-xl overflow-hidden text-sm font-bold text-white transition-all hover:ring-2 hover:ring-violet-500"
+              style={{ background: 'linear-gradient(135deg,#7c3aed,#4f46e5)' }}>
               {user?.avatar
                 ? <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
                 : user?.name?.charAt(0)?.toUpperCase() || 'U'}

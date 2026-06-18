@@ -34,8 +34,13 @@ export const fetchMe = createAsyncThunk('auth/fetchMe', async (_, { rejectWithVa
 });
 
 export const logoutUser = createAsyncThunk('auth/logout', async () => {
-  await api.post('/auth/logout');
-  localStorage.removeItem('token');
+  try {
+    await api.post('/auth/logout');
+  } catch (_) {
+    // Ignore logout API errors — always clear local state
+  } finally {
+    localStorage.removeItem('token');
+  }
 });
 
 export const updateProfile = createAsyncThunk('auth/updateProfile', async (data, { rejectWithValue }) => {
@@ -122,11 +127,18 @@ const authSlice = createSlice({
         state.user = null;
         state.token = null;
       })
-      // Logout
+      // Logout - always clear state regardless of API result
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
         state.token = null;
         state.isAuthenticated = false;
+        state.initializing = false;
+      })
+      .addCase(logoutUser.rejected, (state) => {
+        state.user = null;
+        state.token = null;
+        state.isAuthenticated = false;
+        state.initializing = false;
       })
       // Update Profile
       .addCase(updateProfile.fulfilled, (state, action) => {

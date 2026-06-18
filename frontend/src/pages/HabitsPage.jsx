@@ -12,7 +12,9 @@ import {
   restoreHabit,
   completeHabit,
 } from '../features/habits/habitSlice';
-import { FiPlus, FiSearch, FiEdit2, FiTrash2, FiArchive, FiX, FiCheck, FiRotateCcw, FiCalendar, FiClock, FiActivity, FiStar, FiChevronRight } from 'react-icons/fi';
+import { FiPlus, FiSearch, FiEdit2, FiTrash2, FiArchive, FiX, FiCheck, FiRotateCcw, FiCalendar, FiClock, FiActivity, FiStar, FiChevronRight, FiDownload, FiBell } from 'react-icons/fi';
+import { useNotifications } from '../hooks/useNotifications';
+import { exportHabitsToCSV } from '../utils/exportCSV';
 
 // ─────────────────────────────────────────────
 // Constants
@@ -522,20 +524,46 @@ const HabitsPage = () => {
   const [searchParams] = useSearchParams();
 
   const { habits, archivedHabits, loading } = useSelector((s) => s.habits);
+  const notif = useNotifications();
 
   // UI state
-  const [tab, setTab] = useState('active'); // 'active' | 'archived'
+  const [tab, setTab] = useState('active'); // 'active' | 'archived' | 'done'
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [editingHabit, setEditingHabit] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [reminderTime, setReminderTime] = useState(notif.getReminderTime());
+  const [showReminderPanel, setShowReminderPanel] = useState(false);
+  const [notifEnabled, setNotifEnabled] = useState(notif.isReminderEnabled());
 
   // Fetch habits based on active tab
   useEffect(() => {
     dispatch(fetchHabits({ archived: tab === 'archived' ? 'true' : 'false' }));
   }, [dispatch, tab]);
+
+  const handleEnableNotifications = async () => {
+    const perm = await notif.requestPermission();
+    if (perm === 'granted') {
+      notif.scheduleDailyReminder(reminderTime);
+      setNotifEnabled(true);
+      toast.success(`Reminder set for ${reminderTime} every day! 🔔`);
+    } else {
+      toast.error('Notification permission denied. Please enable in browser settings.');
+    }
+  };
+
+  const handleDisableNotifications = () => {
+    notif.cancelReminder();
+    setNotifEnabled(false);
+    toast.success('Daily reminder cancelled.');
+  };
+
+  const handleExportCSV = () => {
+    exportHabitsToCSV(habits);
+    toast.success('Habits exported to CSV! 📊');
+  };
 
   // Open modal if ?new=true is in URL
   useEffect(() => {
@@ -626,9 +654,12 @@ const HabitsPage = () => {
         !search || h.title.toLowerCase().includes(search.toLowerCase());
       const matchCat = !categoryFilter || h.category?.toLowerCase() === categoryFilter.toLowerCase();
       const matchPri = !priorityFilter || h.priority?.toLowerCase() === priorityFilter.toLowerCase();
-      return matchSearch && matchCat && matchPri;
+      const matchDone = tab === 'done'
+        ? (h.completedToday || h.todayCompleted)
+        : true;
+      return matchSearch && matchCat && matchPri && matchDone;
     });
-  }, [habitsToFilter, search, categoryFilter, priorityFilter]);
+  }, [habitsToFilter, search, categoryFilter, priorityFilter, tab]);
 
   return (
     <div className="min-h-screen bg-slate-950 px-4 py-8 text-white sm:px-8 space-y-6">
@@ -645,18 +676,41 @@ const HabitsPage = () => {
               <FiActivity className="text-violet-500" /> My Habits
             </h1>
             <p className="mt-1 text-slate-400 text-sm">
-              {filtered.length} active habit{filtered.length !== 1 ? 's' : ''} currently tracking
+              {filtered.length} habit{filtered.length !== 1 ? 's' : ''} found
             </p>
           </div>
-          <motion.button
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.97 }}
-            onClick={openCreate}
-            className="flex items-center gap-2 rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/25 hover:bg-violet-500 transition-all"
-          >
-            <FiPlus size={16} />
-            Add Habit
-          </motion.button>
+          <div className="flex items-center gap-2 flex-wrap">
+            {/* Notification toggle */}
+            <motion.button
+              whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
+              onClick={() => setShowReminderPanel((v) => !v)}
+              className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all border ${
+                notifEnabled
+                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/30'
+                  : 'bg-white/5 text-slate-400 border-white/10 hover:text-white'
+              }`}
+            >
+              <FiBell size={14} />
+              <span className="hidden sm:inline">{notifEnabled ? 'Reminder On' : 'Remind Me'}</span>
+            </motion.button>
+            {/* CSV Export */}
+            <motion.button
+              whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
+              onClick={handleExportCSV}
+              className="flex items-center gap-2 rounded-xl bg-white/5 border border-white/10 px-4 py-2.5 text-sm font-semibold text-slate-400 hover:text-white transition-all"
+            >
+              <FiDownload size={14} />
+              <span className="hidden sm:inline">Export</span>
+            </motion.button>
+            {/* Add habit */}
+            <motion.button
+              whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
+              onClick={openCreate}
+              className="flex items-center gap-2 rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/25 hover:bg-violet-500 transition-all"
+            >
+              <FiPlus size={16} /> Add Habit
+            </motion.button>
+          </div>
         </motion.div>
 
         {/* Filter bar */}
@@ -707,6 +761,39 @@ const HabitsPage = () => {
           </select>
         </motion.div>
 
+        {/* Reminder Panel */}
+        <AnimatePresence>
+          {showReminderPanel && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden"
+            >
+              <div className="flex flex-wrap items-center gap-3 bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4">
+                <FiBell className="text-amber-400" size={18} />
+                <p className="text-sm text-amber-300 font-medium">Set daily habit reminder:</p>
+                <input
+                  type="time"
+                  value={reminderTime}
+                  onChange={(e) => setReminderTime(e.target.value)}
+                  className="rounded-xl border border-white/10 bg-slate-900 px-3 py-1.5 text-sm text-white outline-none focus:border-amber-400"
+                />
+                {notifEnabled ? (
+                  <button onClick={handleDisableNotifications}
+                    className="rounded-xl bg-red-500/20 border border-red-500/30 text-red-400 px-4 py-1.5 text-sm font-semibold hover:bg-red-500/30 transition-all">
+                    Cancel Reminder
+                  </button>
+                ) : (
+                  <button onClick={handleEnableNotifications}
+                    className="rounded-xl bg-amber-500/20 border border-amber-500/30 text-amber-300 px-4 py-1.5 text-sm font-semibold hover:bg-amber-500/30 transition-all">
+                    Enable Reminder
+                  </button>
+                )}
+                <p className="text-xs text-slate-500">Browser must be open to receive notifications.</p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Tabs list */}
         <motion.div
           className="flex gap-1.5 bg-slate-900/60 p-1.5 rounded-2xl border border-white/5 w-fit"
@@ -714,7 +801,7 @@ const HabitsPage = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.15 }}
         >
-          {['active', 'archived'].map((t) => (
+          {['active', 'done', 'archived'].map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
@@ -729,7 +816,7 @@ const HabitsPage = () => {
                   style={{ zIndex: -1 }}
                 />
               )}
-              {t}
+              {t === 'done' ? '✅ Done Today' : t}
             </button>
           ))}
         </motion.div>

@@ -33,9 +33,11 @@ exports.getHabits = async (req, res, next) => {
 
     const habitsWithStatus = habits.map((habit) => {
       const log = logMap[habit._id.toString()];
+      const isCompleted = log ? log.completed : false;
       return {
         ...habit.toObject(),
-        todayCompleted: log ? log.completed : false,
+        completedToday: isCompleted,   // used by DashboardPage
+        todayCompleted: isCompleted,   // used by HabitsPage
         todayLog: log || null,
       };
     });
