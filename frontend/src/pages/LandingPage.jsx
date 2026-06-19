@@ -240,7 +240,9 @@ export default function LandingPage() {
                       { icon: '⚙️', label: 'Settings' },
                     ].map((item, idx) => (
                       <div key={idx} className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-white/5 transition-colors cursor-pointer">
-                        <span className="text-xs">{item.icon}</span>
+                        <div className="w-6 h-6 rounded-lg flex items-center justify-center text-xs">
+                          {item.icon}
+                        </div>
                         <span className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>{item.label}</span>
                       </div>
                     ))}
