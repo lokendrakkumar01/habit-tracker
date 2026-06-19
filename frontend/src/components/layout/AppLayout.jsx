@@ -64,7 +64,7 @@ function timeAgo(dateStr) {
 }
 
 // ─── Notification Bell Dropdown ─────────────────────────────────────────────
-function NotificationDropdown({ onClose }) {
+function NotificationDropdown({ onClose, setUnreadCount }) {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const dropdownRef = useRef(null);
@@ -97,14 +97,19 @@ function NotificationDropdown({ onClose }) {
       await api.put('/notifications/mark-all-read');
     } catch {}
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+    setUnreadCount(0);
     toast.success('All notifications marked as read');
   };
 
   const markRead = async (id) => {
+    const wasUnread = notifications.find((n) => n._id === id && !n.read);
     try {
       await api.put(`/notifications/${id}/read`);
     } catch {}
     setNotifications((prev) => prev.map((n) => n._id === id ? { ...n, read: true } : n));
+    if (wasUnread) {
+      setUnreadCount((prev) => Math.max(0, prev - 1));
+    }
   };
 
   const unreadCount = notifications.filter((n) => !n.read).length;
@@ -122,18 +127,18 @@ function NotificationDropdown({ onClose }) {
         top: '48px',
         zIndex: 50,
         width: '320px',
-        background: '#0f172a',
-        border: '1px solid rgba(255,255,255,0.1)',
+        background: 'var(--bg-tertiary)',
+        border: '1px solid var(--border-default)',
         borderRadius: '16px',
-        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+        boxShadow: 'var(--shadow-lg)',
         overflow: 'hidden',
       }}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <FiBell size={15} className="text-violet-400" />
-          <span className="text-sm font-bold text-white">Notifications</span>
+          <span className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>Notifications</span>
           {unreadCount > 0 && (
             <span className="rounded-full px-1.5 py-0.5 text-[10px] font-bold text-white" style={{ background: '#7c3aed' }}>
               {unreadCount}
@@ -143,7 +148,7 @@ function NotificationDropdown({ onClose }) {
         {unreadCount > 0 && (
           <button
             onClick={markAllRead}
-            className="text-[11px] font-semibold text-violet-400 hover:text-violet-300 transition-colors"
+            className="text-[11px] font-semibold text-violet-400 hover:text-violet-300 transition-colors cursor-pointer"
           >
             Mark all read
           </button>
@@ -159,7 +164,7 @@ function NotificationDropdown({ onClose }) {
         ) : notifications.length === 0 ? (
           <div className="py-8 text-center">
             <p className="text-3xl mb-2">🔔</p>
-            <p className="text-sm text-slate-500">No notifications yet</p>
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>No notifications yet</p>
           </div>
         ) : (
           notifications.map((notif) => {
@@ -169,22 +174,22 @@ function NotificationDropdown({ onClose }) {
               <motion.button
                 key={notif._id}
                 onClick={() => markRead(notif._id)}
-                whileHover={{ backgroundColor: 'rgba(255,255,255,0.03)' }}
-                className="w-full flex items-start gap-3 px-4 py-3 text-left transition-colors"
-                style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', opacity: notif.read ? 0.65 : 1 }}
+                whileHover={{ backgroundColor: 'var(--bg-card-hover)' }}
+                className="w-full flex items-start gap-3 px-4 py-3 text-left transition-colors cursor-pointer"
+                style={{ borderBottom: '1px solid var(--border-subtle)', opacity: notif.read ? 0.65 : 1 }}
               >
                 <div className="flex-shrink-0 mt-0.5 flex h-8 w-8 items-center justify-center rounded-xl" style={{ background: meta.bg }}>
                   <Icon size={14} style={{ color: meta.color }} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
-                    <p className="text-xs font-semibold text-white leading-tight">{notif.title}</p>
+                    <p className="text-xs font-semibold leading-tight" style={{ color: 'var(--text-primary)' }}>{notif.title}</p>
                     {!notif.read && (
                       <span className="flex-shrink-0 mt-1 h-1.5 w-1.5 rounded-full bg-violet-500" />
                     )}
                   </div>
-                  <p className="mt-0.5 text-[11px] text-slate-400 leading-relaxed line-clamp-2">{notif.message}</p>
-                  <p className="mt-1 text-[10px] text-slate-600">{timeAgo(notif.createdAt)}</p>
+                  <p className="mt-0.5 text-[11px] leading-relaxed line-clamp-2" style={{ color: 'var(--text-secondary)' }}>{notif.message}</p>
+                  <p className="mt-1 text-[10px]" style={{ color: 'var(--text-muted)' }}>{timeAgo(notif.createdAt)}</p>
                 </div>
               </motion.button>
             );
@@ -193,10 +198,10 @@ function NotificationDropdown({ onClose }) {
       </div>
 
       {/* Footer */}
-      <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }} className="px-4 py-2.5 text-center">
+      <div style={{ borderTop: '1px solid var(--border-subtle)' }} className="px-4 py-2.5 text-center">
         <button
           onClick={onClose}
-          className="text-[11px] font-semibold text-violet-400 hover:text-violet-300 transition-colors"
+          className="text-[11px] font-semibold text-violet-400 hover:text-violet-300 transition-colors cursor-pointer"
         >
           View all notifications →
         </button>
@@ -313,7 +318,7 @@ export default function AppLayout() {
       </div>
 
       {/* Divider */}
-      <div className="mx-3 h-px" style={{ background: 'rgba(255,255,255,0.06)' }} />
+      <div className="mx-3 h-px" style={{ background: 'var(--border-subtle)' }} />
 
       {/* Nav */}
       <nav className="mt-4 flex-1 space-y-0.5 px-3 overflow-y-auto">
@@ -326,14 +331,14 @@ export default function AppLayout() {
       </nav>
 
       {/* Divider */}
-      <div className="mx-3 my-3 h-px" style={{ background: 'rgba(255,255,255,0.06)' }} />
+      <div className="mx-3 my-3 h-px" style={{ background: 'var(--border-subtle)' }} />
 
       {/* User card */}
       <AnimatePresence>
         {(!collapsed || isMobile) && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="mx-3 mb-4 rounded-xl p-3 flex items-center gap-3"
-            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
+            style={{ background: 'var(--bg-card)', border: '1px solid var(--border-default)' }}>
             <div className="h-9 w-9 rounded-full flex items-center justify-center text-sm font-bold text-white flex-shrink-0 overflow-hidden"
               style={{ background: 'linear-gradient(135deg,#7c3aed,#4f46e5)' }}>
               {user?.avatar
@@ -341,11 +346,11 @@ export default function AppLayout() {
                 : user?.name?.charAt(0)?.toUpperCase() || 'U'}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-white truncate">{user?.name || 'User'}</p>
-              <p className="text-xs truncate" style={{ color: 'rgba(255,255,255,0.35)' }}>Level {user?.level || 1} · {(user?.xp || 0).toLocaleString()} XP</p>
+              <p className="text-sm font-semibold truncate" style={{ color: 'var(--text-primary)' }}>{user?.name || 'User'}</p>
+              <p className="text-xs truncate" style={{ color: 'var(--text-secondary)', opacity: 0.85 }}>Level {user?.level || 1} · {(user?.xp || 0).toLocaleString()} XP</p>
             </div>
             <button onClick={handleLogout} title="Logout"
-              className="text-red-400 hover:text-red-300 transition-colors p-1 rounded-lg hover:bg-red-500/10">
+              className="text-red-400 hover:text-red-300 transition-colors p-1 rounded-lg hover:bg-red-500/10 cursor-pointer">
               <FiLogOut size={15} />
             </button>
           </motion.div>
@@ -365,20 +370,20 @@ export default function AppLayout() {
   );
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ background: '#020617' }}>
+    <div className="flex h-screen overflow-hidden" style={{ background: 'var(--bg-primary)' }}>
 
       {/* ── Desktop Sidebar ── */}
       <motion.aside
         animate={{ width: collapsed ? 72 : 256 }}
         transition={{ duration: 0.25, ease: 'easeInOut' }}
         className="hidden lg:flex flex-col relative z-30 overflow-hidden flex-shrink-0"
-        style={{ background: '#0a0f1e', borderRight: '1px solid rgba(255,255,255,0.06)' }}
+        style={{ background: 'var(--bg-secondary)', borderRight: '1px solid var(--border-subtle)' }}
       >
         <SidebarContent />
         {/* Collapse toggle */}
         <button onClick={() => dispatch(toggleSidebarCollapse())}
-          className="absolute top-5 -right-3 z-40 flex h-6 w-6 items-center justify-center rounded-full text-white/40 shadow-lg hover:text-white transition-all"
-          style={{ background: '#1e293b', border: '1px solid rgba(255,255,255,0.1)' }}>
+          className="absolute top-5 -right-3 z-40 flex h-6 w-6 items-center justify-center rounded-full text-white/40 shadow-lg hover:text-white transition-all cursor-pointer"
+          style={{ background: 'var(--bg-tertiary)', border: '1px solid var(--border-default)' }}>
           {collapsed ? <MdChevronRight size={14} /> : <MdChevronLeft size={14} />}
         </button>
       </motion.aside>
@@ -394,10 +399,10 @@ export default function AppLayout() {
               initial={{ x: -280 }} animate={{ x: 0 }} exit={{ x: -280 }}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
               className="fixed left-0 top-0 z-50 h-full w-64 lg:hidden"
-              style={{ background: '#0a0f1e', borderRight: '1px solid rgba(255,255,255,0.06)' }}
+              style={{ background: 'var(--bg-secondary)', borderRight: '1px solid var(--border-subtle)' }}
             >
               <button onClick={() => setMobileOpen(false)}
-                className="absolute right-4 top-4 text-white/40 hover:text-white transition-colors">
+                className="absolute right-4 top-4 text-white/40 hover:text-white transition-colors cursor-pointer">
                 <MdClose size={22} />
               </button>
               <SidebarContent isMobile />
@@ -410,31 +415,31 @@ export default function AppLayout() {
       <div className="flex flex-1 flex-col overflow-hidden min-w-0">
         {/* Navbar */}
         <header className="flex h-16 items-center justify-between px-4 lg:px-6 z-20 flex-shrink-0"
-          style={{ background: 'rgba(10,15,30,0.8)', borderBottom: '1px solid rgba(255,255,255,0.06)', backdropFilter: 'blur(12px)' }}>
+          style={{ background: 'var(--bg-header)', borderBottom: '1px solid var(--border-subtle)', backdropFilter: 'blur(12px)' }}>
           <div className="flex items-center gap-4">
-            <button onClick={() => setMobileOpen(true)} className="lg:hidden text-white/40 hover:text-white transition-colors">
+            <button onClick={() => setMobileOpen(true)} className="lg:hidden text-white/40 hover:text-white transition-colors cursor-pointer">
               <MdMenu size={22} />
             </button>
-            <h1 className="text-base font-semibold text-white hidden sm:block">{pageTitle}</h1>
+            <h1 className="text-base font-semibold hidden sm:block" style={{ color: 'var(--text-primary)' }}>{pageTitle}</h1>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             {/* CSV Export */}
             <button
               onClick={handleExportCSV}
               title="Export habits to CSV"
-              className="h-9 px-3 flex items-center gap-1.5 rounded-xl transition-all text-white/40 hover:text-white text-xs font-medium"
-              style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
+              className="h-9 px-3 flex items-center gap-1.5 rounded-xl transition-all hover:opacity-80 text-xs font-medium cursor-pointer"
+              style={{ background: 'var(--bg-card)', border: '1px solid var(--border-default)', color: 'var(--text-primary)' }}
             >
-              <FiDownload size={14} />
+              <FiDownload size={14} style={{ color: 'var(--text-secondary)' }} />
               <span className="hidden sm:inline">Export</span>
             </button>
 
             {/* Dark / Light Mode */}
             <button onClick={toggleDarkMode}
               title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-              className="h-9 w-9 flex items-center justify-center rounded-xl transition-all text-white/40 hover:text-white"
-              style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              className="h-9 w-9 flex items-center justify-center rounded-xl transition-all cursor-pointer"
+              style={{ background: 'var(--bg-card)', border: '1px solid var(--border-default)', color: 'var(--text-primary)' }}>
               {darkMode ? <FiSun size={16} /> : <FiMoon size={16} />}
             </button>
 
@@ -444,8 +449,8 @@ export default function AppLayout() {
                 ref={notifBtnRef}
                 onClick={toggleNotif}
                 title="Notifications"
-                className="relative h-9 w-9 flex items-center justify-center rounded-xl transition-all text-white/40 hover:text-white"
-                style={{ background: notifOpen ? 'rgba(124,58,237,0.15)' : 'rgba(255,255,255,0.05)', border: notifOpen ? '1px solid rgba(124,58,237,0.4)' : '1px solid rgba(255,255,255,0.08)' }}>
+                className="relative h-9 w-9 flex items-center justify-center rounded-xl transition-all cursor-pointer"
+                style={{ background: notifOpen ? 'rgba(124,58,237,0.15)' : 'var(--bg-card)', border: notifOpen ? '1px solid rgba(124,58,237,0.4)' : '1px solid var(--border-default)', color: 'var(--text-primary)' }}>
                 <FiBell size={16} />
                 {unreadCount > 0 && (
                   <motion.span
@@ -460,14 +465,14 @@ export default function AppLayout() {
               </button>
               <AnimatePresence>
                 {notifOpen && (
-                  <NotificationDropdown onClose={() => setNotifOpen(false)} />
+                  <NotificationDropdown onClose={() => setNotifOpen(false)} setUnreadCount={setUnreadCount} />
                 )}
               </AnimatePresence>
             </div>
 
             {/* Avatar */}
             <button onClick={() => navigate('/profile')}
-              className="h-9 w-9 flex items-center justify-center rounded-xl overflow-hidden text-sm font-bold text-white transition-all hover:ring-2 hover:ring-violet-500"
+              className="h-9 w-9 flex items-center justify-center rounded-xl overflow-hidden text-sm font-bold text-white transition-all hover:ring-2 hover:ring-violet-500 cursor-pointer"
               style={{ background: 'linear-gradient(135deg,#7c3aed,#4f46e5)' }}>
               {user?.avatar
                 ? <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
@@ -477,7 +482,7 @@ export default function AppLayout() {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto min-w-0" style={{ background: '#020617' }}>
+        <main className="flex-1 overflow-y-auto min-w-0" style={{ background: 'var(--bg-primary)' }}>
           <motion.div
             key={location.pathname}
             initial={{ opacity: 0, y: 8 }}

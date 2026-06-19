@@ -144,12 +144,13 @@ export default function ProfilePage() {
   if (!user) return null;
 
   return (
-    <div className="p-4 sm:p-8 max-w-5xl mx-auto space-y-8 text-white min-h-screen">
+    <div className="p-4 sm:p-8 max-w-5xl mx-auto space-y-8 min-h-screen" style={{ color: 'var(--text-primary)' }}>
       {/* Profile Card Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-3xl border border-white/10 bg-slate-900/60 backdrop-blur-xl shadow-2xl p-6 sm:p-8"
+        className="relative overflow-hidden rounded-3xl shadow-2xl p-6 sm:p-8"
+        style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-default)' }}
       >
         {/* Background Gradients */}
         <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-800 opacity-60 rounded-t-3xl -z-10" />
@@ -168,7 +169,7 @@ export default function ProfilePage() {
             <div className="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all duration-300">
               <FiCamera className="text-white text-2xl" />
             </div>
-            <button className="absolute bottom-1 right-1 w-8 h-8 bg-violet-600 hover:bg-violet-500 text-white rounded-full flex items-center justify-center shadow-lg transition-colors border-2 border-slate-900">
+            <button className="absolute bottom-1 right-1 w-8 h-8 bg-violet-600 hover:bg-violet-500 text-white rounded-full flex items-center justify-center shadow-lg transition-colors border-2 border-slate-900 cursor-pointer">
               <FiCamera size={14} />
             </button>
             <input
@@ -182,28 +183,28 @@ export default function ProfilePage() {
 
           {/* User Details */}
           <div className="flex-1 text-center md:text-left space-y-3">
-            <div className="flex flex-col md:flex-row md:items-center gap-3 justify-center md:justify-start">
-              <h2 className="text-3xl font-extrabold tracking-tight text-white">{user.name}</h2>
-              <div className="flex gap-2 justify-center">
-                <span className="rounded-full bg-violet-500/20 border border-violet-500/30 px-3 py-0.5 text-xs font-semibold text-violet-300">
+            <div style={{ display: 'flex', flexFlow: 'row wrap', alignItems: 'center', gap: '12px', justifyContent: 'center' }} className="md:justify-start">
+              <h2 className="text-3xl font-extrabold tracking-tight" style={{ color: 'var(--text-primary)' }}>{user.name}</h2>
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
+                <span className="rounded-full bg-violet-500/20 border border-violet-500/30 px-3 py-0.5 text-xs font-semibold text-violet-300 whitespace-nowrap">
                   {LEVEL_NAMES[currentLevel - 1] || 'Legend'}
                 </span>
                 {user.subscription?.plan === 'premium' && (
-                  <span className="rounded-full bg-amber-500/20 border border-amber-500/30 px-3 py-0.5 text-xs font-semibold text-amber-300 flex items-center gap-1">
+                  <span className="rounded-full bg-amber-500/20 border border-amber-500/30 px-3 py-0.5 text-xs font-semibold text-amber-300 flex items-center gap-1 whitespace-nowrap">
                     <FiStar className="fill-amber-300" size={10} /> Premium
                   </span>
                 )}
               </div>
             </div>
-            <p className="text-slate-400 text-sm">{user.email}</p>
+            <p style={{ color: 'var(--text-secondary)' }} className="text-sm">{user.email}</p>
             
             {/* XP progress bar */}
             <div className="max-w-md mx-auto md:mx-0 pt-2">
-              <div className="flex justify-between text-xs font-medium text-slate-400 mb-1.5">
+              <div className="flex justify-between text-xs font-medium mb-1.5" style={{ color: 'var(--text-secondary)' }}>
                 <span>Level {currentLevel}</span>
                 <span>{currentXP.toLocaleString()} / {nextThreshold.toLocaleString()} XP</span>
               </div>
-              <div className="h-2 w-full rounded-full bg-white/5 border border-white/10 overflow-hidden">
+              <div className="h-2 w-full rounded-full overflow-hidden" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-default)' }}>
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${Math.min(100, xpProgress)}%` }}
@@ -212,7 +213,7 @@ export default function ProfilePage() {
                 />
               </div>
               {nextThreshold > currentXP && (
-                <p className="text-[10px] text-slate-500 mt-1">
+                <p className="text-[10px] mt-1" style={{ color: 'var(--text-muted)' }}>
                   {(nextThreshold - currentXP).toLocaleString()} XP remaining to Level {currentLevel + 1}
                 </p>
               )}
@@ -221,40 +222,70 @@ export default function ProfilePage() {
         </div>
 
         {/* Quick stats grid */}
-        <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-white/5 text-center">
+        <div className="grid grid-cols-3 gap-4 mt-8 pt-6 text-center" style={{ borderTop: '1px solid var(--border-subtle)' }}>
           {[
             { label: 'Member Since', value: user.createdAt ? format(new Date(user.createdAt), 'MMM yyyy') : 'Now' },
             { label: 'Habits Created', value: user.totalHabitsCreated || 0 },
             { label: 'Longest Streak', value: `${user.longestStreakEver || 0}d` },
           ].map((s, i) => (
             <div key={i} className="space-y-1">
-              <div className="text-xl sm:text-2xl font-bold text-white tracking-tight">{s.value}</div>
-              <div className="text-[10px] sm:text-xs uppercase tracking-wider text-slate-400 font-medium">{s.label}</div>
+              <div className="text-xl sm:text-2xl font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>{s.value}</div>
+              <div className="text-[10px] sm:text-xs uppercase tracking-wider font-medium" style={{ color: 'var(--text-secondary)' }}>{s.label}</div>
             </div>
           ))}
         </div>
       </motion.div>
 
       {/* Tabs list */}
-      <div className="flex gap-1.5 bg-slate-900/60 p-1.5 rounded-2xl border border-white/5 w-full sm:w-fit">
+      <div 
+        style={{ 
+          display: 'flex', 
+          gap: '8px', 
+          backgroundColor: 'var(--bg-secondary)', 
+          padding: '6px', 
+          borderRadius: '16px', 
+          border: '1px solid var(--border-default)',
+          width: '100%',
+        }}
+        className="sm:w-max"
+      >
         {[
           { id: 'profile', label: 'Edit Profile', icon: FiUser },
           { id: 'security', label: 'Security & Auth', icon: FiLock },
           { id: 'achievements', label: 'Achievements', icon: FiAward },
         ].map((t) => {
           const Icon = t.icon;
+          const isActive = tab === t.id;
           return (
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
-              className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
-                tab === t.id
-                  ? 'bg-violet-600 text-white shadow-lg shadow-violet-500/25'
-                  : 'text-slate-400 hover:text-white hover:bg-white/5'
-              }`}
+              style={{
+                flex: 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                padding: '10px 20px',
+                borderRadius: '12px',
+                fontSize: '14px',
+                fontWeight: '600',
+                transition: 'all 0.2s ease',
+                backgroundColor: isActive ? '#7c3aed' : 'transparent',
+                color: isActive ? '#ffffff' : 'var(--text-secondary)',
+                border: 'none',
+                cursor: 'pointer',
+                boxShadow: isActive ? '0 10px 15px -3px rgba(124, 58, 237, 0.3)' : 'none',
+              }}
+              onMouseEnter={(e) => {
+                if (!isActive) e.currentTarget.style.backgroundColor = 'var(--bg-card-hover)';
+              }}
+              onMouseLeave={(e) => {
+                if (!isActive) e.currentTarget.style.backgroundColor = 'transparent';
+              }}
             >
               <Icon size={16} />
-              <span className="hidden sm:inline">{t.label}</span>
+              <span>{t.label}</span>
             </button>
           );
         })}
@@ -269,21 +300,23 @@ export default function ProfilePage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.25 }}
-            className="rounded-3xl border border-white/10 bg-slate-900/40 backdrop-blur-md p-6 sm:p-8 space-y-6"
+            className="rounded-3xl backdrop-blur-md p-6 sm:p-8 space-y-6"
+            style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-default)', color: 'var(--text-primary)' }}
           >
-            <div className="flex items-center gap-3 pb-2 border-b border-white/5">
+            <div className="flex items-center gap-3 pb-2 border-b" style={{ borderBottomColor: 'var(--border-subtle)' }}>
               <FiUser className="text-violet-400 text-xl" />
-              <h3 className="text-lg font-bold text-white">Profile Details</h3>
+              <h3 className="text-lg font-bold">Profile Details</h3>
             </div>
 
             <div className="space-y-4 max-w-lg">
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Display Name</label>
+                <label className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>Display Name</label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><FiUser size={16} /></span>
                   <input
                     type="text"
-                    className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-4 text-white outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all"
+                    className="w-full rounded-xl border py-3 pl-10 pr-4 outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all"
+                    style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-default)', color: 'var(--text-primary)' }}
                     value={form.name}
                     onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))}
                   />
@@ -291,13 +324,14 @@ export default function ProfilePage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Email Address</label>
+                <label className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>Email Address</label>
                 <div className="relative opacity-60">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><FiMail size={16} /></span>
                   <input
                     type="email"
                     disabled
-                    className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-4 text-slate-300 outline-none cursor-not-allowed"
+                    className="w-full rounded-xl border py-3 pl-10 pr-4 outline-none cursor-not-allowed"
+                    style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-default)', color: 'var(--text-secondary)' }}
                     value={user.email}
                   />
                 </div>
@@ -305,14 +339,14 @@ export default function ProfilePage() {
 
               {/* Notification preferences */}
               <div className="pt-4 space-y-4">
-                <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                <h4 className="text-sm font-bold flex items-center gap-2">
                   <FiBell className="text-indigo-400" /> Notifications Settings
                 </h4>
                 
-                <div className="flex items-center justify-between py-2 border-b border-white/5">
+                <div className="flex items-center justify-between py-2 border-b" style={{ borderBottomColor: 'var(--border-subtle)' }}>
                   <div className="space-y-0.5">
                     <p className="text-sm font-semibold">Email Alerts</p>
-                    <p className="text-xs text-slate-400">Receive summaries, streaks, and product updates</p>
+                    <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Receive summaries, streaks, and product updates</p>
                   </div>
                   <button
                     onClick={() => setForm(f => ({
@@ -322,7 +356,7 @@ export default function ProfilePage() {
                         notifications: { ...f.settings.notifications, email: !f.settings.notifications.email }
                       }
                     }))}
-                    className={`w-12 h-6 rounded-full transition-all relative ${
+                    className={`w-12 h-6 rounded-full transition-all relative cursor-pointer ${
                       form.settings.notifications.email ? 'bg-violet-600' : 'bg-slate-800'
                     }`}
                   >
@@ -335,7 +369,7 @@ export default function ProfilePage() {
                 <div className="flex items-center justify-between py-2">
                   <div className="space-y-0.5">
                     <p className="text-sm font-semibold">Browser Reminders</p>
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
                       {notif.permission === 'denied'
                         ? '⚠️ Blocked in browser — enable in site settings'
                         : browserNotifEnabled
@@ -362,7 +396,7 @@ export default function ProfilePage() {
                         }
                       }
                     }}
-                    className={`w-12 h-6 rounded-full transition-all relative ${
+                    className={`w-12 h-6 rounded-full transition-all relative cursor-pointer ${
                       browserNotifEnabled ? 'bg-violet-600' : 'bg-slate-800'
                     }`}
                   >
@@ -379,7 +413,7 @@ export default function ProfilePage() {
                 whileTap={{ scale: 0.97 }}
                 onClick={handleSaveProfile}
                 disabled={saving}
-                className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-violet-500 disabled:opacity-50 transition-colors"
+                className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-violet-500 disabled:opacity-50 transition-colors cursor-pointer"
               >
                 <FiSave />
                 {saving ? 'Saving...' : 'Save Profile'}
@@ -387,16 +421,16 @@ export default function ProfilePage() {
             </div>
 
             {/* Danger Zone */}
-            <div className="border-t border-rose-500/20 pt-6 mt-6">
+            <div className="border-t pt-6 mt-6" style={{ borderTopColor: 'rgba(239, 68, 68, 0.2)' }}>
               <h4 className="text-sm font-bold text-rose-400 mb-2 flex items-center gap-2">
                 <FiShield /> Danger Zone
               </h4>
-              <p className="text-xs text-slate-400 mb-4">
+              <p className="text-xs mb-4" style={{ color: 'var(--text-secondary)' }}>
                 Once you delete your account, there is no going back. All your stats, logs, and habits will be deleted.
               </p>
               <button
                 onClick={() => setShowDeleteModal(true)}
-                className="flex items-center gap-2 rounded-xl border border-rose-500/30 hover:bg-rose-500/10 px-5 py-2.5 text-sm font-semibold text-rose-400 transition"
+                className="flex items-center gap-2 rounded-xl border border-rose-500/30 hover:bg-rose-500/10 px-5 py-2.5 text-sm font-semibold text-rose-400 transition cursor-pointer"
               >
                 <FiTrash2 size={14} />
                 Delete Account
@@ -412,28 +446,30 @@ export default function ProfilePage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.25 }}
-            className="rounded-3xl border border-white/10 bg-slate-900/40 backdrop-blur-md p-6 sm:p-8 space-y-6"
+            className="rounded-3xl backdrop-blur-md p-6 sm:p-8 space-y-6"
+            style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-default)', color: 'var(--text-primary)' }}
           >
-            <div className="flex items-center gap-3 pb-2 border-b border-white/5">
+            <div className="flex items-center gap-3 pb-2 border-b" style={{ borderBottomColor: 'var(--border-subtle)' }}>
               <FiLock className="text-violet-400 text-xl" />
-              <h3 className="text-lg font-bold text-white">Change Password</h3>
+              <h3 className="text-lg font-bold">Change Password</h3>
             </div>
 
             <div className="space-y-4 max-w-lg">
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Current Password</label>
+                <label className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>Current Password</label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><FiLock size={16} /></span>
                   <input
                     type={showCurrentPassword ? 'text' : 'password'}
-                    className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-10 text-white outline-none focus:border-violet-500 transition-all"
+                    className="w-full rounded-xl border py-3 pl-10 pr-10 outline-none focus:border-violet-500 transition-all"
+                    style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-default)', color: 'var(--text-primary)' }}
                     value={passwordForm.currentPassword}
                     onChange={(e) => setPasswordForm(f => ({ ...f, currentPassword: e.target.value }))}
                   />
                   <button
                     type="button"
                     onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 cursor-pointer"
                   >
                     {showCurrentPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
                   </button>
@@ -441,19 +477,20 @@ export default function ProfilePage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">New Password</label>
+                <label className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>New Password</label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><FiLock size={16} /></span>
                   <input
                     type={showNewPassword ? 'text' : 'password'}
-                    className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-10 text-white outline-none focus:border-violet-500 transition-all"
+                    className="w-full rounded-xl border py-3 pl-10 pr-10 outline-none focus:border-violet-500 transition-all"
+                    style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-default)', color: 'var(--text-primary)' }}
                     value={passwordForm.newPassword}
                     onChange={(e) => setPasswordForm(f => ({ ...f, newPassword: e.target.value }))}
                   />
                   <button
                     type="button"
                     onClick={() => setShowNewPassword(!showNewPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 cursor-pointer"
                   >
                     {showNewPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
                   </button>
@@ -461,19 +498,20 @@ export default function ProfilePage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Confirm New Password</label>
+                <label className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>Confirm New Password</label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><FiLock size={16} /></span>
                   <input
                     type={showConfirmPassword ? 'text' : 'password'}
-                    className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-10 text-white outline-none focus:border-violet-500 transition-all"
+                    className="w-full rounded-xl border py-3 pl-10 pr-10 outline-none focus:border-violet-500 transition-all"
+                    style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-default)', color: 'var(--text-primary)' }}
                     value={passwordForm.confirmPassword}
                     onChange={(e) => setPasswordForm(f => ({ ...f, confirmPassword: e.target.value }))}
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 cursor-pointer"
                   >
                     {showConfirmPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
                   </button>
@@ -485,7 +523,7 @@ export default function ProfilePage() {
               <motion.button
                 whileTap={{ scale: 0.97 }}
                 onClick={handleChangePassword}
-                className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-violet-500 transition-colors"
+                className="flex items-center gap-2 rounded-xl bg-violet-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-violet-500 transition-colors cursor-pointer"
               >
                 <FiLock />
                 Update Password
@@ -503,9 +541,9 @@ export default function ProfilePage() {
             transition={{ duration: 0.25 }}
             className="space-y-6"
           >
-            <div className="flex items-center gap-3 pb-2 border-b border-white/5">
+            <div className="flex items-center gap-3 pb-2 border-b" style={{ borderBottomColor: 'var(--border-subtle)' }}>
               <FiAward className="text-violet-400 text-xl" />
-              <h3 className="text-lg font-bold text-white">Achievements Gallery</h3>
+              <h3 className="text-lg font-bold">Achievements Gallery</h3>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -515,18 +553,19 @@ export default function ProfilePage() {
                   <motion.div
                     key={a.type}
                     whileHover={{ y: -4, scale: 1.02 }}
-                    className={`relative overflow-hidden rounded-2xl border p-5 text-center transition-all ${
-                      unlocked
-                        ? 'border-violet-500/30 bg-violet-500/5 shadow-lg shadow-violet-500/5'
-                        : 'border-white/5 bg-slate-900/20 opacity-40 grayscale'
-                    }`}
+                    className="relative overflow-hidden rounded-2xl border p-5 text-center transition-all"
+                    style={{
+                      borderColor: unlocked ? 'rgba(124, 58, 237, 0.3)' : 'var(--border-subtle)',
+                      backgroundColor: unlocked ? 'rgba(124, 58, 237, 0.05)' : 'var(--bg-card)',
+                      opacity: unlocked ? 1 : 0.5,
+                    }}
                   >
                     {unlocked && (
                       <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-violet-500 to-indigo-500" />
                     )}
                     <div className="text-5xl mb-4 leading-none">{a.badge}</div>
-                    <h4 className="text-sm font-bold text-white mb-1.5">{a.title}</h4>
-                    <p className="text-xs text-slate-400 leading-relaxed">{a.desc}</p>
+                    <h4 className="text-sm font-bold mb-1.5">{a.title}</h4>
+                    <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{a.desc}</p>
                     
                     <div className="mt-4">
                       {unlocked ? (
@@ -534,7 +573,7 @@ export default function ProfilePage() {
                           <FiCheck size={10} /> Unlocked
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-slate-800 px-2.5 py-0.5 text-[10px] font-semibold text-slate-500">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-slate-800/50 px-2.5 py-0.5 text-[10px] font-semibold text-slate-500">
                           🔒 Locked
                         </span>
                       )}
@@ -563,27 +602,29 @@ export default function ProfilePage() {
               initial={{ scale: 0.95, y: 15 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 15 }}
-              className="relative w-full max-w-md overflow-hidden rounded-3xl border border-rose-500/20 bg-slate-950 p-6 shadow-2xl z-10 text-center"
+              className="relative w-full max-w-md overflow-hidden rounded-3xl border p-6 shadow-2xl z-10 text-center"
+              style={{ backgroundColor: 'var(--bg-secondary)', borderColor: 'var(--border-default)' }}
             >
               <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-rose-500/10 text-rose-500 mb-4">
                 <FiTrash2 size={24} />
               </div>
               
-              <h3 className="text-xl font-bold text-white mb-2">Are you absolutely sure?</h3>
-              <p className="text-sm text-slate-400 mb-6">
+              <h3 className="text-xl font-bold mb-2">Are you absolutely sure?</h3>
+              <p className="text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>
                 This action is permanent and cannot be undone. All your stats, levels, history, and habits will be deleted forever.
               </p>
               
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowDeleteModal(false)}
-                  className="flex-1 rounded-xl bg-slate-900 border border-white/10 hover:bg-slate-850 px-4 py-2.5 text-sm font-semibold text-slate-300 transition-colors"
+                  className="flex-1 rounded-xl border hover:bg-white/5 px-4 py-2.5 text-sm font-semibold transition-colors cursor-pointer"
+                  style={{ backgroundColor: 'transparent', borderColor: 'var(--border-default)', color: 'var(--text-primary)' }}
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleDeleteAccount}
-                  className="flex-1 rounded-xl bg-rose-600 hover:bg-rose-500 px-4 py-2.5 text-sm font-semibold text-white transition-colors"
+                  className="flex-1 rounded-xl bg-rose-600 hover:bg-rose-500 px-4 py-2.5 text-sm font-semibold text-white transition-colors cursor-pointer"
                 >
                   Delete Account
                 </button>

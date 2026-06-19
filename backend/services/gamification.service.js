@@ -1,3 +1,5 @@
+const Notification = require('../models/Notification');
+
 const ACHIEVEMENT_DEFINITIONS = {
   first_habit: { title: 'First Step', description: 'Created your first habit', badge: '🌱', xp: 50 },
   first_complete: { title: 'Getting Started', description: 'Completed a habit for the first time', badge: '✅', xp: 25 },
@@ -25,8 +27,22 @@ exports.calculateXP = (streak) => {
  * Award XP to user and recalculate level
  */
 exports.awardXP = async (user, xpAmount, reason) => {
+  const oldLevel = user.level || 1;
   user.xp = (user.xp || 0) + xpAmount;
   user.calculateLevel();
+
+  if (user.level > oldLevel) {
+    try {
+      await Notification.create({
+        user: user._id,
+        type: 'achievement',
+        title: 'Level Up! ⚡',
+        message: `Congratulations! You've reached Level ${user.level}! Keep up the great work!`,
+      });
+    } catch (err) {
+      console.error('Failed to create level up notification:', err.message);
+    }
+  }
 };
 
 /**
@@ -47,6 +63,17 @@ exports.unlockAchievement = async (user, achievementType, xpOverride) => {
 
   const xpToAward = xpOverride || definition.xp;
   await exports.awardXP(user, xpToAward, achievementType);
+
+  try {
+    await Notification.create({
+      user: user._id,
+      type: 'achievement',
+      title: `Badge Unlocked! ${definition.badge}`,
+      message: `You earned the "${definition.title}" badge for: ${definition.description}!`,
+    });
+  } catch (err) {
+    console.error('Failed to create achievement notification:', err.message);
+  }
 };
 
 /**

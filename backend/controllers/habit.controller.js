@@ -149,9 +149,13 @@ exports.createHabit = async (req, res, next) => {
 
     user.totalHabitsCreated += 1;
 
-    // First habit achievement
+    // Habit creation achievements
     if (user.totalHabitsCreated === 1) {
-      await gamificationService.unlockAchievement(user, 'first_habit', 50);
+      await gamificationService.unlockAchievement(user, 'first_habit');
+    } else if (user.totalHabitsCreated === 5) {
+      await gamificationService.unlockAchievement(user, 'habit_5');
+    } else if (user.totalHabitsCreated === 10) {
+      await gamificationService.unlockAchievement(user, 'habit_10');
     }
     await user.save({ validateBeforeSave: false });
 
@@ -263,6 +267,12 @@ exports.completeHabit = async (req, res, next) => {
 
       const user = await User.findById(req.user.id);
       await gamificationService.awardXP(user, xpEarned, 'habit_complete');
+
+      // First completed habit log achievement check
+      const totalCompletions = await HabitLog.countDocuments({ user: req.user.id, completed: true });
+      if (totalCompletions === 1) {
+        await gamificationService.unlockAchievement(user, 'first_complete');
+      }
 
       // Check achievements
       await gamificationService.checkStreakAchievements(user, newStreak);

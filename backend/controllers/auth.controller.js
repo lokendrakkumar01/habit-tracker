@@ -198,7 +198,7 @@ exports.verifyEmail = async (req, res, next) => {
     user.isVerified = true;
     user.verificationToken = undefined;
     user.verificationTokenExpires = undefined;
-    await gamificationService.awardXP(user, 50, 'account_verified');
+    await gamificationService.unlockAchievement(user, 'account_verified');
     await user.save({ validateBeforeSave: false });
 
     res.json({ success: true, message: 'Email verified! You can now log in.' });
