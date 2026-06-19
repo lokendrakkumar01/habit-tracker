@@ -17,8 +17,6 @@ import {
 } from 'react-icons/fi';
 import { fetchJournals, saveJournal, fetchMoodHistory } from '../features/journal/journalSlice';
 
-// ─── Constants ────────────────────────────────────────────────────────────────
-
 const MOODS = [
   { value: 5, emoji: '😄', label: 'Great',    color: '#10b981', bg: 'rgba(16,185,129,0.18)' },
   { value: 4, emoji: '🙂', label: 'Good',     color: '#6366f1', bg: 'rgba(99,102,241,0.18)' },
@@ -92,8 +90,6 @@ const MOCK_MOOD_HISTORY = [
   { day: 'Sun', mood: 5 },
 ];
 
-// ─── Helper Utilities ─────────────────────────────────────────────────────────
-
 function formatDateLong(iso) {
   return new Date(iso).toLocaleDateString('en-US', {
     weekday: 'long',
@@ -115,8 +111,6 @@ function preview(text, max = 80) {
   if (!text) return 'No content yet…';
   return text.length > max ? text.slice(0, max) + '…' : text;
 }
-
-// ─── Sub-components ───────────────────────────────────────────────────────────
 
 function MoodPill({ mood, selected, onClick }) {
   const isSelected = selected === mood.value;
@@ -356,8 +350,6 @@ function MoodTooltip({ active, payload, label }) {
   );
 }
 
-// ─── Main Component ───────────────────────────────────────────────────────────
-
 export default function JournalPage() {
   const dispatch = useDispatch();
   const { journals = [], moodHistory = [], loading = false } = useSelector(
@@ -472,7 +464,7 @@ export default function JournalPage() {
         fontFamily: "'Inter', -apple-system, sans-serif",
       }}
     >
-      {/* ── Page Header ─────────────────────────────────────────────────── */}
+      
       <motion.div
         initial={{ opacity: 0, y: -18 }}
         animate={{ opacity: 1, y: 0 }}
@@ -526,7 +518,6 @@ export default function JournalPage() {
         </div>
       </motion.div>
 
-      {/* ── Desktop Two-Panel Layout ──────────────────────────────────────── */}
       <div
         className="journal-desktop-layout"
         style={{
@@ -536,7 +527,7 @@ export default function JournalPage() {
           alignItems: 'flex-start',
         }}
       >
-        {/* LEFT PANEL: Entries List */}
+        
         <motion.div
           initial={{ opacity: 0, x: -24 }}
           animate={{ opacity: 1, x: 0 }}
@@ -549,7 +540,7 @@ export default function JournalPage() {
             gap: '12px',
           }}
         >
-          {/* New Entry Button */}
+          
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
@@ -576,7 +567,6 @@ export default function JournalPage() {
             New Entry
           </motion.button>
 
-          {/* Entries List Panel */}
           <div
             style={{
               background: 'rgba(255,255,255,0.04)',
@@ -637,14 +627,13 @@ export default function JournalPage() {
           </div>
         </motion.div>
 
-        {/* RIGHT PANEL: Editor + Chart */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.48, delay: 0.18 }}
           style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '18px' }}
         >
-          {/* Editor Card */}
+          
           <div
             style={{
               background: 'rgba(255,255,255,0.05)',
@@ -653,7 +642,7 @@ export default function JournalPage() {
               padding: '28px 32px',
             }}
           >
-            {/* Editor Header */}
+            
             <div
               style={{
                 display: 'flex',
@@ -1032,7 +1021,7 @@ export default function JournalPage() {
         </motion.div>
       </div>
 
-      {/* ─── Mobile View ──────────────────────────────────────────────────────── */}
+      {/*  Mobile View */}
       <MobileJournalView
         entries={entries}
         selectedId={selectedId}
@@ -1071,7 +1060,7 @@ export default function JournalPage() {
   );
 }
 
-// ─── Mobile-only Panel ────────────────────────────────────────────────────────
+//Mobile-only Pane
 
 function MobileJournalView({
   entries,
@@ -1316,7 +1305,6 @@ function MobileJournalView({
                   </motion.button>
                 </div>
 
-                {/* Mood Picker */}
                 <div style={{ marginBottom: '18px' }}>
                   <div
                     style={{
@@ -1365,10 +1353,8 @@ function MobileJournalView({
                   )}
                 </div>
 
-                {/* Divider */}
                 <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)', marginBottom: '16px' }} />
 
-                {/* Textarea */}
                 <div style={{ marginBottom: '18px' }}>
                   <label
                     style={{
@@ -1406,7 +1392,6 @@ function MobileJournalView({
                   />
                 </div>
 
-                {/* Gratitude */}
                 <div style={{ marginBottom: '18px' }}>
                   <div
                     style={{
@@ -1434,7 +1419,6 @@ function MobileJournalView({
                   </div>
                 </div>
 
-                {/* Tags */}
                 <div>
                   <div
                     style={{

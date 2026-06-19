@@ -8,7 +8,6 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
-// Request interceptor: attach token from localStorage
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -20,15 +19,12 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor: handle 401 (token expired / invalid)
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     const status = error.response?.status;
     const url = error.config?.url || '';
 
-    // Only force redirect on 401 for non-auth endpoints
-    // This prevents infinite redirect loops on /auth/me failures during initialization
     if (status === 401 && !url.includes('/auth/')) {
       localStorage.removeItem('token');
       const currentPath = window.location.pathname;

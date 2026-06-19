@@ -1,11 +1,5 @@
-/**
- * CSV Export utilities for HabitFlow.
- * Uses native Blob + URL.createObjectURL — no library needed.
- */
 
-/**
- * Convert an array of objects to a CSV string.
- */
+
 function toCSV(rows, headers) {
   const headerLine = headers.map((h) => `"${h.label}"`).join(',');
   const dataLines = rows.map((row) =>
@@ -19,9 +13,6 @@ function toCSV(rows, headers) {
   return [headerLine, ...dataLines].join('\n');
 }
 
-/**
- * Trigger a CSV file download in the browser.
- */
 function downloadCSV(csvContent, filename) {
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
@@ -34,11 +25,6 @@ function downloadCSV(csvContent, filename) {
   URL.revokeObjectURL(url);
 }
 
-/**
- * Export habits array to CSV file.
- * @param {Array} habits - Array of habit objects from Redux store.
- * @param {string} filename - Optional filename override.
- */
 export function exportHabitsToCSV(habits, filename = 'habitflow_habits.csv') {
   const headers = [
     { key: 'title',            label: 'Title' },

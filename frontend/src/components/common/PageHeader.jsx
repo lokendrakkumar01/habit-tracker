@@ -1,14 +1,4 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-
-/**
- * PageHeader
- *
- * Props:
- *   title    {string}     – page title displayed in gradient text
- *   subtitle {string}     – optional muted description line
- *   action   {ReactNode}  – optional element rendered on the right (e.g. a button)
- */
 
 const containerVariants = {
   hidden: { opacity: 0, y: -12 },
@@ -32,7 +22,7 @@ export default function PageHeader({ title, subtitle, action }) {
       animate="visible"
       className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"
     >
-      {/* Left: title + subtitle */}
+      
       <div className="flex flex-col gap-1">
         <motion.h2
           variants={childVariants}
@@ -51,7 +41,6 @@ export default function PageHeader({ title, subtitle, action }) {
         )}
       </div>
 
-      {/* Right: action */}
       {action && (
         <motion.div
           variants={childVariants}

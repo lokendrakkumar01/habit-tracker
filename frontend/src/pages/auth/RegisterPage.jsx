@@ -106,7 +106,6 @@ export default function RegisterPage() {
 
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>
 
-        {/* Full Name */}
         <div>
           <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.5)' }}>
             Full Name
@@ -123,7 +122,6 @@ export default function RegisterPage() {
           </div>
         </div>
 
-        {/* Email */}
         <div>
           <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.5)' }}>
             Email Address
@@ -140,7 +138,6 @@ export default function RegisterPage() {
           </div>
         </div>
 
-        {/* Password */}
         <div>
           <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.5)' }}>
             Password
@@ -160,7 +157,7 @@ export default function RegisterPage() {
               {showPwd ? <FiEyeOff size={15} /> : <FiEye size={15} />}
             </button>
           </div>
-          {/* Strength bar */}
+          
           <AnimatePresence>
             {form.password && (
               <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="mt-2 px-1">
@@ -178,7 +175,6 @@ export default function RegisterPage() {
           </AnimatePresence>
         </div>
 
-        {/* Confirm Password */}
         <div>
           <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.5)' }}>
             Confirm Password
@@ -206,7 +202,6 @@ export default function RegisterPage() {
           )}
         </div>
 
-        {/* Terms */}
         <label className="flex items-start gap-3 cursor-pointer select-none pt-1">
           <button type="button" onClick={() => setTerms((v) => !v)}
             className="mt-0.5 w-4 h-4 rounded border flex-shrink-0 flex items-center justify-center transition-all"
@@ -224,7 +219,6 @@ export default function RegisterPage() {
           </span>
         </label>
 
-        {/* Submit */}
         <motion.button type="submit" disabled={loading}
           whileHover={{ scale: loading ? 1 : 1.01 }} whileTap={{ scale: loading ? 1 : 0.98 }}
           className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-white text-sm transition-all"
@@ -240,7 +234,6 @@ export default function RegisterPage() {
         </motion.button>
       </form>
 
-      {/* Divider */}
       <div className="my-5 flex items-center gap-3">
         <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.1)' }} />
         <span className="text-xs uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.3)' }}>or</span>

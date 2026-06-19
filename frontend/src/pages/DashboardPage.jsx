@@ -18,10 +18,6 @@ import {
   FiBook, FiShield, FiArrowUp, FiArrowDown,
 } from 'react-icons/fi';
 
-// ─────────────────────────────────────────────────────────────────────────────
-// CONSTANTS & HELPERS
-// ─────────────────────────────────────────────────────────────────────────────
-
 const MOCK_WEEKLY = [
   { day: 'Mon', value: 45 },
   { day: 'Tue', value: 72 },
@@ -74,11 +70,6 @@ function getDateString() {
   });
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// REUSABLE SUB-COMPONENTS
-// ─────────────────────────────────────────────────────────────────────────────
-
-/** Glassmorphism card wrapper */
 const GlassCard = ({ children, className = '', style = {}, ...rest }) => (
   <div
     className={className}
@@ -96,7 +87,6 @@ const GlassCard = ({ children, className = '', style = {}, ...rest }) => (
   </div>
 );
 
-// ── Circular SVG Ring (Apple Health style) ──────────────────────────────────
 function CircularRing({ value = 0, max = 100, color = '#10b981', size = 88, stroke = 7, children }) {
   const r      = (size - stroke * 2) / 2;
   const circ   = 2 * Math.PI * r;
@@ -106,14 +96,14 @@ function CircularRing({ value = 0, max = 100, color = '#10b981', size = 88, stro
   return (
     <div style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
       <svg width={size} height={size} style={{ transform: 'rotate(-90deg)', display: 'block' }}>
-        {/* Track */}
+        
         <circle
           cx={size / 2} cy={size / 2} r={r}
           fill="none"
           stroke="rgba(255,255,255,0.06)"
           strokeWidth={stroke}
         />
-        {/* Fill */}
+        
         <motion.circle
           cx={size / 2} cy={size / 2} r={r}
           fill="none"
@@ -138,7 +128,6 @@ function CircularRing({ value = 0, max = 100, color = '#10b981', size = 88, stro
   );
 }
 
-// ── Level + XP badge (top-right header) ────────────────────────────────────
 function LevelBadge({ level = 1, xp = 0 }) {
   return (
     <motion.div
@@ -174,7 +163,6 @@ function LevelBadge({ level = 1, xp = 0 }) {
   );
 }
 
-// ── Individual stat card ────────────────────────────────────────────────────
 function StatCard({ icon, label, value, accent, delay = 0 }) {
   return (
     <motion.div
@@ -184,7 +172,7 @@ function StatCard({ icon, label, value, accent, delay = 0 }) {
       whileHover={{ y: -3, transition: { duration: 0.2 } }}
     >
       <GlassCard style={{ padding: '18px 20px', position: 'relative', overflow: 'hidden', height: '100%' }}>
-        {/* Ambient glow */}
+        
         <div style={{
           position: 'absolute', top: -24, right: -24,
           width: 90, height: 90, borderRadius: '50%',
@@ -223,7 +211,6 @@ function StatCard({ icon, label, value, accent, delay = 0 }) {
   );
 }
 
-// ── Wellness metric tile with circular ring ─────────────────────────────────
 function WellnessTile({ label, value, max = 100, color, unit = '%', trend, delay = 0 }) {
   return (
     <motion.div
@@ -268,7 +255,6 @@ function WellnessTile({ label, value, max = 100, color, unit = '%', trend, delay
   );
 }
 
-// ── Custom recharts tooltip ─────────────────────────────────────────────────
 function CustomBarTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null;
   return (
@@ -285,7 +271,6 @@ function CustomBarTooltip({ active, payload, label }) {
   );
 }
 
-// ── Individual habit row ─────────────────────────────────────────────────────
 function HabitRow({ habit, onComplete }) {
   const done     = habit.completedToday;
   const catColor = CATEGORY_COLORS[habit.category] || '#6366f1';
@@ -314,7 +299,6 @@ function HabitRow({ habit, onComplete }) {
         }} />
       )}
 
-      {/* Emoji icon */}
       <div style={{
         width: 42, height: 42, borderRadius: 13, flexShrink: 0,
         background: 'rgba(255,255,255,0.055)',
@@ -325,7 +309,6 @@ function HabitRow({ habit, onComplete }) {
         {habit.emoji || '✨'}
       </div>
 
-      {/* Text */}
       <div style={{ flex: 1, minWidth: 0 }}>
         <p style={{
           color: done ? '#475569' : '#f1f5f9',
@@ -353,7 +336,6 @@ function HabitRow({ habit, onComplete }) {
         </div>
       </div>
 
-      {/* Check button */}
       <motion.button
         whileHover={done ? {} : { scale: 1.1 }}
         whileTap={done ? {} : { scale: 0.88 }}
@@ -392,7 +374,6 @@ function HabitRow({ habit, onComplete }) {
   );
 }
 
-// ── Quick action button ─────────────────────────────────────────────────────
 function QuickAction({ icon, label, sublabel, accent, onClick, delay = 0 }) {
   return (
     <motion.button
@@ -427,7 +408,6 @@ function QuickAction({ icon, label, sublabel, accent, onClick, delay = 0 }) {
   );
 }
 
-// ── Achievement badge tile ──────────────────────────────────────────────────
 function AchievementBadge({ badge, delay = 0 }) {
   return (
     <motion.div
@@ -461,9 +441,6 @@ function AchievementBadge({ badge, delay = 0 }) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// MAIN DASHBOARD PAGE
-// ─────────────────────────────────────────────────────────────────────────────
 export default function DashboardPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -477,19 +454,16 @@ export default function DashboardPage() {
   const [localHabits, setLocalHabits] = useState([]);
   const [completing, setCompleting]   = useState(null);
 
-  // ── On mount: fetch all data ────────────────────────────────────────────
   useEffect(() => {
     dispatch(fetchHabits());
     dispatch(fetchDashboardStats());
     dispatch(fetchWeeklyData());
   }, [dispatch]);
 
-  // ── Sync local habits (with mock fallback) ──────────────────────────────
   useEffect(() => {
     setLocalHabits(habits.length > 0 ? habits : MOCK_HABITS);
   }, [habits]);
 
-  // ── Derived values ──────────────────────────────────────────────────────
   const firstName      = user?.name?.split(' ')[0] || 'Explorer';
   const userLevel      = stats.level          ?? user?.level          ?? 7;
   const xpPoints       = stats.xpPoints       ?? user?.xp             ?? 2450;
@@ -511,17 +485,14 @@ export default function DashboardPage() {
 
   const displayBadges = (user?.badges?.length > 0 ? user.badges : MOCK_BADGES);
 
-  // ── Complete a habit ────────────────────────────────────────────────────
   const handleComplete = useCallback(async (habitId) => {
     if (completing) return;
     setCompleting(habitId);
 
-    // Optimistic update immediately
     setLocalHabits(prev =>
       prev.map(h => h._id === habitId ? { ...h, completedToday: true } : h)
     );
 
-    // Confetti burst
     confetti({
       particleCount: 130,
       spread: 85,
@@ -543,12 +514,11 @@ export default function DashboardPage() {
     try {
       await dispatch(completeHabit(habitId)).unwrap();
     } catch (_) {
-      // silently fail – UI is already updated optimistically
+      
     }
     setCompleting(null);
   }, [completing, dispatch]);
 
-  // ── Streak freeze ───────────────────────────────────────────────────────
   const handleStreakFreeze = useCallback(async () => {
     if (streakFreezes <= 0) {
       toast.error('No streak freezes remaining!');
@@ -567,7 +537,6 @@ export default function DashboardPage() {
     }
   }, [streakFreezes]);
 
-  // Incomplete habits first
   const sortedHabits = [...localHabits].sort((a, b) => Number(a.completedToday) - Number(b.completedToday));
 
   const STAT_CARDS = [
@@ -579,11 +548,9 @@ export default function DashboardPage() {
     { icon: <FiTrendingUp />,  label: 'Productivity Score',  value: `${productivityScore}%`,      accent: '#34d399', delay: 0.31 },
   ];
 
-  // ── Render ──────────────────────────────────────────────────────────────
   return (
     <div style={{ minHeight: '100vh', background: '#020617', padding: '24px 24px 48px', overflowX: 'hidden' }}>
 
-      {/* ── Ambient background glows ─────────────────────────────────── */}
       <div aria-hidden style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
         <div style={{
           position: 'absolute', top: -220, left: -220, width: 660, height: 660,
@@ -605,12 +572,8 @@ export default function DashboardPage() {
         }} />
       </div>
 
-      {/* ── Page content ─────────────────────────────────────────────── */}
       <div style={{ maxWidth: 1440, margin: '0 auto', position: 'relative', zIndex: 1 }}>
 
-        {/* ══════════════════════════════════════════════════════════════
-            SECTION 1 – GREETING ROW
-        ══════════════════════════════════════════════════════════════ */}
         <div style={{
           display: 'flex', alignItems: 'flex-start',
           justifyContent: 'space-between', flexWrap: 'wrap',
@@ -644,9 +607,6 @@ export default function DashboardPage() {
           <LevelBadge level={userLevel} xp={xpPoints} />
         </div>
 
-        {/* ══════════════════════════════════════════════════════════════
-            SECTION 2 – STAT CARDS (6-up)
-        ══════════════════════════════════════════════════════════════ */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fill, minmax(155px, 1fr))',
@@ -657,9 +617,6 @@ export default function DashboardPage() {
           ))}
         </div>
 
-        {/* ══════════════════════════════════════════════════════════════
-            SECTION 3 – WELLNESS DASHBOARD
-        ══════════════════════════════════════════════════════════════ */}
         <motion.div
           initial={{ opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
@@ -667,7 +624,7 @@ export default function DashboardPage() {
           style={{ marginBottom: 22 }}
         >
           <GlassCard style={{ padding: '24px 28px' }}>
-            {/* Header */}
+            
             <div style={{
               display: 'flex', alignItems: 'center',
               justifyContent: 'space-between', flexWrap: 'wrap',
@@ -690,7 +647,7 @@ export default function DashboardPage() {
                 ✦ Live
               </div>
             </div>
-            {/* Rings row */}
+            
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
               <WellnessTile label="Wellness"    value={wellnessScore}    color="#10b981" unit="%" trend={+8}  delay={0.42} />
               <WellnessTile label="Focus"       value={focusScore}       color="#6366f1" unit="%" trend={+5}  delay={0.47} />
@@ -700,9 +657,6 @@ export default function DashboardPage() {
           </GlassCard>
         </motion.div>
 
-        {/* ══════════════════════════════════════════════════════════════
-            SECTION 4 – THREE-COLUMN GRID
-        ══════════════════════════════════════════════════════════════ */}
         <div
           className="dashboard-main-grid"
           style={{
@@ -711,17 +665,16 @@ export default function DashboardPage() {
             gap: 20, marginBottom: 22, alignItems: 'start',
           }}
         >
-          {/* ── LEFT COLUMN ──────────────────────────────────────────── */}
+          
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
 
-            {/* TODAY'S HABITS ───────────────────────────────────────── */}
             <motion.div
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.43, duration: 0.5 }}
             >
               <GlassCard style={{ padding: '24px' }}>
-                {/* Header */}
+                
                 <div style={{
                   display: 'flex', alignItems: 'center',
                   justifyContent: 'space-between', flexWrap: 'wrap',
@@ -800,7 +753,7 @@ export default function DashboardPage() {
               </GlassCard>
             </motion.div>
 
-            {/* WEEKLY PROGRESS CHART ─────────────────────────────────── */}
+            {/* WEEKLY PROGRESS CH */}
             <motion.div
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
@@ -890,7 +843,7 @@ export default function DashboardPage() {
             </motion.div>
           </div>
 
-          {/* ── RIGHT COLUMN – AI COACH ──────────────────────────────── */}
+          {/*RIGHT COLUMN – AI COACH */}
           <motion.div
             initial={{ opacity: 0, x: 22 }}
             animate={{ opacity: 1, x: 0 }}
@@ -900,9 +853,9 @@ export default function DashboardPage() {
           </motion.div>
         </div>
 
-        {/* ══════════════════════════════════════════════════════════════
+        {/*
             SECTION 5 – QUICK ACTIONS
-        ══════════════════════════════════════════════════════════════ */}
+         */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -952,9 +905,9 @@ export default function DashboardPage() {
           </div>
         </motion.div>
 
-        {/* ══════════════════════════════════════════════════════════════
+        {/*
             SECTION 6 – ACHIEVEMENT BADGES
-        ══════════════════════════════════════════════════════════════ */}
+     */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -998,7 +951,7 @@ export default function DashboardPage() {
 
       </div>{/* /max-width */}
 
-      {/* ── Responsive overrides ─────────────────────────────────────── */}
+      {/*  Responsive overrides */}
       <style>{`
         @media (max-width: 900px) {
           .dashboard-main-grid {

@@ -130,7 +130,6 @@ export default function GoalsPage() {
     return { label: `${diffDays}d left`, color: '#10b981', bg: 'rgba(16,185,129,0.15)' };
   };
 
-  // SVG circular progress ring
   const ProgressRing = ({ progress, color, size = 72 }) => {
     const r = (size - 10) / 2;
     const circ = 2 * Math.PI * r;
@@ -153,7 +152,7 @@ export default function GoalsPage() {
   return (
     <div className="min-h-screen p-4 sm:p-6 lg:p-8" style={{ background: '#020617' }}>
       <div className="mx-auto max-w-7xl space-y-6">
-        {/* Header */}
+        
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
           className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
@@ -167,7 +166,6 @@ export default function GoalsPage() {
           </motion.button>
         </motion.div>
 
-        {/* Filters */}
         <div className="flex gap-2">
           {['active', 'completed', 'all'].map(f => (
             <button key={f} onClick={() => setFilter(f)}
@@ -182,7 +180,6 @@ export default function GoalsPage() {
           ))}
         </div>
 
-        {/* Goals Grid */}
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[1,2,3].map(i => (
@@ -207,7 +204,7 @@ export default function GoalsPage() {
                   <motion.div key={goal._id} layout initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }}
                     className="rounded-2xl p-5 space-y-4"
                     style={{ background: 'rgba(30,41,59,0.6)', border: `1px solid rgba(255,255,255,0.08)`, borderLeft: `4px solid ${goal.color || '#6366f1'}` }}>
-                    {/* Header */}
+                    
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
                         <span className="text-3xl">{goal.icon || '🎯'}</span>
@@ -222,7 +219,6 @@ export default function GoalsPage() {
                       </div>
                     </div>
 
-                    {/* Progress ring */}
                     <div className="flex items-center justify-between">
                       <div className="flex flex-col">
                         <div className="flex justify-between text-xs mb-1.5">
@@ -242,8 +238,6 @@ export default function GoalsPage() {
                       </div>
                     </div>
 
-
-                    {/* Deadline badge */}
                     {goal.deadline && (() => {
                       const info = getDeadlineInfo(goal.deadline);
                       return info ? (
@@ -259,7 +253,6 @@ export default function GoalsPage() {
                       ) : null;
                     })()}
 
-                    {/* Milestones toggle */}
                     {(goal.milestones || []).length > 0 && (
                       <>
                         <button onClick={() => setExpanded(e => ({ ...e, [goal._id]: !e[goal._id] }))}
@@ -295,7 +288,6 @@ export default function GoalsPage() {
         )}
       </div>
 
-      {/* Modal */}
       <AnimatePresence>
         {modalOpen && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
@@ -305,14 +297,14 @@ export default function GoalsPage() {
             <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
               className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl"
               style={{ background: 'rgba(15,23,42,0.98)', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 25px 60px rgba(0,0,0,0.6)' }}>
-              {/* Modal Header */}
+              
               <div className="flex items-center justify-between p-6 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
                 <h2 className="text-lg font-bold text-white">{editGoal ? 'Edit Goal' : 'New Goal'}</h2>
                 <button onClick={() => setModalOpen(false)} className="p-2 rounded-xl hover:bg-white/10 transition-all" style={{ color: 'rgba(255,255,255,0.5)' }}><FiX size={18} /></button>
               </div>
 
               <div className="p-6 space-y-5">
-                {/* Icon picker */}
+                
                 <div>
                   <label className="text-xs font-semibold uppercase tracking-wider mb-2 block" style={{ color: 'rgba(255,255,255,0.4)' }}>Icon</label>
                   <div className="flex flex-wrap gap-2">
@@ -326,19 +318,16 @@ export default function GoalsPage() {
                   </div>
                 </div>
 
-                {/* Title */}
                 <div>
                   <label className="text-xs font-semibold uppercase tracking-wider mb-2 block" style={{ color: 'rgba(255,255,255,0.4)' }}>Title *</label>
                   <input style={inputStyle} placeholder="e.g. Run a Marathon" value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} />
                 </div>
 
-                {/* Description */}
                 <div>
                   <label className="text-xs font-semibold uppercase tracking-wider mb-2 block" style={{ color: 'rgba(255,255,255,0.4)' }}>Description</label>
                   <textarea rows={2} style={{ ...inputStyle, resize: 'none' }} placeholder="Optional description..." value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} />
                 </div>
 
-                {/* Category + Deadline */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="text-xs font-semibold uppercase tracking-wider mb-2 block" style={{ color: 'rgba(255,255,255,0.4)' }}>Category</label>
@@ -352,7 +341,6 @@ export default function GoalsPage() {
                   </div>
                 </div>
 
-                {/* Color */}
                 <div>
                   <label className="text-xs font-semibold uppercase tracking-wider mb-2 block" style={{ color: 'rgba(255,255,255,0.4)' }}>Color</label>
                   <div className="flex gap-3">
@@ -364,7 +352,6 @@ export default function GoalsPage() {
                   </div>
                 </div>
 
-                {/* Milestones */}
                 <div>
                   <label className="text-xs font-semibold uppercase tracking-wider mb-2 block" style={{ color: 'rgba(255,255,255,0.4)' }}>Milestones</label>
                   <div className="flex gap-2 mb-2">
@@ -382,7 +369,6 @@ export default function GoalsPage() {
                 </div>
               </div>
 
-              {/* Modal Footer */}
               <div className="flex items-center justify-end gap-3 p-6 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
                 <button onClick={() => setModalOpen(false)} className="px-5 py-2.5 rounded-xl text-sm font-medium" style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.6)' }}>Cancel</button>
                 <motion.button onClick={handleSave} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}

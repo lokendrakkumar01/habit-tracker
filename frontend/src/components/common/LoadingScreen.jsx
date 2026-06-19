@@ -6,7 +6,7 @@ export default function LoadingScreen() {
       style={{ background: 'radial-gradient(ellipse at top, rgba(124,58,237,0.1) 0%, transparent 60%), #020617' }}
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden"
     >
-      {/* Background orbs */}
+      {}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
         <motion.div
           animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.3, 0.15] }}
@@ -22,9 +22,9 @@ export default function LoadingScreen() {
         />
       </div>
 
-      {/* Content */}
+      {}
       <div className="relative z-10 flex flex-col items-center gap-8">
-        {/* Logo ring */}
+        {}
         <div className="relative flex h-28 w-28 items-center justify-center">
           <motion.div
             animate={{ rotate: 360 }}
@@ -47,7 +47,7 @@ export default function LoadingScreen() {
           </motion.span>
         </div>
 
-        {/* Brand */}
+        {}
         <motion.h1
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -58,7 +58,7 @@ export default function LoadingScreen() {
           HabitFlow
         </motion.h1>
 
-        {/* Dots */}
+        {}
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium" style={{ color: '#a78bfa' }}>Loading</span>
           <div className="flex gap-1">
@@ -73,7 +73,7 @@ export default function LoadingScreen() {
           </div>
         </div>
 
-        {/* Progress shimmer */}
+        {}
         <div className="h-0.5 w-48 overflow-hidden rounded-full" style={{ background: 'rgba(255,255,255,0.05)' }}>
           <motion.div
             animate={{ x: ['-100%', '100%'] }}

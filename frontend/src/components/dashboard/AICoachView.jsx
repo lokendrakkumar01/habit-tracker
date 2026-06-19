@@ -10,7 +10,6 @@ export default function AICoachView() {
   const [askActive, setAskActive] = useState(false);
   const [coachResponse, setCoachResponse] = useState(null);
 
-  // Queries
   const { data: suggestionsData, isLoading: suggestionsLoading } = useQuery({
     queryKey: ['aiSuggestions'],
     queryFn: async () => {
@@ -35,7 +34,6 @@ export default function AICoachView() {
     }
   });
 
-  // Mutation to add suggested habit
   const addHabitMutation = useMutation({
     mutationFn: async (habit) => {
       return await api.post('/habits', {
@@ -57,7 +55,6 @@ export default function AICoachView() {
     }
   });
 
-  // Ask coach advice
   const askCoachMutation = useMutation({
     mutationFn: async () => {
       const res = await api.get('/ai/growth-report');
@@ -71,7 +68,7 @@ export default function AICoachView() {
 
   return (
     <div className="space-y-6">
-      {/* ── HEADER CARD ── */}
+      
       <div className="glass-card p-6 relative overflow-hidden bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10">
         <div className="absolute top-0 right-0 p-4 opacity-10">
           <Sparkles size={80} className="text-purple-400" />
@@ -99,7 +96,6 @@ export default function AICoachView() {
           </button>
         </div>
 
-        {/* Coach response area */}
         <AnimatePresence>
           {askActive && coachResponse && (
             <motion.div
@@ -118,7 +114,6 @@ export default function AICoachView() {
         </AnimatePresence>
       </div>
 
-      {/* ── BURNOUT WARNING ring ── */}
       {burnoutData && burnoutData.burnoutStatus !== 'low' && (
         <div className={`p-4 rounded-2xl border flex gap-3 ${
           burnoutData.burnoutStatus === 'high'
@@ -133,7 +128,6 @@ export default function AICoachView() {
         </div>
       )}
 
-      {/* ── HABIT SUGGESTIONS ── */}
       <div className="glass-card p-6">
         <h4 className="text-sm font-bold text-slate-200 dark:text-slate-300 mb-4 flex items-center gap-2">
           <Compass size={16} className="text-indigo-400" />
@@ -172,7 +166,6 @@ export default function AICoachView() {
         )}
       </div>
 
-      {/* ── MISSED HABIT FORECASTS ── */}
       {predictionsData && predictionsData.length > 0 && (
         <div className="glass-card p-6">
           <h4 className="text-sm font-bold text-slate-200 mb-4 flex items-center gap-2">

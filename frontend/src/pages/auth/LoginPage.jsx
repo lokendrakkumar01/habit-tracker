@@ -42,7 +42,7 @@ export default function LoginPage() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
     >
-      {/* Header */}
+      
       <div className="mb-7 text-center">
         <h2 className="text-2xl font-bold text-white mb-1">Welcome back 👋</h2>
         <p className="text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>
@@ -50,10 +50,8 @@ export default function LoginPage() {
         </p>
       </div>
 
-      {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-5" noValidate>
 
-        {/* Email Field */}
         <div>
           <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.5)' }}>
             Email Address
@@ -86,7 +84,6 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Password Field */}
         <div>
           <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.5)' }}>
             Password
@@ -128,7 +125,6 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Remember / Forgot row */}
         <div className="flex items-center justify-between">
           <label className="flex items-center gap-2 cursor-pointer select-none">
             <button
@@ -157,7 +153,6 @@ export default function LoginPage() {
           </Link>
         </div>
 
-        {/* Submit Button */}
         <motion.button
           type="submit"
           disabled={loading}
@@ -182,14 +177,12 @@ export default function LoginPage() {
         </motion.button>
       </form>
 
-      {/* Divider */}
       <div className="my-5 flex items-center gap-3">
         <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.1)' }} />
         <span className="text-xs uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.3)' }}>or</span>
         <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.1)' }} />
       </div>
 
-      {/* Google Sign In */}
       <motion.button
         type="button"
         whileHover={{ scale: 1.01 }}
@@ -206,7 +199,6 @@ export default function LoginPage() {
         Continue with Google
       </motion.button>
 
-      {/* Register link */}
       <p className="mt-6 text-center text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>
         Don&apos;t have an account?{' '}
         <Link to="/register" className="font-semibold transition-colors" style={{ color: '#a78bfa' }}>

@@ -120,8 +120,7 @@ export default function ProfilePage() {
   const handleAvatarChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    
-    // Check file size (e.g. 3MB limit)
+
     if (file.size > 3 * 1024 * 1024) {
       return toast.error('Image size must be less than 3MB');
     }
@@ -145,19 +144,19 @@ export default function ProfilePage() {
 
   return (
     <div className="p-4 sm:p-8 max-w-5xl mx-auto space-y-8 min-h-screen" style={{ color: 'var(--text-primary)' }}>
-      {/* Profile Card Header */}
+      
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="relative overflow-hidden rounded-3xl shadow-2xl p-6 sm:p-8"
         style={{ backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-default)' }}
       >
-        {/* Background Gradients */}
+        
         <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-800 opacity-60 rounded-t-3xl -z-10" />
         <div className="absolute -top-12 -right-12 h-40 w-40 rounded-full bg-violet-500/20 blur-3xl" />
 
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6 pt-12">
-          {/* Avatar Area */}
+          
           <div className="relative group cursor-pointer" onClick={handleAvatarClick}>
             <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full border-4 border-slate-900 bg-gradient-to-tr from-violet-600 to-indigo-600 flex items-center justify-center text-4xl font-bold overflow-hidden shadow-xl">
               {user.avatar ? (
@@ -181,7 +180,6 @@ export default function ProfilePage() {
             />
           </div>
 
-          {/* User Details */}
           <div className="flex-1 text-center md:text-left space-y-3">
             <div style={{ display: 'flex', flexFlow: 'row wrap', alignItems: 'center', gap: '12px', justifyContent: 'center' }} className="md:justify-start">
               <h2 className="text-3xl font-extrabold tracking-tight" style={{ color: 'var(--text-primary)' }}>{user.name}</h2>
@@ -197,8 +195,7 @@ export default function ProfilePage() {
               </div>
             </div>
             <p style={{ color: 'var(--text-secondary)' }} className="text-sm">{user.email}</p>
-            
-            {/* XP progress bar */}
+
             <div className="max-w-md mx-auto md:mx-0 pt-2">
               <div className="flex justify-between text-xs font-medium mb-1.5" style={{ color: 'var(--text-secondary)' }}>
                 <span>Level {currentLevel}</span>
@@ -221,7 +218,6 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Quick stats grid */}
         <div className="grid grid-cols-3 gap-4 mt-8 pt-6 text-center" style={{ borderTop: '1px solid var(--border-subtle)' }}>
           {[
             { label: 'Member Since', value: user.createdAt ? format(new Date(user.createdAt), 'MMM yyyy') : 'Now' },
@@ -236,7 +232,6 @@ export default function ProfilePage() {
         </div>
       </motion.div>
 
-      {/* Tabs list */}
       <div 
         style={{ 
           display: 'flex', 
@@ -291,7 +286,6 @@ export default function ProfilePage() {
         })}
       </div>
 
-      {/* Tab Panels */}
       <AnimatePresence mode="wait">
         {tab === 'profile' && (
           <motion.div
@@ -337,7 +331,6 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              {/* Notification preferences */}
               <div className="pt-4 space-y-4">
                 <h4 className="text-sm font-bold flex items-center gap-2">
                   <FiBell className="text-indigo-400" /> Notifications Settings
@@ -420,7 +413,6 @@ export default function ProfilePage() {
               </motion.button>
             </div>
 
-            {/* Danger Zone */}
             <div className="border-t pt-6 mt-6" style={{ borderTopColor: 'rgba(239, 68, 68, 0.2)' }}>
               <h4 className="text-sm font-bold text-rose-400 mb-2 flex items-center gap-2">
                 <FiShield /> Danger Zone
@@ -586,7 +578,6 @@ export default function ProfilePage() {
         )}
       </AnimatePresence>
 
-      {/* Delete Confirmation Modal */}
       <AnimatePresence>
         {showDeleteModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">

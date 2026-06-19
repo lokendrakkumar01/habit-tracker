@@ -35,7 +35,6 @@ const PAGE_TITLES = {
   '/social': 'Social', '/premium': 'Premium', '/profile': 'Profile', '/admin': 'Admin',
 };
 
-// ─── Notification type styles ───────────────────────────────────────────────
 const NOTIF_ICONS = {
   achievement: { icon: FiZap, color: '#a78bfa', bg: 'rgba(167,139,250,0.15)' },
   streak:      { icon: FiStar, color: '#f59e0b', bg: 'rgba(245,158,11,0.15)' },
@@ -45,7 +44,6 @@ const NOTIF_ICONS = {
   warning:     { icon: FiAlertCircle, color: '#f97316', bg: 'rgba(249,115,22,0.15)' },
 };
 
-// Mock notifications fallback
 const MOCK_NOTIFICATIONS = [
   { _id: '1', type: 'achievement', title: 'Badge Unlocked! 🎉', message: 'You earned the "Week Warrior" badge for a 7-day streak!', read: false, createdAt: new Date(Date.now() - 5 * 60000).toISOString() },
   { _id: '2', type: 'streak', title: 'Streak Milestone', message: 'Amazing! You\'re on a 14-day streak. Keep going!', read: false, createdAt: new Date(Date.now() - 2 * 3600000).toISOString() },
@@ -63,7 +61,6 @@ function timeAgo(dateStr) {
   return `${Math.floor(hrs / 24)}d ago`;
 }
 
-// ─── Notification Bell Dropdown ─────────────────────────────────────────────
 function NotificationDropdown({ onClose, setUnreadCount }) {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -134,7 +131,7 @@ function NotificationDropdown({ onClose, setUnreadCount }) {
         overflow: 'hidden',
       }}
     >
-      {/* Header */}
+      
       <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <FiBell size={15} className="text-violet-400" />
@@ -155,7 +152,6 @@ function NotificationDropdown({ onClose, setUnreadCount }) {
         )}
       </div>
 
-      {/* List */}
       <div className="max-h-80 overflow-y-auto">
         {loading ? (
           <div className="flex justify-center py-8">
@@ -197,7 +193,6 @@ function NotificationDropdown({ onClose, setUnreadCount }) {
         )}
       </div>
 
-      {/* Footer */}
       <div style={{ borderTop: '1px solid var(--border-subtle)' }} className="px-4 py-2.5 text-center">
         <button
           onClick={onClose}
@@ -210,7 +205,6 @@ function NotificationDropdown({ onClose, setUnreadCount }) {
   );
 }
 
-// ─── Sidebar Link ────────────────────────────────────────────────────────────
 function SidebarLink({ to, label, icon: Icon, collapsed }) {
   const location = useLocation();
   const isActive = location.pathname.startsWith(to);
@@ -238,7 +232,7 @@ function SidebarLink({ to, label, icon: Icon, collapsed }) {
           </motion.span>
         )}
       </AnimatePresence>
-      {/* Tooltip for collapsed mode */}
+      
       {collapsed && (
         <div className="pointer-events-none absolute left-full ml-2 z-50 hidden rounded-lg px-2.5 py-1.5 text-xs text-white shadow-xl border group-hover:block whitespace-nowrap"
           style={{ background: 'rgba(15,23,42,0.95)', border: '1px solid rgba(255,255,255,0.1)' }}>
@@ -249,7 +243,6 @@ function SidebarLink({ to, label, icon: Icon, collapsed }) {
   );
 }
 
-// ─── Main AppLayout ──────────────────────────────────────────────────────────
 export default function AppLayout() {
   const dispatch   = useDispatch();
   const navigate   = useNavigate();
@@ -265,20 +258,18 @@ export default function AppLayout() {
 
   const pageTitle = PAGE_TITLES[Object.keys(PAGE_TITLES).find((p) => location.pathname.startsWith(p)) || ''] || 'HabitFlow';
 
-  // Fetch unread notification count
   useEffect(() => {
     const fetchUnread = async () => {
       try {
         const res = await api.get('/notifications/unread-count');
         setUnreadCount(res.data?.count ?? 0);
       } catch {
-        setUnreadCount(2); // mock fallback
+        setUnreadCount(2); 
       }
     };
     fetchUnread();
   }, []);
 
-  // Close notif dropdown when navigating
   useEffect(() => {
     setNotifOpen(false);
     setMobileOpen(false);
@@ -302,7 +293,7 @@ export default function AppLayout() {
 
   const SidebarContent = ({ isMobile = false }) => (
     <div className="flex h-full flex-col">
-      {/* Logo */}
+      
       <div className={`flex items-center gap-3 px-4 py-5 ${collapsed && !isMobile ? 'justify-center' : ''}`}>
         <span className="text-2xl flex-shrink-0">🎯</span>
         <AnimatePresence>
@@ -317,10 +308,8 @@ export default function AppLayout() {
         </AnimatePresence>
       </div>
 
-      {/* Divider */}
       <div className="mx-3 h-px" style={{ background: 'var(--border-subtle)' }} />
 
-      {/* Nav */}
       <nav className="mt-4 flex-1 space-y-0.5 px-3 overflow-y-auto">
         {NAV.map((item) => (
           <SidebarLink key={item.to} {...item} collapsed={collapsed && !isMobile} />
@@ -330,10 +319,8 @@ export default function AppLayout() {
         )}
       </nav>
 
-      {/* Divider */}
       <div className="mx-3 my-3 h-px" style={{ background: 'var(--border-subtle)' }} />
 
-      {/* User card */}
       <AnimatePresence>
         {(!collapsed || isMobile) && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
@@ -372,7 +359,6 @@ export default function AppLayout() {
   return (
     <div className="flex h-screen overflow-hidden" style={{ background: 'var(--bg-primary)' }}>
 
-      {/* ── Desktop Sidebar ── */}
       <motion.aside
         animate={{ width: collapsed ? 72 : 256 }}
         transition={{ duration: 0.25, ease: 'easeInOut' }}
@@ -380,7 +366,7 @@ export default function AppLayout() {
         style={{ background: 'var(--bg-secondary)', borderRight: '1px solid var(--border-subtle)' }}
       >
         <SidebarContent />
-        {/* Collapse toggle */}
+        
         <button onClick={() => dispatch(toggleSidebarCollapse())}
           className="absolute top-5 -right-3 z-40 flex h-6 w-6 items-center justify-center rounded-full text-white/40 shadow-lg hover:text-white transition-all cursor-pointer"
           style={{ background: 'var(--bg-tertiary)', border: '1px solid var(--border-default)' }}>
@@ -388,7 +374,6 @@ export default function AppLayout() {
         </button>
       </motion.aside>
 
-      {/* ── Mobile Sidebar ── */}
       <AnimatePresence>
         {mobileOpen && (
           <>
@@ -411,9 +396,8 @@ export default function AppLayout() {
         )}
       </AnimatePresence>
 
-      {/* ── Main Content ── */}
       <div className="flex flex-1 flex-col overflow-hidden min-w-0">
-        {/* Navbar */}
+        
         <header className="flex h-16 items-center justify-between px-4 lg:px-6 z-20 flex-shrink-0"
           style={{ background: 'var(--bg-header)', borderBottom: '1px solid var(--border-subtle)', backdropFilter: 'blur(12px)' }}>
           <div className="flex items-center gap-4">
@@ -424,7 +408,7 @@ export default function AppLayout() {
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            {/* CSV Export */}
+            
             <button
               onClick={handleExportCSV}
               title="Export habits to CSV"
@@ -435,7 +419,6 @@ export default function AppLayout() {
               <span className="hidden sm:inline">Export</span>
             </button>
 
-            {/* Dark / Light Mode */}
             <button onClick={toggleDarkMode}
               title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
               className="h-9 w-9 flex items-center justify-center rounded-xl transition-all cursor-pointer"
@@ -443,7 +426,6 @@ export default function AppLayout() {
               {darkMode ? <FiSun size={16} /> : <FiMoon size={16} />}
             </button>
 
-            {/* Notification Bell */}
             <div className="relative">
               <button
                 ref={notifBtnRef}
@@ -470,7 +452,6 @@ export default function AppLayout() {
               </AnimatePresence>
             </div>
 
-            {/* Avatar */}
             <button onClick={() => navigate('/profile')}
               className="h-9 w-9 flex items-center justify-center rounded-xl overflow-hidden text-sm font-bold text-white transition-all hover:ring-2 hover:ring-violet-500 cursor-pointer"
               style={{ background: 'linear-gradient(135deg,#7c3aed,#4f46e5)' }}>
@@ -481,7 +462,6 @@ export default function AppLayout() {
           </div>
         </header>
 
-        {/* Page Content */}
         <main className="flex-1 overflow-y-auto min-w-0" style={{ background: 'var(--bg-primary)' }}>
           <motion.div
             key={location.pathname}

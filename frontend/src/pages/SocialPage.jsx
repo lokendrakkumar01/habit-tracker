@@ -24,8 +24,6 @@ import {
   FiSmile,
 } from "react-icons/fi";
 
-// ─── Mock Data ────────────────────────────────────────────────────────────────
-
 const MOCK_FEED = [
   {
     id: 1,
@@ -267,8 +265,6 @@ const MOCK_CHALLENGES = [
   },
 ];
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
 const RANK_MEDALS = {
   1: { icon: "🥇", color: "#f59e0b" },
   2: { icon: "🥈", color: "#94a3b8" },
@@ -287,8 +283,6 @@ const getCategoryIcon = (name, size = 13) => {
   };
   return icons[name] || <FiStar size={size} />;
 };
-
-// ─── Animation Variants ───────────────────────────────────────────────────────
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -313,8 +307,6 @@ const fadeScale = {
   exit: { opacity: 0, scale: 0.97, transition: { duration: 0.18 } },
 };
 
-// ─── Animated Counter ─────────────────────────────────────────────────────────
-
 const AnimatedCounter = ({ target, duration = 1100 }) => {
   const [count, setCount] = useState(0);
   const startRef = useRef(null);
@@ -336,8 +328,6 @@ const AnimatedCounter = ({ target, duration = 1100 }) => {
 
   return <span>{count.toLocaleString()}</span>;
 };
-
-// ─── Feed Item ────────────────────────────────────────────────────────────────
 
 const FeedItem = ({ item }) => {
   const [liked, setLiked] = useState(item.liked);
@@ -378,9 +368,9 @@ const FeedItem = ({ item }) => {
           backdropFilter: "blur(12px)",
         }}
       >
-        {/* Top row */}
+        
         <div style={{ display: "flex", alignItems: "flex-start", gap: 14 }}>
-          {/* Avatar */}
+          
           <div
             style={{
               width: 44,
@@ -401,7 +391,6 @@ const FeedItem = ({ item }) => {
             {item.initials}
           </div>
 
-          {/* Text */}
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap" }}>
               <span style={{ color: "#f1f5f9", fontWeight: 700, fontSize: 14 }}>{item.name}</span>
@@ -431,7 +420,6 @@ const FeedItem = ({ item }) => {
           </div>
         </div>
 
-        {/* Action bar */}
         <div
           style={{
             display: "flex",
@@ -442,7 +430,7 @@ const FeedItem = ({ item }) => {
             borderTop: "1px solid rgba(255,255,255,0.05)",
           }}
         >
-          {/* Like */}
+          
           <motion.button
             whileTap={{ scale: 0.86 }}
             onClick={handleLike}
@@ -465,7 +453,6 @@ const FeedItem = ({ item }) => {
             {likeCount}
           </motion.button>
 
-          {/* Comment */}
           <motion.button
             whileTap={{ scale: 0.86 }}
             onClick={handlePostComment}
@@ -488,7 +475,6 @@ const FeedItem = ({ item }) => {
             {item.comments}
           </motion.button>
 
-          {/* Share */}
           <motion.button
             whileTap={{ scale: 0.86 }}
             onClick={() => toast("Link copied to clipboard!", { icon: "🔗" })}
@@ -510,7 +496,6 @@ const FeedItem = ({ item }) => {
           </motion.button>
         </div>
 
-        {/* Comment input */}
         <AnimatePresence>
           {showComment && (
             <motion.div
@@ -562,8 +547,6 @@ const FeedItem = ({ item }) => {
   );
 };
 
-// ─── Leaderboard Row ──────────────────────────────────────────────────────────
-
 const LeaderboardRow = ({ user, rank, animate }) => {
   const medal = RANK_MEDALS[rank];
 
@@ -586,7 +569,7 @@ const LeaderboardRow = ({ user, rank, animate }) => {
           overflow: "hidden",
         }}
       >
-        {/* Top accent for top 3 */}
+        
         {medal && (
           <div
             style={{
@@ -598,7 +581,6 @@ const LeaderboardRow = ({ user, rank, animate }) => {
           />
         )}
 
-        {/* Rank / medal */}
         <div style={{ width: 36, textAlign: "center", flexShrink: 0 }}>
           {medal ? (
             <span style={{ fontSize: 22 }}>{medal.icon}</span>
@@ -609,7 +591,6 @@ const LeaderboardRow = ({ user, rank, animate }) => {
           )}
         </div>
 
-        {/* Avatar */}
         <div
           style={{
             width: 40,
@@ -630,7 +611,6 @@ const LeaderboardRow = ({ user, rank, animate }) => {
           {user.initials}
         </div>
 
-        {/* Name + meta */}
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <span
@@ -681,7 +661,6 @@ const LeaderboardRow = ({ user, rank, animate }) => {
           </div>
         </div>
 
-        {/* XP */}
         <div style={{ textAlign: "right", flexShrink: 0 }}>
           <div
             style={{
@@ -700,8 +679,6 @@ const LeaderboardRow = ({ user, rank, animate }) => {
     </motion.div>
   );
 };
-
-// ─── Challenge Card ───────────────────────────────────────────────────────────
 
 const ChallengeCard = ({ challenge }) => {
   const [joined, setJoined] = useState(challenge.joined);
@@ -739,7 +716,7 @@ const ChallengeCard = ({ challenge }) => {
           boxSizing: "border-box",
         }}
       >
-        {/* Top gradient strip */}
+        
         <div
           style={{
             position: "absolute",
@@ -750,7 +727,6 @@ const ChallengeCard = ({ challenge }) => {
           }}
         />
 
-        {/* Category + Difficulty badges */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 4 }}>
           <span
             style={{
@@ -784,7 +760,6 @@ const ChallengeCard = ({ challenge }) => {
           </span>
         </div>
 
-        {/* Title + Desc */}
         <div>
           <h3 style={{ color: "#f1f5f9", fontWeight: 700, fontSize: 15, margin: 0, lineHeight: 1.4 }}>
             {challenge.title}
@@ -794,7 +769,6 @@ const ChallengeCard = ({ challenge }) => {
           </p>
         </div>
 
-        {/* Stats */}
         <div style={{ display: "flex", gap: 18 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 5, color: "#64748b", fontSize: 12 }}>
             <FiUsers size={12} />
@@ -806,7 +780,6 @@ const ChallengeCard = ({ challenge }) => {
           </div>
         </div>
 
-        {/* Progress bar (if joined + has progress) */}
         {joined && challenge.progress > 0 && (
           <div>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 7 }}>
@@ -836,7 +809,6 @@ const ChallengeCard = ({ challenge }) => {
           </div>
         )}
 
-        {/* Join / Leave button */}
         <motion.button
           whileTap={{ scale: 0.97 }}
           onClick={handleToggle}
@@ -871,8 +843,6 @@ const ChallengeCard = ({ challenge }) => {
     </motion.div>
   );
 };
-
-// ─── Create Challenge Modal ───────────────────────────────────────────────────
 
 const CATEGORIES = ["Fitness", "Mindfulness", "Learning", "Productivity"];
 const DURATIONS = ["7", "14", "21", "30", "60", "90"];
@@ -943,7 +913,7 @@ const CreateChallengeModal = ({ onClose }) => {
           boxShadow: "0 40px 80px rgba(0,0,0,0.65)",
         }}
       >
-        {/* Modal Header */}
+        
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 26 }}>
           <div>
             <h2
@@ -982,7 +952,7 @@ const CreateChallengeModal = ({ onClose }) => {
         </div>
 
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-          {/* Title */}
+          
           <div>
             <label style={{ color: "#64748b", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", display: "block", marginBottom: 7 }}>
               Title *
@@ -995,7 +965,6 @@ const CreateChallengeModal = ({ onClose }) => {
             />
           </div>
 
-          {/* Description */}
           <div>
             <label style={{ color: "#64748b", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", display: "block", marginBottom: 7 }}>
               Description
@@ -1008,7 +977,6 @@ const CreateChallengeModal = ({ onClose }) => {
             />
           </div>
 
-          {/* Category + Duration */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
             <div>
               <label style={{ color: "#64748b", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", display: "block", marginBottom: 7 }}>
@@ -1040,7 +1008,6 @@ const CreateChallengeModal = ({ onClose }) => {
             </div>
           </div>
 
-          {/* Difficulty */}
           <div>
             <label style={{ color: "#64748b", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", display: "block", marginBottom: 10 }}>
               Difficulty
@@ -1074,7 +1041,6 @@ const CreateChallengeModal = ({ onClose }) => {
             </div>
           </div>
 
-          {/* Submit */}
           <motion.button
             whileTap={{ scale: 0.97 }}
             type="submit"
@@ -1100,8 +1066,6 @@ const CreateChallengeModal = ({ onClose }) => {
   );
 };
 
-// ─── MAIN PAGE ────────────────────────────────────────────────────────────────
-
 const TABS = [
   { id: "feed",        label: "Feed",        icon: <FiActivity size={15} />    },
   { id: "leaderboard",label: "Leaderboard",  icon: <FiTrendingUp size={15} />  },
@@ -1118,7 +1082,6 @@ const LB_DATA_MAP = {
 export default function SocialPage() {
   const dispatch = useDispatch();
 
-  // Try Redux feed; fall back to mock
   const reduxFeed = useSelector((state) => state?.social?.feed);
   const feedData = reduxFeed && reduxFeed.length > 0 ? reduxFeed : MOCK_FEED;
 
@@ -1129,7 +1092,6 @@ export default function SocialPage() {
 
   const leaderboardData = LB_DATA_MAP[lbFilter];
 
-  // Re-trigger counter animation on filter change
   useEffect(() => {
     setAnimateLb(false);
     const t = setTimeout(() => setAnimateLb(true), 60);
@@ -1138,7 +1100,7 @@ export default function SocialPage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "#020617", paddingBottom: 64 }}>
-      {/* ── Page Header ── */}
+      
       <motion.div
         initial={{ opacity: 0, y: -18 }}
         animate={{ opacity: 1, y: 0 }}
@@ -1146,7 +1108,7 @@ export default function SocialPage() {
         style={{ padding: "32px 24px 0", maxWidth: 900, margin: "0 auto" }}
       >
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
-          {/* Title */}
+          
           <div>
             <h1
               style={{
@@ -1166,7 +1128,6 @@ export default function SocialPage() {
             </p>
           </div>
 
-          {/* Quick stats */}
           <div style={{ display: "flex", gap: 10 }}>
             {[
               { label: "Friends", value: "24", icon: <FiUsers size={14} /> },
@@ -1193,7 +1154,6 @@ export default function SocialPage() {
           </div>
         </div>
 
-        {/* ── Tabs ── */}
         <div
           style={{
             display: "flex",
@@ -1238,14 +1198,12 @@ export default function SocialPage() {
         </div>
       </motion.div>
 
-      {/* ── Content area ── */}
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "24px 24px 0" }}>
         <AnimatePresence mode="wait">
 
-          {/* ══════════ FEED ══════════ */}
           {activeTab === "feed" && (
             <motion.div key="feed" variants={fadeScale} initial="hidden" animate="visible" exit="exit">
-              {/* Header */}
+              
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
                 <h2 style={{ color: "#f1f5f9", fontWeight: 700, fontSize: 18, margin: 0 }}>
                   Activity Feed
@@ -1295,7 +1253,6 @@ export default function SocialPage() {
                 ))}
               </motion.div>
 
-              {/* Load more */}
               <div style={{ textAlign: "center", marginTop: 24 }}>
                 <motion.button
                   whileTap={{ scale: 0.96 }}
@@ -1323,10 +1280,9 @@ export default function SocialPage() {
             </motion.div>
           )}
 
-          {/* ══════════ LEADERBOARD ══════════ */}
           {activeTab === "leaderboard" && (
             <motion.div key="leaderboard" variants={fadeScale} initial="hidden" animate="visible" exit="exit">
-              {/* Header + filter */}
+              
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12, marginBottom: 20 }}>
                 <h2 style={{ color: "#f1f5f9", fontWeight: 700, fontSize: 18, margin: 0 }}>
                   Top Performers 🏆
@@ -1364,7 +1320,6 @@ export default function SocialPage() {
                 </div>
               </div>
 
-              {/* Top 3 podium cards */}
               <motion.div
                 variants={containerVariants}
                 initial="hidden"
@@ -1388,7 +1343,7 @@ export default function SocialPage() {
                           boxShadow: `0 8px 32px ${medal.color}14`,
                         }}
                       >
-                        {/* Top shimmer */}
+                        
                         <div style={{ position: "absolute", inset: "0 0 auto 0", height: 2, background: `linear-gradient(90deg, transparent, ${medal.color}, transparent)` }} />
                         <div style={{ fontSize: 28, marginBottom: 12 }}>{medal.icon}</div>
                         <div
@@ -1425,7 +1380,6 @@ export default function SocialPage() {
                 })}
               </motion.div>
 
-              {/* Rows 4–10 */}
               <motion.div
                 key={lbFilter}
                 variants={containerVariants}
@@ -1438,7 +1392,6 @@ export default function SocialPage() {
                 ))}
               </motion.div>
 
-              {/* Your progress card */}
               <motion.div
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -1485,10 +1438,9 @@ export default function SocialPage() {
             </motion.div>
           )}
 
-          {/* ══════════ CHALLENGES ══════════ */}
           {activeTab === "challenges" && (
             <motion.div key="challenges" variants={fadeScale} initial="hidden" animate="visible" exit="exit">
-              {/* Header */}
+              
               <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 12, marginBottom: 20 }}>
                 <div>
                   <h2 style={{ color: "#f1f5f9", fontWeight: 700, fontSize: 18, margin: 0 }}>
@@ -1522,7 +1474,6 @@ export default function SocialPage() {
                 </motion.button>
               </div>
 
-              {/* Category filter pills */}
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 20 }}>
                 {[
                   { label: "All",           color: "#6366f1" },
@@ -1551,7 +1502,6 @@ export default function SocialPage() {
                 ))}
               </div>
 
-              {/* Challenge grid */}
               <motion.div
                 variants={containerVariants}
                 initial="hidden"
@@ -1567,7 +1517,6 @@ export default function SocialPage() {
                 ))}
               </motion.div>
 
-              {/* Bottom CTA banner */}
               <motion.div
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}

@@ -9,7 +9,6 @@ import {
 } from 'react-icons/fi';
 import { MdAutoGraph, MdEmojiEvents } from 'react-icons/md';
 
-/* ─── Animation Variants ─────────────────────────────── */
 const fade = {
   hidden: { opacity: 0, y: 28 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } },
@@ -19,7 +18,6 @@ const stagger = {
   visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
 };
 
-/* ─── Data ───────────────────────────────────────────── */
 const features = [
   { icon: FiTarget,    color: '#a78bfa', title: 'Smart Habit Tracking',    desc: 'Create unlimited habits with custom schedules, reminders, and priority levels tailored to your lifestyle.' },
   { icon: FiZap,       color: '#fbbf24', title: 'Streak System',           desc: 'Stay on fire with streak tracking, streak freeze protection, and milestone celebrations.' },
@@ -56,8 +54,6 @@ const faqs = [
   { q: 'Is my data secure?', a: 'We use JWT authentication, bcrypt password hashing, rate limiting, NoSQL injection prevention, and MongoDB Atlas for secure cloud storage. Your data is never sold.' },
   { q: 'Do you have a mobile app?', a: 'HabitFlow is a fully responsive Progressive Web App (PWA) that works perfectly on all mobile browsers. A native iOS/Android app is on our roadmap.' },
 ];
-
-/* ─── Sub-components ─────────────────────────────────── */
 
 function AnimatedCounter({ target, suffix = '', duration = 2000 }) {
   const [count, setCount] = useState(0);
@@ -129,7 +125,6 @@ function FAQItem({ q, a, index }) {
   );
 }
 
-/* ─── Main Page ──────────────────────────────────────── */
 export default function LandingPage() {
   const { scrollY } = useScroll();
   const navBg = useTransform(scrollY, [0, 80], ['rgba(10,10,15,0)', 'rgba(10,10,15,0.95)']);
@@ -143,7 +138,6 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen text-white overflow-x-hidden" style={{ background: '#0a0a0f' }}>
 
-      {/* ── Navbar ────────────────────────────────────── */}
       <motion.nav
         style={{ backgroundColor: navBg, borderBottomColor: navBorder }}
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 border-b backdrop-blur-xl"
@@ -171,9 +165,8 @@ export default function LandingPage() {
         </div>
       </motion.nav>
 
-      {/* ── Hero ──────────────────────────────────────── */}
       <section className="relative pt-32 pb-24 px-6 text-center overflow-hidden">
-        {/* Background */}
+        
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full opacity-30"
             style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.35) 0%, transparent 70%)' }} />
@@ -181,7 +174,7 @@ export default function LandingPage() {
             style={{ background: 'radial-gradient(circle, rgba(56,189,248,0.4) 0%, transparent 70%)' }} />
           <div className="absolute top-1/4 right-0 w-[350px] h-[350px] rounded-full opacity-15"
             style={{ background: 'radial-gradient(circle, rgba(99,102,241,0.4) 0%, transparent 70%)' }} />
-          {/* Grid pattern */}
+          
           <div className="absolute inset-0 opacity-[0.03]" style={{
             backgroundImage: 'linear-gradient(rgba(255,255,255,1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,1) 1px,transparent 1px)',
             backgroundSize: '80px 80px',
@@ -189,24 +182,21 @@ export default function LandingPage() {
         </div>
 
         <motion.div className="relative max-w-5xl mx-auto" variants={stagger} initial="hidden" animate="visible">
-          {/* Badge */}
+          
           <motion.div variants={fade} className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-8 badge badge-primary">
             <FiZap className="text-yellow-400" size={13} />
             ✨ AI-Powered Habit Intelligence — Now Live
           </motion.div>
 
-          {/* Headline */}
           <motion.h1 variants={fade} className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-[1.1] tracking-tight font-display">
             Build Habits That{' '}
             <span className="block gradient-text">Actually Stick</span>
           </motion.h1>
 
-          {/* Sub */}
           <motion.p variants={fade} className="text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed" style={{ color: '#94a3b8' }}>
             The most powerful habit tracker for serious achievers. Track habits, crush streaks, achieve goals, and transform your life with AI coaching.
           </motion.p>
 
-          {/* CTAs */}
           <motion.div variants={fade} className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
             <Link to="/register" className="btn-primary text-sm sm:text-base px-6 py-3.5 sm:px-8 sm:py-4 rounded-2xl">
               Start Free Today <FiArrowRight size={16} />
@@ -219,7 +209,6 @@ export default function LandingPage() {
             Free forever · No credit card · 5 habits included
           </motion.p>
 
-          {/* App Preview */}
           <motion.div variants={fade} className="mt-16 relative max-w-4xl mx-auto">
             <div className="absolute -inset-8 rounded-full opacity-20 blur-3xl pointer-events-none"
               style={{ background: 'linear-gradient(135deg,rgba(139,92,246,0.6),rgba(56,189,248,0.4))' }} />
@@ -228,16 +217,16 @@ export default function LandingPage() {
               border: '1px solid rgba(255,255,255,0.1)',
               boxShadow: '0 40px 100px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05)',
             }}>
-              {/* Window chrome */}
+              
               <div className="flex items-center gap-2 px-6 py-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
                 <div className="w-3 h-3 rounded-full bg-red-500" />
                 <div className="w-3 h-3 rounded-full bg-yellow-500" />
                 <div className="w-3 h-3 rounded-full bg-green-500" />
                 <span className="ml-3 text-xs" style={{ color: '#475569' }}>habitflow.app/dashboard</span>
               </div>
-              {/* Dashboard preview */}
+              
               <div className="p-6">
-                {/* Stats row */}
+                
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
                   {[
                     { label: "Today's Habits", value: '6/8', color: '#a78bfa' },
@@ -252,7 +241,7 @@ export default function LandingPage() {
                     </motion.div>
                   ))}
                 </div>
-                {/* Habit list */}
+                
                 <div className="space-y-2">
                   {[
                     { icon: '🏃', name: 'Morning Run', streak: 42, done: true, cat: 'Fitness' },
@@ -287,7 +276,6 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      {/* ── Stats ─────────────────────────────────────── */}
       <section className="py-20 px-6">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -314,7 +302,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Features ──────────────────────────────────── */}
       <section id="features" className="py-24 px-6">
         <div className="max-w-6xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
@@ -345,7 +332,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Social Proof ──────────────────────────────── */}
       <section id="testimonials" className="py-24 px-6" style={{ background: 'rgba(255,255,255,0.01)' }}>
         <div className="max-w-6xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
@@ -381,14 +367,12 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Pricing ───────────────────────────────────── */}
       <section id="pricing" className="py-24 px-6">
         <div className="max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
             <div className="badge badge-info mb-4 inline-flex">💎 Simple Pricing</div>
             <h2 className="text-4xl md:text-5xl font-black mb-5 font-display">Start <span className="gradient-text">Free</span>, Scale Later</h2>
 
-            {/* Billing toggle */}
             <div className="flex items-center justify-center gap-4 mt-6">
               <span className={`text-sm font-medium ${!pricingAnnual ? 'text-white' : 'text-gray-500'}`}>Monthly</span>
               <button
@@ -405,7 +389,7 @@ export default function LandingPage() {
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            {/* Free */}
+            
             <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="glass-card p-6 sm:p-8">
               <div className="text-sm font-semibold text-gray-400 mb-2">Free Plan</div>
               <div className="text-5xl font-black text-white mb-1">$0</div>
@@ -421,7 +405,6 @@ export default function LandingPage() {
               <Link to="/register" className="btn-secondary w-full justify-center mt-8 rounded-2xl">Get Started Free</Link>
             </motion.div>
 
-            {/* Premium */}
             <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}
               className="glass-card p-6 sm:p-8 glow-brand relative" style={{ border: '1px solid rgba(139,92,246,0.4)' }}>
               <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 badge badge-primary text-xs px-4 py-1.5">⭐ MOST POPULAR</div>
@@ -448,7 +431,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── FAQ ───────────────────────────────────────── */}
       <section id="faq" className="py-24 px-6" style={{ background: 'rgba(255,255,255,0.01)' }}>
         <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
@@ -461,7 +443,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Final CTA ─────────────────────────────────── */}
       <section className="py-24 px-6">
         <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
           className="max-w-3xl mx-auto text-center glass-card p-6 sm:p-12 relative overflow-hidden">
@@ -486,7 +467,6 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      {/* ── Footer ────────────────────────────────────── */}
       <footer className="py-12 px-6" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 mb-10">

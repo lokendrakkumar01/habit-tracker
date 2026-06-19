@@ -18,9 +18,6 @@ import {
   deleteHabit,
 } from '../features/habits/habitSlice';
 
-// ─────────────────────────────────────────────
-// Constants
-// ─────────────────────────────────────────────
 const CATEGORIES = [
   { value: 'health', label: '💪 Health' },
   { value: 'fitness', label: '🏃 Fitness' },
@@ -65,9 +62,6 @@ const EMPTY_FORM = {
   endDate: '',
 };
 
-// ─────────────────────────────────────────────
-// Animation variants
-// ─────────────────────────────────────────────
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
@@ -77,9 +71,6 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
 };
 
-// ─────────────────────────────────────────────
-// Circular progress SVG
-// ─────────────────────────────────────────────
 const CircularProgress = ({ value = 0, size = 120, stroke = 10, color = '#6366f1' }) => {
   const r = (size - stroke) / 2;
   const circ = 2 * Math.PI * r;
@@ -111,9 +102,6 @@ const CircularProgress = ({ value = 0, size = 120, stroke = 10, color = '#6366f1
   );
 };
 
-// ─────────────────────────────────────────────
-// 30-day Heatmap
-// ─────────────────────────────────────────────
 const Heatmap = ({ logs = [], color = '#6366f1' }) => {
   const today = new Date();
   const cells = useMemo(() => {
@@ -160,9 +148,6 @@ const Heatmap = ({ logs = [], color = '#6366f1' }) => {
   );
 };
 
-// ─────────────────────────────────────────────
-// Activity log row
-// ─────────────────────────────────────────────
 const LogRow = ({ log, index }) => (
   <motion.div
     variants={itemVariants}
@@ -199,9 +184,6 @@ const LogRow = ({ log, index }) => (
   </motion.div>
 );
 
-// ─────────────────────────────────────────────
-// Edit Modal (inline)
-// ─────────────────────────────────────────────
 const EditModal = ({ open, onClose, initialData, onSave }) => {
   const [form, setForm] = useState(EMPTY_FORM);
   const [errors, setErrors] = useState({});
@@ -262,7 +244,7 @@ const EditModal = ({ open, onClose, initialData, onSave }) => {
           </div>
 
           <div className="space-y-4">
-            {/* Icon */}
+            
             <div>
               <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-gray-400">Icon</label>
               <div className="flex flex-wrap gap-2">
@@ -282,7 +264,6 @@ const EditModal = ({ open, onClose, initialData, onSave }) => {
               </div>
             </div>
 
-            {/* Title */}
             <div>
               <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-gray-400">Title *</label>
               <input
@@ -294,7 +275,6 @@ const EditModal = ({ open, onClose, initialData, onSave }) => {
               {errors.title && <p className="mt-1 text-xs text-rose-400">{errors.title}</p>}
             </div>
 
-            {/* Description */}
             <div>
               <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-gray-400">Description</label>
               <textarea
@@ -305,7 +285,6 @@ const EditModal = ({ open, onClose, initialData, onSave }) => {
               />
             </div>
 
-            {/* Category + Priority */}
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-gray-400">Category</label>
@@ -333,7 +312,6 @@ const EditModal = ({ open, onClose, initialData, onSave }) => {
               </div>
             </div>
 
-            {/* Color */}
             <div>
               <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-gray-400">Color</label>
               <div className="flex gap-2">
@@ -350,7 +328,6 @@ const EditModal = ({ open, onClose, initialData, onSave }) => {
               </div>
             </div>
 
-            {/* Frequency */}
             <div>
               <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-gray-400">Frequency</label>
               <div className="flex gap-2">
@@ -370,7 +347,6 @@ const EditModal = ({ open, onClose, initialData, onSave }) => {
               </div>
             </div>
 
-            {/* Target days */}
             <div>
               <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-gray-400">Target Days *</label>
               <div className="flex gap-1.5">
@@ -391,7 +367,6 @@ const EditModal = ({ open, onClose, initialData, onSave }) => {
               {errors.targetDays && <p className="mt-1 text-xs text-rose-400">{errors.targetDays}</p>}
             </div>
 
-            {/* Reminder + Dates */}
             <div className="grid grid-cols-3 gap-3">
               <div>
                 <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-gray-400">Reminder</label>
@@ -445,7 +420,6 @@ const EditModal = ({ open, onClose, initialData, onSave }) => {
   );
 };
 
-// Custom Recharts tooltip
 const LineTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
   return (
@@ -456,9 +430,6 @@ const LineTooltip = ({ active, payload, label }) => {
   );
 };
 
-// ─────────────────────────────────────────────
-// Main Page
-// ─────────────────────────────────────────────
 const HabitDetailPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -467,7 +438,7 @@ const HabitDetailPage = () => {
   const { selectedHabit: habit, habitLogs: logs, loading } = useSelector((s) => s.habits);
 
   const [editOpen, setEditOpen] = useState(false);
-  const [deleteStep, setDeleteStep] = useState(0); // 0 = idle, 1 = confirm
+  const [deleteStep, setDeleteStep] = useState(0); 
 
   useEffect(() => {
     if (id) dispatch(fetchHabitDetail(id));
@@ -488,7 +459,6 @@ const HabitDetailPage = () => {
     }
   };
 
-  // Build trend data from logs
   const trendData = useMemo(() => {
     if (!logs?.length) return [];
     return logs.slice(-14).map((log) => ({
@@ -527,7 +497,7 @@ const HabitDetailPage = () => {
         initial="hidden"
         animate="visible"
       >
-        {/* Back + Actions header */}
+        
         <motion.div variants={itemVariants} className="flex items-center justify-between">
           <button
             onClick={() => navigate(-1)}
@@ -559,12 +529,11 @@ const HabitDetailPage = () => {
           </div>
         </motion.div>
 
-        {/* Hero card */}
         <motion.div
           variants={itemVariants}
           className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-7 backdrop-blur-md shadow-xl"
         >
-          {/* Accent gradient background */}
+          
           <div
             className="absolute inset-0 opacity-10 pointer-events-none"
             style={{
@@ -577,7 +546,7 @@ const HabitDetailPage = () => {
           />
 
           <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-            {/* Icon */}
+            
             <div
               className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-2xl text-5xl shadow-inner"
               style={{ background: `${accentColor}22` }}
@@ -585,7 +554,6 @@ const HabitDetailPage = () => {
               {habit.icon ?? '🎯'}
             </div>
 
-            {/* Info */}
             <div className="flex-1 min-w-0">
               <h1 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
                 {habit.title}
@@ -606,7 +574,6 @@ const HabitDetailPage = () => {
               </div>
             </div>
 
-            {/* Completion rate ring */}
             <div className="flex flex-col items-center gap-1">
               <div className="relative">
                 <CircularProgress value={completionRate} color={accentColor} />
@@ -619,7 +586,6 @@ const HabitDetailPage = () => {
           </div>
         </motion.div>
 
-        {/* Streak cards */}
         <motion.div variants={itemVariants} className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           {[
             {
@@ -668,9 +634,8 @@ const HabitDetailPage = () => {
           ))}
         </motion.div>
 
-        {/* Two-column: Heatmap + Activity log */}
         <div className="grid gap-6 lg:grid-cols-2">
-          {/* 30-day Heatmap */}
+          
           <motion.section variants={itemVariants}>
             <h2 className="mb-4 text-lg font-bold text-white">30-Day Overview</h2>
             <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-md shadow-lg">
@@ -678,7 +643,6 @@ const HabitDetailPage = () => {
             </div>
           </motion.section>
 
-          {/* Recent Activity */}
           <motion.section variants={itemVariants}>
             <h2 className="mb-4 text-lg font-bold text-white">Recent Activity</h2>
             <motion.div
@@ -700,7 +664,6 @@ const HabitDetailPage = () => {
           </motion.section>
         </div>
 
-        {/* Trend LineChart */}
         <motion.section variants={itemVariants}>
           <h2 className="mb-4 text-lg font-bold text-white">14-Day Completion Trend</h2>
           <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-md shadow-lg">
@@ -750,7 +713,6 @@ const HabitDetailPage = () => {
         </motion.section>
       </motion.div>
 
-      {/* Edit Modal */}
       <EditModal
         open={editOpen}
         onClose={() => setEditOpen(false)}

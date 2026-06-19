@@ -5,13 +5,13 @@ import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
 import { setToken, fetchMe } from '../../features/auth/authSlice';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'; // eslint-disable-line no-unused-vars
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'; 
 
 export default function GoogleSuccessPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { isAuthenticated } = useSelector((state) => state.auth); // eslint-disable-line no-unused-vars
+  const { isAuthenticated } = useSelector((state) => state.auth); 
 
   const handled = useRef(false);
 
@@ -27,16 +27,13 @@ export default function GoogleSuccessPage() {
       return;
     }
 
-    // Persist token + update Redux
     localStorage.setItem('token', token);
     dispatch(setToken(token));
 
-    // Load user data from server
     dispatch(fetchMe()).then(() => {
       toast.success('Signed in with Google! 🎉');
     });
 
-    // Redirect after animation
     const timer = setTimeout(() => {
       navigate('/dashboard', { replace: true });
     }, 1500);
@@ -53,7 +50,7 @@ export default function GoogleSuccessPage() {
         className="w-full max-w-md"
       >
         <div className="bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl p-10 text-center">
-          {/* Google logo */}
+          
           <div className="flex items-center justify-center mb-5">
             <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
               <svg className="w-8 h-8" viewBox="0 0 24 24">
@@ -70,7 +67,6 @@ export default function GoogleSuccessPage() {
             Authenticating your account, redirecting you now…
           </p>
 
-          {/* Animated progress bar */}
           <div className="w-full h-1.5 bg-gray-800 rounded-full overflow-hidden">
             <motion.div
               className="h-full bg-indigo-500 rounded-full"

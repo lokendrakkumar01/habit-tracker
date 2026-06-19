@@ -13,7 +13,7 @@ export default function AuthLayout() {
           'radial-gradient(ellipse at 20% 20%, rgba(124,58,237,0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(99,102,241,0.12) 0%, transparent 50%), #020617',
       }}
     >
-      {/* ── Animated orbs ── */}
+      
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
         <motion.div
           animate={{ x: [0, 40, -20, 0], y: [0, -30, 20, 0], scale: [1, 1.1, 0.95, 1] }}
@@ -33,7 +33,7 @@ export default function AuthLayout() {
           className="absolute top-1/3 left-1/2 -translate-x-1/2 h-[300px] w-[300px] rounded-full"
           style={{ background: 'rgba(139,92,246,0.1)', filter: 'blur(90px)' }}
         />
-        {/* Grid */}
+        
         <div
           className="absolute inset-0 opacity-[0.025]"
           style={{
@@ -44,7 +44,6 @@ export default function AuthLayout() {
         />
       </div>
 
-      {/* ── Card container ── */}
       <motion.div
         initial={{ opacity: 0, y: 24, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -52,7 +51,7 @@ export default function AuthLayout() {
         className="relative z-10 w-full"
         style={{ maxWidth: isRegister ? '440px' : '420px' }}
       >
-        {/* Logo */}
+        
         <div className="mb-7 flex flex-col items-center gap-2">
           <motion.div
             initial={{ scale: 0 }}
@@ -86,7 +85,6 @@ export default function AuthLayout() {
           </motion.p>
         </div>
 
-        {/* Glass card */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -103,7 +101,6 @@ export default function AuthLayout() {
           <Outlet />
         </motion.div>
 
-        {/* Footer */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

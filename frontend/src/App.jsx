@@ -6,18 +6,13 @@ import { store } from './app/store';
 import { fetchMe } from './features/auth/authSlice';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-// Layouts
 import AppLayout from './components/layout/AppLayout';
 import AuthLayout from './components/layout/AuthLayout';
 
-// Loading screen (eager - needed immediately)
 import LoadingScreen from './components/common/LoadingScreen';
 
-// Lazy-loaded Pages
-// Landing page loaded eagerly for fast first paint
 import LandingPage from './pages/LandingPage';
 
-// Auth pages
 const LoginPage         = lazy(() => import('./pages/auth/LoginPage'));
 const RegisterPage      = lazy(() => import('./pages/auth/RegisterPage'));
 const ForgotPasswordPage= lazy(() => import('./pages/auth/ForgotPasswordPage'));
@@ -25,7 +20,6 @@ const ResetPasswordPage = lazy(() => import('./pages/auth/ResetPasswordPage'));
 const VerifyEmailPage   = lazy(() => import('./pages/auth/VerifyEmailPage'));
 const GoogleSuccessPage = lazy(() => import('./pages/auth/GoogleSuccessPage'));
 
-// App pages (code-split per route)
 const DashboardPage   = lazy(() => import('./pages/DashboardPage'));
 const HabitsPage      = lazy(() => import('./pages/HabitsPage'));
 const HabitDetailPage = lazy(() => import('./pages/HabitDetailPage'));
@@ -39,7 +33,6 @@ const PremiumPage     = lazy(() => import('./pages/PremiumPage'));
 const AdminPage       = lazy(() => import('./pages/AdminPage'));
 const NotFoundPage    = lazy(() => import('./pages/NotFoundPage'));
 
-// Page Fallback (for Suspense)
 function PageFallback() {
   return (
     <div className="flex items-center justify-center min-h-[60vh]">
@@ -53,8 +46,6 @@ function PageFallback() {
     </div>
   );
 }
-
-//  Route Guards
 
 const ProtectedRoute = ({ adminOnly = false }) => {
   const { isAuthenticated, user, initializing } = useSelector((s) => s.auth);
@@ -70,8 +61,6 @@ const PublicRoute = () => {
   if (isAuthenticated) return <Navigate to="/dashboard" replace />;
   return <Outlet />;
 };
-
-// App Content
 
 function AppContent() {
   const dispatch = useDispatch();
@@ -104,20 +93,17 @@ function AppContent() {
 
       <Suspense fallback={<PageFallback />}>
         <Routes>
-          {/*Landing */}
+          
           <Route path="/" element={<LandingPage />} />
 
-          {/*Google OAuth callback*/}
           <Route path="/auth/google/success" element={<GoogleSuccessPage />} />
 
-          {/*Verify / Reset (no auth guard)*/}
           <Route element={<AuthLayout />}>
             <Route path="/verify-email"    element={<VerifyEmailPage />} />
             <Route path="/reset-password"  element={<ResetPasswordPage />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           </Route>
 
-          {/*Public routes (redirect to /dashboard if already logged in)*/}
           <Route element={<PublicRoute />}>
             <Route element={<AuthLayout />}>
               <Route path="/login"    element={<LoginPage />} />
@@ -125,7 +111,6 @@ function AppContent() {
             </Route>
           </Route>
 
-          {/*Protected app routes*/}
           <Route element={<ProtectedRoute />}>
             <Route element={<AppLayout />}>
               <Route path="/dashboard"   element={<DashboardPage />} />
@@ -142,14 +127,12 @@ function AppContent() {
             </Route>
           </Route>
 
-          {/*Admin routes*/}
           <Route element={<ProtectedRoute adminOnly />}>
             <Route element={<AppLayout />}>
               <Route path="/admin" element={<AdminPage />} />
             </Route>
           </Route>
 
-          {/*404 Catch-all*/}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
@@ -162,7 +145,7 @@ const queryClient = new QueryClient({
     queries: {
       refetchOnWindowFocus: false,
       retry: 1,
-      staleTime: 30 * 1000, // 30 seconds
+      staleTime: 30 * 1000, 
     },
   },
 });

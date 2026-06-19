@@ -2,18 +2,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FiTrendingUp, FiTrendingDown, FiMinus } from 'react-icons/fi';
 
-/**
- * StatCard
- *
- * Props:
- *   title    {string}       – card label
- *   value    {string|number}– primary metric displayed large
- *   icon     {ReactNode}    – icon element
- *   color    {string}       – tailwind color key: 'violet'|'indigo'|'emerald'|'amber'|'rose'|'sky'|'fuchsia'
- *   trend    {number}       – optional signed percentage (e.g. 12 → +12%, -5 → -5%)
- *   subtitle {string}       – optional secondary text below value
- */
-
 const colorMap = {
   violet:  { bg: 'bg-violet-500/15',  icon: 'bg-violet-500/20 text-violet-400',  ring: 'ring-violet-500/20',  grad: 'from-violet-500 to-violet-700'  },
   indigo:  { bg: 'bg-indigo-500/15',  icon: 'bg-indigo-500/20 text-indigo-400',  ring: 'ring-indigo-500/20',  grad: 'from-indigo-500 to-indigo-700'  },
@@ -72,14 +60,13 @@ export default function StatCard({
         transition-shadow duration-300 hover:shadow-2xl
       `}
     >
-      {/* Background glow */}
+      
       <div
         className={`pointer-events-none absolute -top-8 -right-8 h-32 w-32 rounded-full ${c.bg} blur-2xl`}
       />
 
-      {/* Top row: icon + trend */}
       <div className="relative flex items-start justify-between mb-4">
-        {/* Icon circle */}
+        
         <div
           className={`
             flex h-11 w-11 items-center justify-center rounded-xl
@@ -89,11 +76,9 @@ export default function StatCard({
           {icon}
         </div>
 
-        {/* Trend badge */}
         <TrendBadge trend={trend} />
       </div>
 
-      {/* Value */}
       <div className="relative">
         <motion.p
           initial={{ opacity: 0, scale: 0.8 }}
@@ -104,16 +89,13 @@ export default function StatCard({
           {value}
         </motion.p>
 
-        {/* Title */}
         <p className="mt-1.5 text-sm font-medium text-gray-400">{title}</p>
 
-        {/* Subtitle */}
         {subtitle && (
           <p className="mt-1 text-xs text-gray-600 truncate">{subtitle}</p>
         )}
       </div>
 
-      {/* Bottom accent line */}
       <div
         className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r ${c.grad} opacity-40`}
       />

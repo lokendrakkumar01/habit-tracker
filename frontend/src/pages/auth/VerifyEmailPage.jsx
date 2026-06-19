@@ -6,7 +6,7 @@ import { FiCheck, FiX, FiLoader } from 'react-icons/fi';
 
 export default function VerifyEmailPage() {
   const [searchParams] = useSearchParams();
-  const [status, setStatus] = useState('loading'); // loading | success | error
+  const [status, setStatus] = useState('loading'); 
   const [message, setMessage] = useState('');
   const token = searchParams.get('token');
 

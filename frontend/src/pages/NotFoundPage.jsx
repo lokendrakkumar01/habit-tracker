@@ -7,7 +7,7 @@ export default function NotFoundPage() {
       className="min-h-screen flex flex-col items-center justify-center px-6 text-center"
       style={{ background: '#0a0a0f' }}
     >
-      {/* Background glow */}
+      
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-20"
           style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.5) 0%, transparent 70%)' }} />
@@ -19,7 +19,7 @@ export default function NotFoundPage() {
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="relative"
       >
-        {/* Floating 404 */}
+        
         <motion.div
           animate={{ y: [0, -16, 0] }}
           transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}

@@ -57,7 +57,7 @@ export const restoreHabit = createAsyncThunk('habits/restore', async (id, { reje
 
 export const completeHabit = createAsyncThunk('habits/complete', async (arg, { rejectWithValue }) => {
   try {
-    // Accept both: completeHabit(id) and completeHabit({id, data})
+    
     const id   = typeof arg === 'string' ? arg : arg.id;
     const data = typeof arg === 'string' ? {} : (arg.data || {});
     const res = await api.post(`/habits/${id}/complete`, data);
@@ -130,8 +130,8 @@ const habitSlice = createSlice({
           state.habits[idx] = {
             ...state.habits[idx],
             ...habit,
-            completedToday: log.completed,  // match backend field name
-            todayCompleted: log.completed,  // keep both for compatibility
+            completedToday: log.completed,  
+            todayCompleted: log.completed,  
             todayLog: log,
           };
         }

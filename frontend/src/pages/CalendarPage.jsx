@@ -30,8 +30,6 @@ import {
   subDays,
 } from "date-fns";
 
-// ─── Mock Data Generation ─────────────────────────────────────────────────────
-
 function generateYearData() {
   const today = new Date();
   const yearStart = startOfYear(today);
@@ -67,10 +65,7 @@ function generateYearData() {
   return data;
 }
 
-// Generate once — stable reference across renders
 const YEAR_DATA = generateYearData();
-
-// ─── Color Utilities ──────────────────────────────────────────────────────────
 
 function getHeatmapColor(value) {
   if (value === null) return "transparent";
@@ -90,8 +85,6 @@ function getDotColor(value) {
   if (value < 90) return "#8b5cf6";
   return "#a78bfa";
 }
-
-// ─── Animation Variants ───────────────────────────────────────────────────────
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -119,8 +112,6 @@ const fadeIn = {
   },
 };
 
-// ─── Computed Stats ───────────────────────────────────────────────────────────
-
 function computeStats(data) {
   const today = new Date();
   const todayKey = format(today, "yyyy-MM-dd");
@@ -129,10 +120,9 @@ function computeStats(data) {
     .filter((k) => data[k] !== null && k <= todayKey)
     .sort();
 
-  // Current streak
   let currentStreak = 0;
   let checkDate = new Date(today);
-  // eslint-disable-next-line no-constant-condition
+  
   while (true) {
     const key = format(checkDate, "yyyy-MM-dd");
     const val = data[key];
@@ -141,7 +131,6 @@ function computeStats(data) {
     checkDate = subDays(checkDate, 1);
   }
 
-  // Longest streak
   let longestStreak = 0;
   let tempStreak = 0;
   pastKeys.forEach((k) => {
@@ -153,10 +142,8 @@ function computeStats(data) {
     }
   });
 
-  // Total active days
   const totalActiveDays = pastKeys.filter((k) => data[k] > 0).length;
 
-  // This month completion rate
   const monthStart = startOfMonth(today);
   const monthDays = eachDayOfInterval({ start: monthStart, end: today });
   const monthActive = monthDays.filter((d) => {
@@ -165,7 +152,6 @@ function computeStats(data) {
   }).length;
   const monthRate = Math.round((monthActive / monthDays.length) * 100);
 
-  // Average completion on active days
   const activeDayValues = pastKeys.filter((k) => data[k] > 0).map((k) => data[k]);
   const avgCompletion =
     activeDayValues.length > 0
@@ -175,9 +161,6 @@ function computeStats(data) {
   return { currentStreak, longestStreak, totalActiveDays, monthRate, avgCompletion };
 }
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
-
-// Flame streak badge
 function StreakBadge({ count }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -199,7 +182,6 @@ function StreakBadge({ count }) {
   );
 }
 
-// Stat card
 function StatCard({ icon: Icon, label, value, sub, color }) {
   return (
     <motion.div
@@ -252,8 +234,6 @@ function StatCard({ icon: Icon, label, value, sub, color }) {
   );
 }
 
-// ─── Heatmap Tooltip ──────────────────────────────────────────────────────────
-
 function HeatmapTooltip({ tooltip }) {
   if (!tooltip) return null;
   return (
@@ -291,8 +271,6 @@ function HeatmapTooltip({ tooltip }) {
   );
 }
 
-// ─── GitHub-style Year Heatmap ────────────────────────────────────────────────
-
 function YearHeatmap({ data }) {
   const [tooltip, setTooltip] = useState(null);
   const today = new Date();
@@ -304,7 +282,6 @@ function YearHeatmap({ data }) {
     const weeksArr = [];
     let currentWeek = [];
 
-    // Pad the first week (Sunday = 0)
     const firstDayOfWeek = getDay(yearStart);
     for (let i = 0; i < firstDayOfWeek; i++) {
       currentWeek.push(null);
@@ -359,7 +336,7 @@ function YearHeatmap({ data }) {
           height={gridH + TOP_PAD + 4}
           style={{ display: "block", overflow: "visible" }}
         >
-          {/* Month labels */}
+          
           {monthLabels.map(({ month, weekIndex }) => (
             <text
               key={`${month}-${weekIndex}`}
@@ -373,7 +350,6 @@ function YearHeatmap({ data }) {
             </text>
           ))}
 
-          {/* Day labels */}
           {dayLabels.map((label, row) => (
             <text
               key={`day-${row}`}
@@ -387,7 +363,6 @@ function YearHeatmap({ data }) {
             </text>
           ))}
 
-          {/* Cells */}
           {weeks.map((week, wi) =>
             week.map((day, di) => {
               if (!day) return null;
@@ -438,7 +413,6 @@ function YearHeatmap({ data }) {
           )}
         </svg>
 
-        {/* Legend */}
         <div
           style={{
             display: "flex",
@@ -472,8 +446,6 @@ function YearHeatmap({ data }) {
   );
 }
 
-// ─── Monthly Calendar ─────────────────────────────────────────────────────────
-
 function MonthlyCalendar({ data }) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const today = new Date();
@@ -495,7 +467,7 @@ function MonthlyCalendar({ data }) {
 
   return (
     <div>
-      {/* Header */}
+      
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
         <h3 style={{ fontSize: 18, fontWeight: 700, color: "#f8fafc" }}>
           {format(currentMonth, "MMMM yyyy")}
@@ -528,7 +500,6 @@ function MonthlyCalendar({ data }) {
         </div>
       </div>
 
-      {/* Day headers */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 4, marginBottom: 8 }}>
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
           <div
@@ -548,7 +519,6 @@ function MonthlyCalendar({ data }) {
         ))}
       </div>
 
-      {/* Weeks */}
       <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
         {calendarWeeks.map((week, wi) => (
           <div key={wi} style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 4 }}>
@@ -622,7 +592,6 @@ function MonthlyCalendar({ data }) {
         ))}
       </div>
 
-      {/* Calendar legend */}
       <div style={{ display: "flex", gap: 16, marginTop: 18, flexWrap: "wrap" }}>
         {[
           { color: "#1e293b", label: "No habits" },
@@ -647,8 +616,6 @@ function MonthlyCalendar({ data }) {
     </div>
   );
 }
-
-// ─── Weekly Bar Chart ─────────────────────────────────────────────────────────
 
 function WeeklyBar({ data }) {
   const today = new Date();
@@ -722,8 +689,6 @@ function WeeklyBar({ data }) {
   );
 }
 
-// ─── Month Completion Ring ────────────────────────────────────────────────────
-
 function CompletionRing({ percent }) {
   const r = 36;
   const circ = 2 * Math.PI * r;
@@ -770,21 +735,18 @@ function CompletionRing({ percent }) {
   );
 }
 
-// ─── CalendarPage ─────────────────────────────────────────────────────────────
-
 export default function CalendarPage() {
   const data = YEAR_DATA;
   const today = new Date();
   const stats = useMemo(() => computeStats(data), []);
 
-  // Graceful Redux fallback
   let habits = [];
   try {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const reduxHabits = useSelector((state) => state.habits?.habits);
     if (Array.isArray(reduxHabits)) habits = reduxHabits;
   } catch (_) {
-    // Redux not available in this context
+    
   }
 
   const dayOfYear = Math.ceil(
@@ -799,7 +761,7 @@ export default function CalendarPage() {
         padding: "32px 20px 80px",
       }}
     >
-      {/* Ambient background glows */}
+      
       <div
         style={{
           position: "fixed",
@@ -842,7 +804,7 @@ export default function CalendarPage() {
         animate="visible"
         style={{ maxWidth: 1280, margin: "0 auto", position: "relative", zIndex: 1 }}
       >
-        {/* ── Page Header ── */}
+        
         <motion.div variants={itemVariants} style={{ marginBottom: 32 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 8 }}>
             <div
@@ -880,7 +842,6 @@ export default function CalendarPage() {
           </div>
         </motion.div>
 
-        {/* ── Quick Stats Row ── */}
         <motion.div
           variants={itemVariants}
           style={{
@@ -920,7 +881,6 @@ export default function CalendarPage() {
           />
         </motion.div>
 
-        {/* ── Main 2-column Layout ── */}
         <div
           className="cal-main-grid"
           style={{
@@ -930,10 +890,9 @@ export default function CalendarPage() {
             alignItems: "start",
           }}
         >
-          {/* Left Column */}
+          
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
 
-            {/* Heatmap Card */}
             <motion.div
               variants={fadeIn}
               className="glass-card"
@@ -976,7 +935,6 @@ export default function CalendarPage() {
               <YearHeatmap data={data} />
             </motion.div>
 
-            {/* Monthly Calendar Card */}
             <motion.div
               variants={fadeIn}
               className="glass-card"
@@ -1006,10 +964,8 @@ export default function CalendarPage() {
             </motion.div>
           </div>
 
-          {/* ── Right Sidebar ── */}
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 
-            {/* Month Stats Ring */}
             <motion.div
               variants={fadeIn}
               className="glass-card"
@@ -1072,7 +1028,6 @@ export default function CalendarPage() {
               ))}
             </motion.div>
 
-            {/* Weekly bar chart */}
             <motion.div
               variants={fadeIn}
               className="glass-card"
@@ -1081,7 +1036,6 @@ export default function CalendarPage() {
               <WeeklyBar data={data} />
             </motion.div>
 
-            {/* Streak Milestones */}
             <motion.div
               variants={fadeIn}
               className="glass-card"
@@ -1142,7 +1096,7 @@ export default function CalendarPage() {
                       >
                         {label}
                       </p>
-                      {/* Progress bar towards milestone */}
+                      
                       {!achieved && (
                         <div
                           style={{
@@ -1200,7 +1154,6 @@ export default function CalendarPage() {
               })}
             </motion.div>
 
-            {/* Info note */}
             <motion.div
               variants={fadeIn}
               style={{
@@ -1223,7 +1176,6 @@ export default function CalendarPage() {
         </div>
       </motion.div>
 
-      {/* Responsive overrides */}
       <style>{`
         @media (max-width: 960px) {
           .cal-main-grid {

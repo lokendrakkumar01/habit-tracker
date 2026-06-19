@@ -49,8 +49,6 @@ import {
   fetchWeeklyData,
 } from '../features/analytics/analyticsSlice';
 
-// ─── Animation Variants ─────────────────────────────────────────────────────
-
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -67,8 +65,6 @@ const itemVariants = {
     transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
   },
 };
-
-// ─── Mock / Fallback Data ────────────────────────────────────────────────────
 
 const MOCK_STATS = {
   totalCompletions: 347,
@@ -146,7 +142,6 @@ const MOCK_CATEGORIES = [
   { name: 'Mindfulness', icon: '🧘', completion: 78, habits: 2, color: '#f87171', bgColor: 'rgba(248,113,113,0.12)' },
 ];
 
-// Generate heatmap data: 53 cols x 7 rows
 const generateHeatmapData = () => {
   const cells = [];
   for (let col = 0; col < 53; col++) {
@@ -177,8 +172,6 @@ const HEATMAP_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 
 const HEATMAP_DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 const TABS = ['Overview', 'Weekly', 'Monthly', 'Yearly'];
-
-// ─── Custom Tooltip Components ───────────────────────────────────────────────
 
 const DarkTooltip = ({ active, payload, label }) => {
   if (!active || !payload || !payload.length) return null;
@@ -260,8 +253,6 @@ const RadarTooltip = ({ active, payload }) => {
   );
 };
 
-// ─── Stat Card ───────────────────────────────────────────────────────────────
-
 const StatCard = ({ icon: Icon, label, value, delta, color, bgColor, suffix }) => {
   const isPositive = delta >= 0;
   return (
@@ -311,8 +302,6 @@ const StatCard = ({ icon: Icon, label, value, delta, color, bgColor, suffix }) =
   );
 };
 
-// ─── Category Row ────────────────────────────────────────────────────────────
-
 const CategoryRow = ({ item, index }) => (
   <motion.div
     variants={itemVariants}
@@ -353,8 +342,6 @@ const CategoryRow = ({ item, index }) => (
     </div>
   </motion.div>
 );
-
-// ─── Activity Heatmap ────────────────────────────────────────────────────────
 
 const ActivityHeatmap = () => {
   const [hoveredCell, setHoveredCell] = useState(null);
@@ -442,12 +429,10 @@ const ActivityHeatmap = () => {
   );
 };
 
-// ─── Overview Tab ────────────────────────────────────────────────────────────
-
 const OverviewTab = ({ areaData, barData, radarData, pieData }) => (
   <motion.div key="overview" variants={containerVariants} initial="hidden" animate="visible">
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20, marginBottom: 20 }}>
-      {/* Area Chart */}
+      
       <motion.div variants={itemVariants} className="glass-card-static" style={{ padding: 24 }}>
         <div style={{ marginBottom: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
@@ -475,7 +460,6 @@ const OverviewTab = ({ areaData, barData, radarData, pieData }) => (
         </ResponsiveContainer>
       </motion.div>
 
-      {/* Bar Chart */}
       <motion.div variants={itemVariants} className="glass-card-static" style={{ padding: 24 }}>
         <div style={{ marginBottom: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
@@ -506,7 +490,7 @@ const OverviewTab = ({ areaData, barData, radarData, pieData }) => (
     </div>
 
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20, marginBottom: 20 }}>
-      {/* Radar Chart */}
+      
       <motion.div variants={itemVariants} className="glass-card-static" style={{ padding: 24 }}>
         <div style={{ marginBottom: 16 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
@@ -528,7 +512,6 @@ const OverviewTab = ({ areaData, barData, radarData, pieData }) => (
         </ResponsiveContainer>
       </motion.div>
 
-      {/* Pie Chart */}
       <motion.div variants={itemVariants} className="glass-card-static" style={{ padding: 24 }}>
         <div style={{ marginBottom: 16 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
@@ -564,8 +547,6 @@ const OverviewTab = ({ areaData, barData, radarData, pieData }) => (
     </div>
   </motion.div>
 );
-
-// ─── Weekly Tab ──────────────────────────────────────────────────────────────
 
 const WeeklyTab = ({ areaData, barData }) => (
   <motion.div key="weekly" variants={containerVariants} initial="hidden" animate="visible">
@@ -624,8 +605,6 @@ const WeeklyTab = ({ areaData, barData }) => (
   </motion.div>
 );
 
-// ─── Monthly Tab ─────────────────────────────────────────────────────────────
-
 const MonthlyTab = ({ monthlyData }) => (
   <motion.div key="monthly" variants={containerVariants} initial="hidden" animate="visible">
     <motion.div variants={itemVariants} className="glass-card-static" style={{ padding: 28, marginBottom: 20 }}>
@@ -679,8 +658,6 @@ const MonthlyTab = ({ monthlyData }) => (
   </motion.div>
 );
 
-// ─── Yearly Tab ──────────────────────────────────────────────────────────────
-
 const YearlyTab = ({ yearlyData }) => (
   <motion.div key="yearly" variants={containerVariants} initial="hidden" animate="visible">
     <motion.div variants={itemVariants} className="glass-card-static" style={{ padding: 28, marginBottom: 20 }}>
@@ -730,8 +707,6 @@ const YearlyTab = ({ yearlyData }) => (
   </motion.div>
 );
 
-// ─── Main AnalyticsPage ───────────────────────────────────────────────────────
-
 export default function AnalyticsPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -768,7 +743,7 @@ export default function AnalyticsPage() {
         style: { background: 'rgba(10,10,20,0.95)', border: '1px solid rgba(255,255,255,0.1)', color: '#f8fafc', borderRadius: 12 },
       });
     } catch (_) {
-      // silently fall through to mock data
+      
     } finally {
       setIsRefreshing(false);
     }
@@ -812,14 +787,13 @@ export default function AnalyticsPage() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#020617', position: 'relative', overflow: 'hidden' }}>
-      {/* Ambient gradient orbs */}
+      
       <div style={{ position: 'fixed', top: -200, left: -200, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(124,58,237,0.06) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
       <div style={{ position: 'fixed', top: '30%', right: -200, width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(56,189,248,0.04) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
       <div style={{ position: 'fixed', bottom: -100, left: '40%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,102,241,0.05) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
 
       <div style={{ position: 'relative', zIndex: 1, padding: '28px 24px', maxWidth: 1280, margin: '0 auto' }}>
 
-        {/* ── Page Header ──────────────────────────────────────────────────── */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -871,7 +845,6 @@ export default function AnalyticsPage() {
           </div>
         </motion.div>
 
-        {/* ── Stat Cards ───────────────────────────────────────────────────── */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -883,7 +856,6 @@ export default function AnalyticsPage() {
           ))}
         </motion.div>
 
-        {/* ── Tab Navigation ───────────────────────────────────────────────── */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -920,7 +892,6 @@ export default function AnalyticsPage() {
           </div>
         </motion.div>
 
-        {/* ── Tab Content ──────────────────────────────────────────────────── */}
         <AnimatePresence mode="wait">
           {activeTab === 'Overview' && (
             <OverviewTab key="overview-tab" areaData={areaData} barData={barData} radarData={radarData} pieData={pieData} />
@@ -936,7 +907,6 @@ export default function AnalyticsPage() {
           )}
         </AnimatePresence>
 
-        {/* ── Activity Heatmap ─────────────────────────────────────────────── */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -969,10 +939,8 @@ export default function AnalyticsPage() {
           <ActivityHeatmap />
         </motion.div>
 
-        {/* ── Category Analytics + Quick Insights ─────────────────────────── */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20, marginBottom: 24 }}>
 
-          {/* Category Progress */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -996,7 +964,6 @@ export default function AnalyticsPage() {
             </motion.div>
           </motion.div>
 
-          {/* Quick Insights */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -1043,7 +1010,6 @@ export default function AnalyticsPage() {
           </motion.div>
         </div>
 
-        {/* ── Footer ───────────────────────────────────────────────────────── */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

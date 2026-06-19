@@ -16,10 +16,6 @@ import { FiPlus, FiSearch, FiEdit2, FiTrash2, FiArchive, FiX, FiCheck, FiRotateC
 import { useNotifications } from '../hooks/useNotifications';
 import { exportHabitsToCSV } from '../utils/exportCSV';
 
-// ─────────────────────────────────────────────
-// Constants
-// ─────────────────────────────────────────────
-// Category values match backend enum exactly (Title Case or Coding-specific)
 const CATEGORIES = [
   { value: 'Health', label: '💪 Health' },
   { value: 'Fitness', label: '🏃 Fitness' },
@@ -41,17 +37,16 @@ const PRIORITIES = [
 const ICONS = ['🎯', '💪', '🏃', '📚', '🧘', '💧', '🥗', '😴', '📓', '🎨', '💰', '🔔', '⚡', '🌿', '🚴'];
 
 const PRESET_COLORS = [
-  '#6366f1', // indigo
-  '#10b981', // emerald
-  '#f59e0b', // amber
-  '#f97316', // orange
-  '#ec4899', // pink
-  '#14b8a6', // teal
+  '#6366f1', 
+  '#10b981', 
+  '#f59e0b', 
+  '#f97316', 
+  '#ec4899', 
+  '#14b8a6', 
 ];
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-// Handle both backend Title Case and any legacy lowercase values
 const PRIORITY_META = {
   low:    { label: 'Low',    color: 'text-emerald-400', bg: 'bg-emerald-500/15' },
   Low:    { label: 'Low',    color: 'text-emerald-400', bg: 'bg-emerald-500/15' },
@@ -75,9 +70,6 @@ const EMPTY_FORM = {
   endDate: '',
 };
 
-// ─────────────────────────────────────────────
-// Animation variants
-// ─────────────────────────────────────────────
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { staggerChildren: 0.07 } },
@@ -88,9 +80,6 @@ const cardVariants = {
   exit: { opacity: 0, scale: 0.9, y: -10, transition: { duration: 0.2 } },
 };
 
-// ─────────────────────────────────────────────
-// HabitModal (inline)
-// ─────────────────────────────────────────────
 const HabitModal = ({ open, onClose, initialData, onSave }) => {
   const [form, setForm] = useState(EMPTY_FORM);
   const [errors, setErrors] = useState({});
@@ -98,10 +87,10 @@ const HabitModal = ({ open, onClose, initialData, onSave }) => {
   useEffect(() => {
     if (open) {
       if (initialData) {
-        // Normalize category & priority – keep as-is (Title Case) for backend compatibility
+        
         const mappedData = {
           ...initialData,
-          // Keep original casing from backend; fallback to defaults if missing
+          
           category: initialData.category || 'Health',
           priority: initialData.priority || 'Medium',
           startDate: initialData.startDate ? new Date(initialData.startDate).toISOString().slice(0, 10) : EMPTY_FORM.startDate,
@@ -158,7 +147,7 @@ const HabitModal = ({ open, onClose, initialData, onSave }) => {
           transition={{ type: 'spring', stiffness: 300, damping: 25 }}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Header */}
+          
           <div className="flex items-center justify-between border-b border-white/5 pb-4">
             <h2 className="text-xl font-bold text-white flex items-center gap-2">
               <FiActivity className="text-violet-500" />
@@ -173,7 +162,7 @@ const HabitModal = ({ open, onClose, initialData, onSave }) => {
           </div>
 
           <div className="space-y-4">
-            {/* Icon picker */}
+            
             <div>
               <label className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-slate-400">
                 Choose Habit Icon
@@ -195,7 +184,6 @@ const HabitModal = ({ open, onClose, initialData, onSave }) => {
               </div>
             </div>
 
-            {/* Title */}
             <div>
               <label className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-slate-400">
                 Habit Title *
@@ -210,7 +198,6 @@ const HabitModal = ({ open, onClose, initialData, onSave }) => {
               {errors.title && <p className="mt-1.5 text-xs text-rose-400 font-semibold">{errors.title}</p>}
             </div>
 
-            {/* Description */}
             <div>
               <label className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-slate-400">
                 Description (Optional)
@@ -224,7 +211,6 @@ const HabitModal = ({ open, onClose, initialData, onSave }) => {
               />
             </div>
 
-            {/* Category + Priority */}
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-slate-400">
@@ -260,7 +246,6 @@ const HabitModal = ({ open, onClose, initialData, onSave }) => {
               </div>
             </div>
 
-            {/* Color picker */}
             <div>
               <label className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-slate-400">
                 Card Accent Color
@@ -279,7 +264,6 @@ const HabitModal = ({ open, onClose, initialData, onSave }) => {
               </div>
             </div>
 
-            {/* Frequency */}
             <div>
               <label className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-slate-400">
                 Frequency
@@ -301,7 +285,6 @@ const HabitModal = ({ open, onClose, initialData, onSave }) => {
               </div>
             </div>
 
-            {/* Target days */}
             <div>
               <label className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-slate-400">
                 Target Days *
@@ -329,7 +312,6 @@ const HabitModal = ({ open, onClose, initialData, onSave }) => {
               )}
             </div>
 
-            {/* Reminder + Dates */}
             <div className="grid grid-cols-3 gap-3">
               <div>
                 <label className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-slate-400">
@@ -367,7 +349,6 @@ const HabitModal = ({ open, onClose, initialData, onSave }) => {
             </div>
           </div>
 
-          {/* Actions */}
           <div className="mt-6 flex justify-end gap-3 border-t border-white/5 pt-4">
             <button
               onClick={onClose}
@@ -390,9 +371,6 @@ const HabitModal = ({ open, onClose, initialData, onSave }) => {
   );
 };
 
-// ─────────────────────────────────────────────
-// HabitCard
-// ─────────────────────────────────────────────
 const HabitCard = ({ habit, tab, onEdit, onDelete, onArchive, onRestore, onComplete, onClick }) => {
   const [hovering, setHovering] = useState(false);
   const done = habit.completedToday;
@@ -408,13 +386,12 @@ const HabitCard = ({ habit, tab, onEdit, onDelete, onArchive, onRestore, onCompl
       className="group relative cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-slate-900/40 p-5 backdrop-blur-md shadow-lg transition-shadow hover:shadow-indigo-500/5 hover:border-white/20"
       onClick={() => onClick(habit._id)}
     >
-      {/* Color accent top bar */}
+      
       <div
         className="absolute top-0 left-0 right-0 h-1.5 opacity-80"
         style={{ backgroundColor: habit.color ?? '#6366f1' }}
       />
 
-      {/* Hover action row */}
       <AnimatePresence>
         {hovering && (
           <motion.div
@@ -459,7 +436,6 @@ const HabitCard = ({ habit, tab, onEdit, onDelete, onArchive, onRestore, onCompl
         )}
       </AnimatePresence>
 
-      {/* Icon + title */}
       <div className="flex items-center gap-3.5 mt-2">
         <span className="text-4xl leading-none w-12 h-12 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 shadow-inner">{habit.icon ?? '🎯'}</span>
         <div className="min-w-0 flex-1">
@@ -475,7 +451,6 @@ const HabitCard = ({ habit, tab, onEdit, onDelete, onArchive, onRestore, onCompl
         </div>
       </div>
 
-      {/* Streak and Completion */}
       <div className="mt-5 flex items-center justify-between border-t border-white/5 pt-3.5">
         <div className="flex items-center gap-1.5 text-amber-500">
           <FiZap size={14} className="fill-amber-500" />
@@ -483,7 +458,6 @@ const HabitCard = ({ habit, tab, onEdit, onDelete, onArchive, onRestore, onCompl
           <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">streak</span>
         </div>
 
-        {/* Complete toggle */}
         {tab === 'active' && (
           <motion.button
             whileTap={{ scale: 0.9 }}
@@ -521,9 +495,6 @@ const ActionBtn = ({ icon, label, onClick, className }) => (
   </button>
 );
 
-// ─────────────────────────────────────────────
-// Main Page
-// ─────────────────────────────────────────────
 const HabitsPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -532,8 +503,7 @@ const HabitsPage = () => {
   const { habits, archivedHabits, loading } = useSelector((s) => s.habits);
   const notif = useNotifications();
 
-  // UI state
-  const [tab, setTab] = useState('active'); // 'active' | 'archived' | 'done'
+  const [tab, setTab] = useState('active'); 
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('');
@@ -544,7 +514,6 @@ const HabitsPage = () => {
   const [showReminderPanel, setShowReminderPanel] = useState(false);
   const [notifEnabled, setNotifEnabled] = useState(notif.isReminderEnabled());
 
-  // Fetch habits based on active tab
   useEffect(() => {
     dispatch(fetchHabits({ archived: tab === 'archived' ? 'true' : 'false' }));
   }, [dispatch, tab]);
@@ -571,7 +540,6 @@ const HabitsPage = () => {
     toast.success('Habits exported to CSV! 📊');
   };
 
-  // Open modal if ?new=true is in URL
   useEffect(() => {
     if (searchParams.get('new') === 'true') {
       setEditingHabit(null);
@@ -670,7 +638,7 @@ const HabitsPage = () => {
   return (
     <div className="min-h-screen bg-slate-950 px-4 py-8 text-white sm:px-8 space-y-6">
       <div className="mx-auto max-w-7xl space-y-6">
-        {/* Header */}
+        
         <motion.div
           className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-white/5"
           initial={{ opacity: 0, y: -20 }}
@@ -686,7 +654,7 @@ const HabitsPage = () => {
             </p>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
-            {/* Notification toggle */}
+            
             <motion.button
               whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
               onClick={() => setShowReminderPanel((v) => !v)}
@@ -699,7 +667,7 @@ const HabitsPage = () => {
               <FiBell size={14} />
               <span className="hidden sm:inline">{notifEnabled ? 'Reminder On' : 'Remind Me'}</span>
             </motion.button>
-            {/* CSV Export */}
+            
             <motion.button
               whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
               onClick={handleExportCSV}
@@ -708,7 +676,7 @@ const HabitsPage = () => {
               <FiDownload size={14} />
               <span className="hidden sm:inline">Export</span>
             </motion.button>
-            {/* Add habit */}
+            
             <motion.button
               whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
               onClick={openCreate}
@@ -719,14 +687,13 @@ const HabitsPage = () => {
           </div>
         </motion.div>
 
-        {/* Filter bar */}
         <motion.div
           className="flex flex-wrap gap-3 bg-slate-900/40 p-4 rounded-2xl border border-white/5"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.35 }}
         >
-          {/* Search */}
+          
           <div className="relative flex-1 min-w-[200px]">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"><FiSearch size={16} /></span>
             <input
@@ -738,7 +705,6 @@ const HabitsPage = () => {
             />
           </div>
 
-          {/* Category */}
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
@@ -752,7 +718,6 @@ const HabitsPage = () => {
             ))}
           </select>
 
-          {/* Priority */}
           <select
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
@@ -767,7 +732,6 @@ const HabitsPage = () => {
           </select>
         </motion.div>
 
-        {/* Reminder Panel */}
         <AnimatePresence>
           {showReminderPanel && (
             <motion.div
@@ -800,7 +764,6 @@ const HabitsPage = () => {
           )}
         </AnimatePresence>
 
-        {/* Tabs list */}
         <motion.div
           className="flex gap-1.5 bg-slate-900/60 p-1.5 rounded-2xl border border-white/5 w-fit"
           initial={{ opacity: 0 }}
@@ -827,7 +790,6 @@ const HabitsPage = () => {
           ))}
         </motion.div>
 
-        {/* Habit Grid */}
         {loading ? (
           <div className="flex h-64 items-center justify-center">
             <motion.div
@@ -887,7 +849,6 @@ const HabitsPage = () => {
           </motion.div>
         )}
 
-        {/* Delete confirmation toast */}
         <AnimatePresence>
           {deleteConfirm && (
             <motion.div
@@ -908,7 +869,6 @@ const HabitsPage = () => {
           )}
         </AnimatePresence>
 
-        {/* FAB */}
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.92 }}
@@ -922,7 +882,6 @@ const HabitsPage = () => {
         </motion.button>
       </div>
 
-      {/* Modal */}
       <HabitModal
         open={modalOpen}
         onClose={closeModal}

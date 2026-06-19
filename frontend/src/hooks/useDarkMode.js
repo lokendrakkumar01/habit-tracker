@@ -1,14 +1,10 @@
 import { useState, useEffect } from 'react';
 
-/**
- * Custom hook for dark/light mode toggle.
- * Reads/writes to localStorage and applies 'dark' class to <html>.
- */
 export function useDarkMode() {
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem('habitflow-theme');
     if (saved) return saved === 'dark';
-    return true; // default: dark
+    return true; 
   });
 
   useEffect(() => {

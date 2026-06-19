@@ -74,7 +74,7 @@ export default function AdminPage() {
 
   return (
     <div className="p-4 sm:p-8 max-w-7xl mx-auto space-y-8 text-white min-h-screen">
-      {/* Page Header */}
+      
       <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="pb-4 border-b border-white/5">
         <h1 className="text-3xl font-extrabold tracking-tight text-white flex items-center gap-3">
           <FiShield className="text-violet-500" /> Admin Control Center
@@ -82,7 +82,6 @@ export default function AdminPage() {
         <p className="text-slate-400 mt-1">Monitor site activity, adjust user subscription plans, and manage platform roles</p>
       </motion.div>
 
-      {/* Stats Cards */}
       {stats ? (
         <div className="grid grid-cols-2 lg:grid-cols-6 gap-4">
           {[
@@ -123,7 +122,6 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* Users Management Grid */}
       <div className="rounded-3xl border border-white/10 bg-slate-900/40 p-6 backdrop-blur-md">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <h2 className="text-base font-bold text-white">Registered Users ({total})</h2>
@@ -246,7 +244,6 @@ export default function AdminPage() {
           </table>
         </div>
 
-        {/* Pagination Controls */}
         {total > 15 && (
           <div className="flex items-center justify-between mt-6 pt-4 border-t border-white/5">
             <span className="text-slate-450 text-xs">
@@ -272,7 +269,6 @@ export default function AdminPage() {
         )}
       </div>
 
-      {/* Edit User Modal */}
       <AnimatePresence>
         {editUser && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -291,7 +287,7 @@ export default function AdminPage() {
               className="relative w-full max-w-md overflow-hidden rounded-3xl border border-white/10 bg-slate-950 p-6 shadow-2xl z-10 space-y-6"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Header */}
+              
               <div className="flex items-center justify-between border-b border-white/5 pb-3.5">
                 <h3 className="text-base font-bold text-white">Adjust User Roles & Subscription</h3>
                 <button

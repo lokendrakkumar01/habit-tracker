@@ -59,7 +59,7 @@ export default function PremiumPage() {
     setProcessing(true);
     const loadToast = toast.loading('Initializing payment session...');
     try {
-      // 1. Create Checkout Session
+      
       const checkoutRes = await api.post('/payments/checkout', {
         plan: 'premium',
         billingCycle,
@@ -69,10 +69,8 @@ export default function PremiumPage() {
       const { sessionId, amount } = checkoutRes.data;
       toast.loading(`Processing $${amount} payment via ${paymentGateway === 'stripe' ? 'Stripe Secure' : 'Razorpay Gateway'}...`, { id: loadToast });
 
-      // Simulate a small network latency
       await new Promise(resolve => setTimeout(resolve, 1500));
 
-      // 2. Verify Payment
       const verifyRes = await api.post('/payments/verify', {
         sessionId,
         status: 'success'
@@ -108,7 +106,7 @@ export default function PremiumPage() {
 
   return (
     <div className="p-4 sm:p-8 max-w-5xl mx-auto space-y-8 text-white min-h-screen">
-      {/* Hero Header */}
+      
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -144,7 +142,7 @@ export default function PremiumPage() {
 
       {!isPremium && (
         <div className="space-y-12">
-          {/* Billing Cycle Toggle */}
+          
           <div className="flex justify-center">
             <div className="bg-slate-900 border border-white/10 p-1.5 rounded-2xl inline-flex gap-1.5 shadow-inner">
               {['monthly', 'yearly'].map((cycle) => (
@@ -168,9 +166,8 @@ export default function PremiumPage() {
             </div>
           </div>
 
-          {/* Pricing Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {/* Free Tier Card */}
+            
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -204,7 +201,6 @@ export default function PremiumPage() {
               </button>
             </motion.div>
 
-            {/* Premium Tier Card */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -246,7 +242,6 @@ export default function PremiumPage() {
             </motion.div>
           </div>
 
-          {/* Feature Comparison Table */}
           <div className="rounded-3xl border border-white/5 bg-slate-900/40 p-6 sm:p-8 backdrop-blur-md">
             <h2 className="text-lg font-bold text-white mb-6 text-center">Feature Matrix</h2>
             <div className="overflow-x-auto">
@@ -280,7 +275,6 @@ export default function PremiumPage() {
             </div>
           </div>
 
-          {/* FAQ Accordion */}
           <div className="rounded-3xl border border-white/5 bg-slate-900/40 p-6 sm:p-8 backdrop-blur-md">
             <h2 className="text-lg font-bold text-white mb-6 text-center">Frequently Asked Questions</h2>
             <div className="space-y-3 max-w-3xl mx-auto">
@@ -314,7 +308,6 @@ export default function PremiumPage() {
         </div>
       )}
 
-      {/* CHECKOUT MODAL */}
       <AnimatePresence>
         {checkoutModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
@@ -336,7 +329,6 @@ export default function PremiumPage() {
                 </button>
               </div>
 
-              {/* Order summary */}
               <div className="p-4 rounded-xl bg-slate-950/60 border border-white/5 space-y-2">
                 <div className="flex justify-between text-xs text-slate-400">
                   <span>Product</span>
@@ -352,7 +344,6 @@ export default function PremiumPage() {
                 </div>
               </div>
 
-              {/* Gateway selector */}
               <div className="space-y-2">
                 <label className="text-xs text-slate-400 font-semibold uppercase block">Payment Method</label>
                 <div className="grid grid-cols-2 gap-3">
@@ -379,7 +370,6 @@ export default function PremiumPage() {
                 </div>
               </div>
 
-              {/* Simulated Card inputs */}
               <div className="space-y-3">
                 <label className="text-xs text-slate-400 font-semibold uppercase block">Card Information</label>
                 <div className="relative">
