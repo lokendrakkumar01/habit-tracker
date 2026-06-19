@@ -129,6 +129,7 @@ function AppContent() {
           <Route element={<ProtectedRoute />}>
             <Route element={<AppLayout />}>
               <Route path="/dashboard"   element={<DashboardPage />} />
+              <Route path="/habits/new"  element={<Navigate to="/habits?new=true" replace />} />
               <Route path="/habits"      element={<HabitsPage />} />
               <Route path="/habits/:id"  element={<HabitDetailPage />} />
               <Route path="/analytics"   element={<AnalyticsPage />} />

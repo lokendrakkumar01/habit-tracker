@@ -5,7 +5,7 @@ import {
   FiCheck, FiArrowRight, FiZap, FiTrendingUp, FiAward,
   FiCalendar, FiUsers, FiStar, FiBarChart2, FiTarget,
   FiBookOpen, FiCpu, FiShield, FiSmile, FiChevronDown,
-  FiPlay, FiGithub, FiTwitter, FiLinkedin,
+  FiPlay, FiGithub, FiTwitter, FiLinkedin, FiFlag,
 } from 'react-icons/fi';
 import { MdAutoGraph, MdEmojiEvents } from 'react-icons/md';
 
@@ -25,7 +25,7 @@ const features = [
   { icon: FiZap,       color: '#fbbf24', title: 'Streak System',           desc: 'Stay on fire with streak tracking, streak freeze protection, and milestone celebrations.' },
   { icon: FiBarChart2, color: '#38bdf8', title: 'Deep Analytics',          desc: 'Visualize progress with interactive charts, heatmaps, radar plots, and AI-powered insights.' },
   { icon: MdEmojiEvents,color:'#34d399', title: 'Gamification',           desc: 'Earn XP, unlock badges, climb leaderboards, and compete in community challenges.' },
-  { icon: FiTarget,    color: '#f87171', title: 'Goal Management',         desc: 'Set meaningful goals, attach habits to milestones, and track every step forward.' },
+  { icon: FiFlag,      color: '#f87171', title: 'Goal Management',         desc: 'Set meaningful goals, attach habits to milestones, and track every step forward.' },
   { icon: FiBookOpen,  color: '#c084fc', title: 'Reflection Journal',      desc: 'Daily journaling with mood tracking to build self-awareness and long-term motivation.' },
   { icon: FiCpu,       color: '#fb923c', title: 'AI Productivity Coach',   desc: 'Get personalized habit suggestions, burnout alerts, and weekly performance reports.' },
   { icon: FiUsers,     color: '#4ade80', title: 'Social & Communities',    desc: 'Follow friends, join groups, challenge others, and stay accountable together.' },

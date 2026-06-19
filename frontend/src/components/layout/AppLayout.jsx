@@ -116,8 +116,18 @@ function NotificationDropdown({ onClose }) {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: -8, scale: 0.95 }}
       transition={{ duration: 0.18, ease: 'easeOut' }}
-      className="absolute right-0 top-12 z-50 w-80 rounded-2xl shadow-2xl overflow-hidden"
-      style={{ background: '#0f172a', border: '1px solid rgba(255,255,255,0.1)' }}
+      style={{
+        position: 'absolute',
+        right: 0,
+        top: '48px',
+        zIndex: 50,
+        width: '320px',
+        background: '#0f172a',
+        border: '1px solid rgba(255,255,255,0.1)',
+        borderRadius: '16px',
+        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+        overflow: 'hidden',
+      }}
     >
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
@@ -397,7 +407,7 @@ export default function AppLayout() {
       </AnimatePresence>
 
       {/* ── Main Content ── */}
-      <div className="flex flex-1 flex-col overflow-hidden">
+      <div className="flex flex-1 flex-col overflow-hidden min-w-0">
         {/* Navbar */}
         <header className="flex h-16 items-center justify-between px-4 lg:px-6 z-20 flex-shrink-0"
           style={{ background: 'rgba(10,15,30,0.8)', borderBottom: '1px solid rgba(255,255,255,0.06)', backdropFilter: 'blur(12px)' }}>
@@ -467,7 +477,7 @@ export default function AppLayout() {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto" style={{ background: '#020617' }}>
+        <main className="flex-1 overflow-y-auto min-w-0" style={{ background: '#020617' }}>
           <motion.div
             key={location.pathname}
             initial={{ opacity: 0, y: 8 }}
