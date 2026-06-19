@@ -1,14 +1,14 @@
 /**
- * Custom hook for browser Notification API.
- * Handles permission request and scheduling daily reminders.
+  Custom hook for browser Notification API.
+ Handles permission request and scheduling daily reminders.
  */
 export function useNotifications() {
   const isSupported = 'Notification' in window;
   const permission = isSupported ? Notification.permission : 'denied';
 
   /**
-   * Request notification permission from user.
-   * Returns: 'granted' | 'denied' | 'default'
+   Request notification permission from user.
+   Returns: 'granted' | 'denied' | 'default'
    */
   const requestPermission = async () => {
     if (!isSupported) return 'denied';

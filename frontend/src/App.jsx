@@ -13,7 +13,7 @@ import AuthLayout from './components/layout/AuthLayout';
 // Loading screen (eager - needed immediately)
 import LoadingScreen from './components/common/LoadingScreen';
 
-// ─── Lazy-loaded Pages ──────────────────────────────────────────────────────
+// Lazy-loaded Pages
 // Landing page loaded eagerly for fast first paint
 import LandingPage from './pages/LandingPage';
 
@@ -39,7 +39,7 @@ const PremiumPage     = lazy(() => import('./pages/PremiumPage'));
 const AdminPage       = lazy(() => import('./pages/AdminPage'));
 const NotFoundPage    = lazy(() => import('./pages/NotFoundPage'));
 
-// ─── Page Fallback (for Suspense) ────────────────────────────────────────────
+// Page Fallback (for Suspense)
 function PageFallback() {
   return (
     <div className="flex items-center justify-center min-h-[60vh]">
@@ -54,7 +54,7 @@ function PageFallback() {
   );
 }
 
-// ─── Route Guards ──────────────────────────────────────────────────────────
+//  Route Guards
 
 const ProtectedRoute = ({ adminOnly = false }) => {
   const { isAuthenticated, user, initializing } = useSelector((s) => s.auth);
@@ -71,7 +71,7 @@ const PublicRoute = () => {
   return <Outlet />;
 };
 
-// ─── App Content ───────────────────────────────────────────────────────────
+// App Content
 
 function AppContent() {
   const dispatch = useDispatch();
@@ -104,20 +104,20 @@ function AppContent() {
 
       <Suspense fallback={<PageFallback />}>
         <Routes>
-          {/* ── Landing ── */}
+          {/*Landing */}
           <Route path="/" element={<LandingPage />} />
 
-          {/* ── Google OAuth callback ── */}
+          {/*Google OAuth callback*/}
           <Route path="/auth/google/success" element={<GoogleSuccessPage />} />
 
-          {/* ── Verify / Reset (no auth guard) ── */}
+          {/*Verify / Reset (no auth guard)*/}
           <Route element={<AuthLayout />}>
             <Route path="/verify-email"    element={<VerifyEmailPage />} />
             <Route path="/reset-password"  element={<ResetPasswordPage />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           </Route>
 
-          {/* ── Public routes (redirect to /dashboard if already logged in) ── */}
+          {/*Public routes (redirect to /dashboard if already logged in)*/}
           <Route element={<PublicRoute />}>
             <Route element={<AuthLayout />}>
               <Route path="/login"    element={<LoginPage />} />
@@ -125,7 +125,7 @@ function AppContent() {
             </Route>
           </Route>
 
-          {/* ── Protected app routes ── */}
+          {/*Protected app routes*/}
           <Route element={<ProtectedRoute />}>
             <Route element={<AppLayout />}>
               <Route path="/dashboard"   element={<DashboardPage />} />
@@ -142,14 +142,14 @@ function AppContent() {
             </Route>
           </Route>
 
-          {/* ── Admin routes ── */}
+          {/*Admin routes*/}
           <Route element={<ProtectedRoute adminOnly />}>
             <Route element={<AppLayout />}>
               <Route path="/admin" element={<AdminPage />} />
             </Route>
           </Route>
 
-          {/* ── 404 Catch-all ── */}
+          {/*404 Catch-all*/}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>

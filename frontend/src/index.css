@@ -4,7 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Design Tokens ─────────────────────────────────────── */
+/*Design Tokens */
 :root {
   --color-brand-50:  #f5f3ff;
   --color-brand-100: #ede9fe;
@@ -77,6 +77,7 @@ html.light {
 
 html {
   scroll-behavior: smooth;
+  text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   font-size: 16px;
 }
@@ -96,13 +97,13 @@ body {
   color: #fff;
 }
 
-/* ─── Scrollbar ──────────────────────────────────────────── */
+/*Scrollbar */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(139,92,246,0.4); border-radius: 99px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(139,92,246,0.7); }
 
-/* ─── Typography Utilities ──────────────────────────────── */
+/*Typography Utilities*/
 .font-display { font-family: var(--font-display); }
 
 .gradient-text {
@@ -126,7 +127,7 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
-/* ─── Glassmorphism Components ──────────────────────────── */
+/*Glassmorphism Components*/
 .glass {
   background: var(--bg-card);
   backdrop-filter: blur(12px);
@@ -256,7 +257,7 @@ body {
   border-color: rgba(239, 68, 68, 0.5);
 }
 
-/* ─── Badge / Pill Components ───────────────────────────── */
+/* Badge / Pill Components*/
 .badge {
   display: inline-flex;
   align-items: center;
@@ -299,7 +300,7 @@ body {
   border: 1px solid rgba(56, 189, 248, 0.3);
 }
 
-/* ─── Input Components ──────────────────────────────────── */
+/* Input Components */
 .input-field {
   width: 100%;
   padding: 12px 16px;
@@ -321,7 +322,7 @@ body {
 
 .input-field::placeholder { color: var(--text-muted); }
 
-/* ─── Glow Effects ──────────────────────────────────────── */
+/*Glow Effects*/
 .glow-brand {
   box-shadow: var(--shadow-glow-brand);
 }
@@ -334,7 +335,7 @@ body {
   box-shadow: 0 0 30px rgba(16, 185, 129, 0.2);
 }
 
-/* ─── Background Gradients ──────────────────────────────── */
+/*Background Gradients*/
 .bg-gradient-hero {
   background:
     radial-gradient(ellipse 120% 80% at 50% -20%, rgba(139,92,246,0.18) 0%, transparent 60%),
@@ -359,7 +360,7 @@ body {
     radial-gradient(at 33% 50%, hsla(250,70%,55%,0.05) 0px, transparent 50%);
 }
 
-/* ─── Dark color aliases for Tailwind classes ───────────── */
+/*Dark color aliases for Tailwind classes*/
 .text-dark-100 { color: #f1f5f9; }
 .text-dark-200 { color: #e2e8f0; }
 .text-dark-300 { color: #cbd5e1; }
@@ -367,7 +368,7 @@ body {
 .text-dark-500 { color: #64748b; }
 .text-dark-600 { color: #475569; }
 
-/* ─── Animations ────────────────────────────────────────── */
+/*Animations*/
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
@@ -424,7 +425,7 @@ body {
   border-radius: var(--radius-md);
 }
 
-/* ─── Progress Bar ──────────────────────────────────────── */
+/* Progress Bar*/
 .progress-bar {
   height: 6px;
   background: rgba(255,255,255,0.08);
@@ -439,7 +440,7 @@ body {
   transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* ─── Neumorphism Card ──────────────────────────────────── */
+/*Neumorphism Card*/
 .neuro-card {
   background: var(--bg-secondary);
   border-radius: var(--radius-xl);
@@ -450,7 +451,7 @@ body {
   border: 1px solid var(--border-subtle);
 }
 
-/* ─── Gradient Border ───────────────────────────────────── */
+/*Gradient Border */
 .gradient-border {
   position: relative;
   border-radius: var(--radius-xl);
@@ -465,7 +466,7 @@ body {
   width: 100%;
 }
 
-/* ─── Stat Card ─────────────────────────────────────────── */
+/*Stat Card*/
 .stat-card {
   position: relative;
   overflow: hidden;
@@ -515,7 +516,7 @@ body {
   background: rgba(16, 185, 129, 0.04);
 }
 
-/* ─── Modal Overlay ─────────────────────────────────────── */
+/*Modal Overlay */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -539,7 +540,7 @@ body {
   box-shadow: var(--shadow-lg);
 }
 
-/* ─── Tab System ────────────────────────────────────────── */
+/*Tab System*/
 .tab-list {
   display: flex;
   gap: 4px;
@@ -579,14 +580,14 @@ body {
   margin-bottom: 16px;
 }
 
-/* ─── Divider ───────────────────────────────────────────── */
+/*Divider*/
 .divider {
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--border-default), transparent);
   margin: 24px 0;
 }
 
-/* ─── Tooltip ───────────────────────────────────────────── */
+/*Tooltip */
 .tooltip {
   position: relative;
 }
@@ -612,17 +613,17 @@ body {
 
 .tooltip:hover::after { opacity: 1; }
 
-/* ─── Recharts Custom Styles ────────────────────────────── */
+/*Recharts Custom Styles */
 .recharts-tooltip-wrapper { outline: none !important; }
 
-/* ─── Focus Visible ─────────────────────────────────────── */
+/* Focus Visible */
 *:focus-visible {
   outline: 2px solid rgba(139,92,246,0.6);
   outline-offset: 2px;
   border-radius: 4px;
 }
 
-/* ─── Responsive Helpers ────────────────────────────────── */
+/*Responsive Helpers*/
 @media (max-width: 640px) {
   .btn-primary, .btn-secondary { padding: 10px 18px; font-size: 13px; }
   .glass-card { border-radius: var(--radius-lg); }
