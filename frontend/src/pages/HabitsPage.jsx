@@ -19,22 +19,23 @@ import { exportHabitsToCSV } from '../utils/exportCSV';
 // ─────────────────────────────────────────────
 // Constants
 // ─────────────────────────────────────────────
+// Category values match backend enum exactly (Title Case or Coding-specific)
 const CATEGORIES = [
-  { value: 'health', label: '💪 Health' },
-  { value: 'fitness', label: '🏃 Fitness' },
-  { value: 'mindfulness', label: '🧘 Mindfulness' },
-  { value: 'learning', label: '📚 Learning' },
-  { value: 'productivity', label: '⚡ Productivity' },
-  { value: 'social', label: '🤝 Social' },
-  { value: 'creativity', label: '🎨 Creativity' },
-  { value: 'finance', label: '💰 Finance' },
-  { value: 'other', label: '🌀 Other' },
+  { value: 'Health', label: '💪 Health' },
+  { value: 'Fitness', label: '🏃 Fitness' },
+  { value: 'Study', label: '📚 Study' },
+  { value: 'Coding', label: '💻 Coding' },
+  { value: 'Reading', label: '📖 Reading' },
+  { value: 'Meditation', label: '🧘 Meditation' },
+  { value: 'Productivity', label: '⚡ Productivity' },
+  { value: 'Personal Development', label: '🌱 Personal Development' },
+  { value: 'Custom', label: '🎨 Custom' },
 ];
 
 const PRIORITIES = [
-  { value: 'low', label: '🟢 Low' },
-  { value: 'medium', label: '🟡 Medium' },
-  { value: 'high', label: '🔴 High' },
+  { value: 'Low',    label: '🟢 Low'    },
+  { value: 'Medium', label: '🟡 Medium' },
+  { value: 'High',   label: '🔴 High'   },
 ];
 
 const ICONS = ['🎯', '💪', '🏃', '📚', '🧘', '💧', '🥗', '😴', '📓', '🎨', '💰', '🔔', '⚡', '🌿', '🚴'];
@@ -50,17 +51,21 @@ const PRESET_COLORS = [
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
+// Handle both backend Title Case and any legacy lowercase values
 const PRIORITY_META = {
-  low: { label: 'Low', color: 'text-emerald-400', bg: 'bg-emerald-500/15' },
-  medium: { label: 'Medium', color: 'text-amber-400', bg: 'bg-amber-500/15' },
-  high: { label: 'High', color: 'text-rose-400', bg: 'bg-rose-500/15' },
+  low:    { label: 'Low',    color: 'text-emerald-400', bg: 'bg-emerald-500/15' },
+  Low:    { label: 'Low',    color: 'text-emerald-400', bg: 'bg-emerald-500/15' },
+  medium: { label: 'Medium', color: 'text-amber-400',   bg: 'bg-amber-500/15'  },
+  Medium: { label: 'Medium', color: 'text-amber-400',   bg: 'bg-amber-500/15'  },
+  high:   { label: 'High',   color: 'text-rose-400',    bg: 'bg-rose-500/15'   },
+  High:   { label: 'High',   color: 'text-rose-400',    bg: 'bg-rose-500/15'   },
 };
 
 const EMPTY_FORM = {
   title: '',
   description: '',
-  category: 'health',
-  priority: 'medium',
+  category: 'Health',
+  priority: 'Medium',
   icon: '🎯',
   color: '#6366f1',
   frequency: 'daily',
@@ -93,11 +98,12 @@ const HabitModal = ({ open, onClose, initialData, onSave }) => {
   useEffect(() => {
     if (open) {
       if (initialData) {
-        // Map backend enums to frontend lowercase if necessary
+        // Normalize category & priority – keep as-is (Title Case) for backend compatibility
         const mappedData = {
           ...initialData,
-          category: initialData.category?.toLowerCase() || 'health',
-          priority: initialData.priority?.toLowerCase() || 'medium',
+          // Keep original casing from backend; fallback to defaults if missing
+          category: initialData.category || 'Health',
+          priority: initialData.priority || 'Medium',
           startDate: initialData.startDate ? new Date(initialData.startDate).toISOString().slice(0, 10) : EMPTY_FORM.startDate,
           endDate: initialData.endDate ? new Date(initialData.endDate).toISOString().slice(0, 10) : '',
         };

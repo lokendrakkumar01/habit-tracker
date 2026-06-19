@@ -117,6 +117,39 @@ export default function GoalsPage() {
     return Math.round((ms.filter(m => m.completed).length / ms.length) * 100);
   };
 
+  const getDeadlineInfo = (deadline) => {
+    if (!deadline) return null;
+    const now = new Date();
+    const due = new Date(deadline);
+    const diffMs = due - now;
+    const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+    if (diffDays < 0) return { label: `Overdue ${Math.abs(diffDays)}d`, color: '#ef4444', bg: 'rgba(239,68,68,0.15)' };
+    if (diffDays === 0) return { label: 'Due Today!', color: '#f59e0b', bg: 'rgba(245,158,11,0.15)' };
+    if (diffDays <= 7)  return { label: `${diffDays}d left`, color: '#f97316', bg: 'rgba(249,115,22,0.15)' };
+    if (diffDays <= 30) return { label: `${diffDays}d left`, color: '#6366f1', bg: 'rgba(99,102,241,0.15)' };
+    return { label: `${diffDays}d left`, color: '#10b981', bg: 'rgba(16,185,129,0.15)' };
+  };
+
+  // SVG circular progress ring
+  const ProgressRing = ({ progress, color, size = 72 }) => {
+    const r = (size - 10) / 2;
+    const circ = 2 * Math.PI * r;
+    const offset = circ - (progress / 100) * circ;
+    return (
+      <svg width={size} height={size} className="-rotate-90">
+        <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="6" />
+        <circle
+          cx={size/2} cy={size/2} r={r} fill="none"
+          stroke={color || '#6366f1'} strokeWidth="6"
+          strokeLinecap="round"
+          strokeDasharray={circ}
+          strokeDashoffset={offset}
+          style={{ transition: 'stroke-dashoffset 0.8s ease' }}
+        />
+      </svg>
+    );
+  };
+
   return (
     <div className="min-h-screen p-4 sm:p-6 lg:p-8" style={{ background: '#020617' }}>
       <div className="mx-auto max-w-7xl space-y-6">
@@ -189,24 +222,42 @@ export default function GoalsPage() {
                       </div>
                     </div>
 
-                    {/* Progress */}
-                    <div>
-                      <div className="flex justify-between text-xs mb-1.5">
-                        <span style={{ color: 'rgba(255,255,255,0.4)' }}>Progress</span>
-                        <span style={{ color: goal.color || '#6366f1' }}>{progress}%</span>
+                    {/* Progress ring */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-col">
+                        <div className="flex justify-between text-xs mb-1.5">
+                          <span style={{ color: 'rgba(255,255,255,0.4)' }}>Progress</span>
+                          <span style={{ color: goal.color || '#6366f1', fontWeight: 700 }}>{progress}%</span>
+                        </div>
+                        <div className="h-2 w-48 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.08)' }}>
+                          <motion.div initial={{ width: 0 }} animate={{ width: `${progress}%` }} transition={{ duration: 0.8, ease: 'easeOut' }}
+                            className="h-full rounded-full" style={{ background: `linear-gradient(90deg, ${goal.color || '#6366f1'}, ${goal.color || '#6366f1'}88)` }} />
+                        </div>
                       </div>
-                      <div className="h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.08)' }}>
-                        <motion.div initial={{ width: 0 }} animate={{ width: `${progress}%` }} transition={{ duration: 0.8, ease: 'easeOut' }}
-                          className="h-full rounded-full" style={{ background: `linear-gradient(90deg, ${goal.color || '#6366f1'}, ${goal.color || '#6366f1'}88)` }} />
+                      <div className="relative flex-shrink-0">
+                        <ProgressRing progress={progress} color={goal.color} size={64} />
+                        <div className="absolute inset-0 flex items-center justify-center rotate-90">
+                          <span className="text-[11px] font-bold" style={{ color: goal.color || '#6366f1' }}>{progress}%</span>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Deadline */}
-                    {goal.deadline && (
-                      <div className="flex items-center gap-1.5 text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>
-                        <FiCalendar size={11} /> Due {new Date(goal.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                      </div>
-                    )}
+
+                    {/* Deadline badge */}
+                    {goal.deadline && (() => {
+                      const info = getDeadlineInfo(goal.deadline);
+                      return info ? (
+                        <div className="flex items-center gap-2">
+                          <span className="flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold"
+                            style={{ background: info.bg, color: info.color, border: `1px solid ${info.color}30` }}>
+                            <FiCalendar size={10} />{info.label}
+                          </span>
+                          <span className="text-xs" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                            {new Date(goal.deadline).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })}
+                          </span>
+                        </div>
+                      ) : null;
+                    })()}
 
                     {/* Milestones toggle */}
                     {(goal.milestones || []).length > 0 && (

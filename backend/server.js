@@ -20,7 +20,8 @@ const journalRoutes = require('./routes/journal.routes');
 const adminRoutes = require('./routes/admin.routes');
 const aiRoutes = require('./routes/ai.routes');
 const socialRoutes = require('./routes/social.routes');
-const paymentRoutes = require('./routes/payment.routes');
+const paymentRoutes      = require('./routes/payment.routes');
+const notificationRoutes  = require('./routes/notification.routes');
 
 const app = express();
 
@@ -123,7 +124,8 @@ app.use('/api/journals', journalRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/social', socialRoutes);
-app.use('/api/payments', paymentRoutes);
+app.use('/api/payments',       paymentRoutes);
+app.use('/api/notifications',  notificationRoutes);
 
 // 404 handler
 app.all('*', (req, res) => {

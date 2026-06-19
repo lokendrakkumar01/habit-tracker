@@ -10,10 +10,11 @@ const notificationSchema = new mongoose.Schema(
     type: {
       type: String,
       enum: [
-        'reminder', 'streak_alert', 'achievement', 'friend_request',
-        'system', 'missed_habit', 'goal_deadline',
+        'reminder', 'streak_alert', 'streak', 'achievement',
+        'friend_request', 'system', 'missed_habit', 'goal_deadline',
+        'info', 'success', 'warning',
       ],
-      required: true,
+      default: 'info',
     },
     title: { type: String, required: true },
     message: { type: String, required: true },
@@ -30,6 +31,7 @@ const notificationSchema = new mongoose.Schema(
 );
 
 notificationSchema.index({ user: 1, read: 1 });
+notificationSchema.index({ user: 1, createdAt: -1 });
 notificationSchema.index({ scheduledFor: 1, sent: 1 });
 
 module.exports = mongoose.model('Notification', notificationSchema);
