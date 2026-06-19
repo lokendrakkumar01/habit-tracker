@@ -10,7 +10,6 @@ import {
 } from 'recharts';
 import { fetchDashboardStats, fetchWeeklyData } from '../features/analytics/analyticsSlice';
 import { fetchHabits, completeHabit } from '../features/habits/habitSlice';
-import { fetchMe } from '../features/auth/authSlice';
 import api from '../services/api';
 import AICoachView from '../components/dashboard/AICoachView';
 import {
@@ -472,7 +471,7 @@ export default function DashboardPage() {
   const { user }          = useSelector(s => s.auth);
   const { habits = [] }   = useSelector(s => s.habits);
   const analytics         = useSelector(s => s.analytics || {});
-  const stats             = analytics.stats || {};
+  const stats             = analytics.dashboardStats || {};
   const weeklyData        = analytics.weeklyData || [];
 
   const [localHabits, setLocalHabits] = useState([]);
@@ -480,7 +479,6 @@ export default function DashboardPage() {
 
   // ── On mount: fetch all data ────────────────────────────────────────────
   useEffect(() => {
-    dispatch(fetchMe());
     dispatch(fetchHabits());
     dispatch(fetchDashboardStats());
     dispatch(fetchWeeklyData());

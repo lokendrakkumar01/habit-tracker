@@ -28,7 +28,10 @@ export const fetchMe = createAsyncThunk('auth/fetchMe', async (_, { rejectWithVa
     const res = await api.get('/auth/me');
     return res.data;
   } catch (err) {
-    localStorage.removeItem('token');
+    const status = err.response?.status;
+    if (status === 401 || status === 403) {
+      localStorage.removeItem('token');
+    }
     return rejectWithValue(err.response?.data?.message || 'Failed to fetch user');
   }
 });
@@ -123,9 +126,15 @@ const authSlice = createSlice({
       })
       .addCase(fetchMe.rejected, (state) => {
         state.initializing = false;
-        state.isAuthenticated = false;
-        state.user = null;
-        state.token = null;
+        const hasToken = !!localStorage.getItem('token');
+        if (!hasToken) {
+          state.isAuthenticated = false;
+          state.user = null;
+          state.token = null;
+        } else {
+          state.isAuthenticated = false;
+          state.user = null;
+        }
       })
       // Logout - always clear state regardless of API result
       .addCase(logoutUser.fulfilled, (state) => {

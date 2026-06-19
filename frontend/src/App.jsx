@@ -75,11 +75,13 @@ const PublicRoute = () => {
 
 function AppContent() {
   const dispatch = useDispatch();
-  const { token } = useSelector((s) => s.auth);
+  const { token, user } = useSelector((s) => s.auth);
 
   useEffect(() => {
-    if (token) dispatch(fetchMe());
-  }, [dispatch, token]);
+    if (token && !user) {
+      dispatch(fetchMe());
+    }
+  }, [dispatch, token, user]);
 
   return (
     <Router>
