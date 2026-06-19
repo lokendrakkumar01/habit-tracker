@@ -6,7 +6,7 @@ import {
   FiCalendar, FiUsers, FiStar, FiBarChart2, FiTarget,
   FiBookOpen, FiCpu, FiShield, FiSmile, FiChevronDown,
   FiPlay, FiGithub, FiTwitter, FiLinkedin, FiGlobe,
-  FiInstagram, FiYoutube,
+  FiInstagram, FiYoutube, FiFlag,
 } from 'react-icons/fi';
 import { MdEmojiEvents } from 'react-icons/md';
 
