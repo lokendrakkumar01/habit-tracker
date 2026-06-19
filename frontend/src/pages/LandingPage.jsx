@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import {
@@ -7,12 +7,13 @@ import {
   FiBookOpen, FiCpu, FiShield, FiSmile, FiChevronDown,
   FiPlay, FiGithub, FiTwitter, FiLinkedin, FiFlag,
 } from 'react-icons/fi';
-import { MdAutoGraph, MdEmojiEvents } from 'react-icons/md';
+import { MdEmojiEvents } from 'react-icons/md';
 
 const fade = {
   hidden: { opacity: 0, y: 28 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } },
 };
+
 const stagger = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
@@ -93,7 +94,7 @@ function FAQItem({ q, a, index }) {
       transition={{ delay: index * 0.06 }}
       viewport={{ once: true }}
       className="rounded-2xl overflow-hidden"
-      style={{ border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)' }}
+      style={{ border: '1px solid var(--border-default)', background: 'var(--bg-card)' }}
     >
       <button
         onClick={() => setOpen(o => !o)}
@@ -127,8 +128,8 @@ function FAQItem({ q, a, index }) {
 
 export default function LandingPage() {
   const { scrollY } = useScroll();
-  const navBg = useTransform(scrollY, [0, 80], ['rgba(10,10,15,0)', 'rgba(10,10,15,0.95)']);
-  const navBorder = useTransform(scrollY, [0, 80], ['rgba(255,255,255,0)', 'rgba(255,255,255,0.07)']);
+  const navBg = useTransform(scrollY, [0, 80], ['rgba(2,6,23,0)', 'rgba(2,6,23,0.85)']);
+  const navBorder = useTransform(scrollY, [0, 80], ['rgba(255,255,255,0)', 'rgba(255,255,255,0.06)']);
 
   const [pricingAnnual, setPricingAnnual] = useState(true);
 
@@ -136,141 +137,208 @@ export default function LandingPage() {
   const annualTotal  = (monthlyPrice * 12).toFixed(0);
 
   return (
-    <div className="min-h-screen text-white overflow-x-hidden" style={{ background: '#0a0a0f' }}>
+    <div className="min-h-screen text-white overflow-x-hidden" style={{ background: 'var(--bg-primary)' }}>
 
       <motion.nav
         style={{ backgroundColor: navBg, borderBottomColor: navBorder }}
-        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 border-b backdrop-blur-xl"
+        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 border-b backdrop-blur-xl transition-all"
       >
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '6px' }} className="sm:gap-2.5">
-          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center text-base sm:text-lg flex-shrink-0" style={{ background: 'linear-gradient(135deg,#7c3aed,#4f46e5)', boxShadow: '0 4px 16px rgba(124,58,237,0.4)' }}>
+        <Link to="/" className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl flex items-center justify-center text-lg flex-shrink-0" style={{ background: 'linear-gradient(135deg,#7c3aed,#4f46e5)', boxShadow: '0 4px 16px rgba(124,58,237,0.4)' }}>
             🎯
           </div>
-          <span className="text-base sm:text-lg font-bold gradient-text">HabitFlow</span>
+          <span className="text-lg font-bold gradient-text">HabitFlow</span>
         </Link>
 
-        <div className="hidden md:flex items-center gap-8 text-sm" style={{ color: '#94a3b8' }}>
+        <div className="hidden md:flex items-center gap-8 text-sm" style={{ color: 'var(--text-secondary)' }}>
           <a href="#features" className="hover:text-white transition-colors">Features</a>
           <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
           <a href="#testimonials" className="hover:text-white transition-colors">Reviews</a>
           <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Link to="/login" className="btn-secondary text-xs sm:text-sm px-2.5 py-1.5 sm:px-4 sm:py-2 whitespace-nowrap">Sign In</Link>
-          <Link to="/register" className="btn-primary text-xs sm:text-sm px-2.5 py-1.5 sm:px-4 sm:py-2 whitespace-nowrap">
+        <div className="flex items-center gap-3">
+          <Link to="/login" className="btn-secondary text-xs sm:text-sm px-3.5 py-2 whitespace-nowrap">Sign In</Link>
+          <Link to="/register" className="btn-primary text-xs sm:text-sm px-3.5 py-2 whitespace-nowrap">
             <span className="hidden sm:inline">Get Started Free</span>
             <span className="sm:hidden">Sign Up</span>
           </Link>
         </div>
       </motion.nav>
 
-      <section className="relative pt-32 pb-24 px-6 text-center overflow-hidden">
-        
+      <section className="relative pt-36 pb-24 px-6 text-center overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full opacity-30"
-            style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.35) 0%, transparent 70%)' }} />
-          <div className="absolute top-1/3 left-0 w-[400px] h-[400px] rounded-full opacity-15"
-            style={{ background: 'radial-gradient(circle, rgba(56,189,248,0.4) 0%, transparent 70%)' }} />
-          <div className="absolute top-1/4 right-0 w-[350px] h-[350px] rounded-full opacity-15"
-            style={{ background: 'radial-gradient(circle, rgba(99,102,241,0.4) 0%, transparent 70%)' }} />
-          
-          <div className="absolute inset-0 opacity-[0.03]" style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,1) 1px,transparent 1px)',
-            backgroundSize: '80px 80px',
-          }} />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full opacity-35"
+            style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.3) 0%, transparent 70%)' }} />
+          <div className="absolute top-1/3 left-0 w-[450px] h-[450px] rounded-full opacity-10"
+            style={{ background: 'radial-gradient(circle, rgba(56,189,248,0.35) 0%, transparent 70%)' }} />
+          <div className="absolute top-1/4 right-0 w-[400px] h-[400px] rounded-full opacity-10"
+            style={{ background: 'radial-gradient(circle, rgba(99,102,241,0.35) 0%, transparent 70%)' }} />
+          <div className="absolute inset-0 opacity-[0.02] bg-mesh" />
         </div>
 
         <motion.div className="relative max-w-5xl mx-auto" variants={stagger} initial="hidden" animate="visible">
-          
-          <motion.div variants={fade} className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-8 badge badge-primary">
+          <motion.div variants={fade} className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold mb-8 badge badge-primary">
             <FiZap className="text-yellow-400" size={13} />
-            ✨ AI-Powered Habit Intelligence — Now Live
+            ✨ AI-POWERED PRODUCTIVITY COACH — NOW ACTIVE
           </motion.div>
 
           <motion.h1 variants={fade} className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-[1.1] tracking-tight font-display">
-            Build Habits That{' '}
-            <span className="block gradient-text">Actually Stick</span>
+            Build Habits That<br />
+            <span className="gradient-text">Actually Stick</span>
           </motion.h1>
 
-          <motion.p variants={fade} className="text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed" style={{ color: '#94a3b8' }}>
-            The most powerful habit tracker for serious achievers. Track habits, crush streaks, achieve goals, and transform your life with AI coaching.
+          <motion.p variants={fade} className="text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+            The most powerful habit tracker for serious achievers. Track progress, crush streaks, achieve goals, and transform your routine with AI coaching.
           </motion.p>
 
-          <motion.div variants={fade} className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
-            <Link to="/register" className="btn-primary text-sm sm:text-base px-6 py-3.5 sm:px-8 sm:py-4 rounded-2xl">
+          <motion.div variants={fade} className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
+            <Link to="/register" className="btn-primary text-sm sm:text-base px-8 py-4 rounded-2xl w-full sm:w-auto justify-center">
               Start Free Today <FiArrowRight size={16} />
             </Link>
-            <button className="btn-secondary text-sm sm:text-base px-6 py-3.5 sm:px-8 sm:py-4 rounded-2xl flex items-center gap-2 justify-center">
+            <button className="btn-secondary text-sm sm:text-base px-8 py-4 rounded-2xl flex items-center gap-2 justify-center w-full sm:w-auto">
               <FiPlay size={16} /> Watch Demo
             </button>
           </motion.div>
-          <motion.p variants={fade} className="text-sm" style={{ color: '#475569' }}>
-            Free forever · No credit card · 5 habits included
+          <motion.p variants={fade} className="text-xs" style={{ color: 'var(--text-muted)' }}>
+            Free forever · No credit card required · 5 habits included
           </motion.p>
 
-          <motion.div variants={fade} className="mt-16 relative max-w-4xl mx-auto">
-            <div className="absolute -inset-8 rounded-full opacity-20 blur-3xl pointer-events-none"
-              style={{ background: 'linear-gradient(135deg,rgba(139,92,246,0.6),rgba(56,189,248,0.4))' }} />
-            <div className="relative rounded-3xl overflow-hidden" style={{
-              background: 'rgba(15,15,25,0.9)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              boxShadow: '0 40px 100px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05)',
-            }}>
+          <motion.div variants={fade} className="mt-20 relative max-w-5xl mx-auto">
+            <div className="absolute -inset-8 rounded-full opacity-25 blur-3xl pointer-events-none"
+              style={{ background: 'linear-gradient(135deg,rgba(139,92,246,0.5),rgba(56,189,248,0.3))' }} />
+            <div className="relative rounded-3xl overflow-hidden glass-card-static" style={{ border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-lg)' }}>
               
-              <div className="flex items-center gap-2 px-6 py-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                <div className="w-3 h-3 rounded-full bg-red-500" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                <div className="w-3 h-3 rounded-full bg-green-500" />
-                <span className="ml-3 text-xs" style={{ color: '#475569' }}>habitflow.app/dashboard</span>
-              </div>
-              
-              <div className="p-6">
-                
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-                  {[
-                    { label: "Today's Habits", value: '6/8', color: '#a78bfa' },
-                    { label: 'Current Streak', value: '🔥 42d', color: '#fb923c' },
-                    { label: 'XP Points', value: '⚡ 2,840', color: '#fbbf24' },
-                    { label: 'Productivity', value: '94%', color: '#34d399' },
-                  ].map((s, i) => (
-                    <motion.div key={i} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 + i * 0.1 }}
-                      className="rounded-xl p-4 text-center" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                      <div className="text-xl font-bold" style={{ color: s.color }}>{s.value}</div>
-                      <div className="text-xs mt-1" style={{ color: '#475569' }}>{s.label}</div>
-                    </motion.div>
-                  ))}
+              <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: '1px solid var(--border-subtle)', background: 'rgba(255,255,255,0.01)' }}>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-red-500/80" />
+                  <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+                  <div className="w-3 h-3 rounded-full bg-green-500/80" />
+                  <span className="ml-3 text-xs tracking-wider" style={{ color: 'var(--text-muted)' }}>habitflow.app/dashboard</span>
                 </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-16 h-1.5 rounded-full" style={{ background: 'var(--border-subtle)' }} />
+                  <div className="w-10 h-1.5 rounded-full" style={{ background: 'var(--border-subtle)' }} />
+                </div>
+              </div>
+
+              <div className="flex flex-col md:flex-row min-h-[460px] text-left">
                 
-                <div className="space-y-2">
-                  {[
-                    { icon: '🏃', name: 'Morning Run', streak: 42, done: true, cat: 'Fitness' },
-                    { icon: '📚', name: 'Read 30 mins', streak: 28, done: true, cat: 'Learning' },
-                    { icon: '💻', name: 'Code Daily', streak: 60, done: false, cat: 'Coding' },
-                    { icon: '🧘', name: 'Meditate', streak: 15, done: false, cat: 'Wellness' },
-                  ].map((h, i) => (
-                    <motion.div key={i} initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.8 + i * 0.1 }}
-                      className="flex items-center gap-3 rounded-xl px-4 py-3"
-                      style={{
-                        background: h.done ? 'rgba(16,185,129,0.06)' : 'rgba(255,255,255,0.03)',
-                        border: `1px solid ${h.done ? 'rgba(16,185,129,0.2)' : 'rgba(255,255,255,0.06)'}`,
-                      }}>
-                      <span className="text-xl">{h.icon}</span>
-                      <div className="flex-1">
-                        <div className="text-sm font-medium" style={{ color: h.done ? '#6b7280' : '#f1f5f9', textDecoration: h.done ? 'line-through' : 'none' }}>{h.name}</div>
-                        <div className="flex items-center gap-2 mt-0.5">
-                          <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: 'rgba(139,92,246,0.15)', color: '#a78bfa' }}>{h.cat}</span>
-                          <span className="text-xs text-amber-400">🔥 {h.streak}d</span>
+                <div className="w-full md:w-56 p-5 hidden md:flex flex-col gap-6" style={{ borderRight: '1px solid var(--border-subtle)', background: 'rgba(255,255,255,0.01)' }}>
+                  <div className="flex items-center gap-3 px-3 py-2 rounded-xl" style={{ background: 'rgba(124,58,237,0.1)' }}>
+                    <div className="w-6 h-6 rounded-lg flex items-center justify-center bg-violet-600 text-xs">📊</div>
+                    <span className="text-xs font-semibold text-white">Dashboard</span>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    {[
+                      { icon: '🎯', label: 'Habits' },
+                      { icon: '🏆', label: 'Goals' },
+                      { icon: '📔', label: 'Journal' },
+                      { icon: '📈', label: 'Analytics' },
+                      { icon: '👥', label: 'Social' },
+                      { icon: '⚙️', label: 'Settings' },
+                    ].map((item, idx) => (
+                      <div key={idx} className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-white/5 transition-colors cursor-pointer">
+                        <span className="text-xs">{item.icon}</span>
+                        <span className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>{item.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex-1 p-6 md:p-8">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+                    <div>
+                      <h3 className="text-xl font-bold text-white">Welcome back, Priya! 👋</h3>
+                      <p className="text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>Here is your daily habit breakdown</p>
+                    </div>
+                    <div className="flex items-center gap-2 px-4 py-2 rounded-full" style={{ background: 'rgba(124,58,237,0.12)', border: '1px solid rgba(124,58,237,0.3)' }}>
+                      <span className="text-xs font-black text-violet-300">Level 3</span>
+                      <div className="w-20 h-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.1)' }}>
+                        <div className="h-full rounded-full bg-violet-500" style={{ width: '65%' }} />
+                      </div>
+                      <span className="text-[10px]" style={{ color: 'var(--text-secondary)' }}>65% XP</span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    {[
+                      { label: "Today's Progress", value: '6 / 8 Completed', change: '75%', up: true, color: '#a78bfa' },
+                      { label: 'Current Streak', value: '🔥 42 Days', change: 'Best: 60d', up: true, color: '#fb923c' },
+                      { label: 'Total XP Earned', value: '⚡ 2,840 XP', change: '+180 Today', up: true, color: '#fbbf24' },
+                      { label: 'Focus Score', value: '📈 94% Consistency', change: '+2% vs LW', up: true, color: '#34d399' },
+                    ].map((stat, i) => (
+                      <div key={i} className="rounded-2xl p-4" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-subtle)' }}>
+                        <div className="text-[10px] uppercase font-bold tracking-wider mb-2.5" style={{ color: 'var(--text-muted)' }}>{stat.label}</div>
+                        <div className="text-base font-extrabold text-white mb-1.5" style={{ color: stat.color }}>{stat.value}</div>
+                        <div className="text-[10px] font-medium" style={{ color: 'var(--text-secondary)' }}>{stat.change}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <h4 className="text-xs font-bold uppercase tracking-wider mb-4" style={{ color: 'var(--text-muted)' }}>Today's Habit Checklist</h4>
+                      <div className="space-y-3">
+                        {[
+                          { icon: '🏃', name: 'Morning Run', streak: 42, done: true, cat: 'Fitness' },
+                          { icon: '📚', name: 'Read 30 mins', streak: 28, done: true, cat: 'Learning' },
+                          { icon: '💻', name: 'Code Daily', streak: 60, done: false, cat: 'Coding' },
+                          { icon: '🧘', name: 'Meditate', streak: 15, done: false, cat: 'Wellness' },
+                        ].map((h, i) => (
+                          <div key={i} className="flex items-center justify-between gap-3 rounded-xl px-4 py-3 text-left"
+                            style={{
+                              background: h.done ? 'rgba(16,185,129,0.06)' : 'rgba(255,255,255,0.03)',
+                              border: `1px solid ${h.done ? 'rgba(16,185,129,0.18)' : 'rgba(255,255,255,0.06)'}`,
+                            }}>
+                            <div className="flex items-center gap-3">
+                              <span className="text-lg">{h.icon}</span>
+                              <div>
+                                <div className="text-sm font-semibold" style={{ color: h.done ? 'var(--text-muted)' : 'var(--text-primary)', textDecoration: h.done ? 'line-through' : 'none' }}>{h.name}</div>
+                                <div className="flex items-center gap-2 mt-0.5">
+                                  <span className="text-[10px] px-1.5 py-0.5 rounded-full" style={{ background: 'rgba(139,92,246,0.15)', color: '#a78bfa' }}>{h.cat}</span>
+                                  <span className="text-[10px] text-amber-400 font-bold">🔥 {h.streak}d</span>
+                                </div>
+                              </div>
+                            </div>
+                            <button className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${h.done ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' : 'bg-white/5 text-gray-500 border border-white/10'}`}>
+                              {h.done ? '✓' : '○'}
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <h4 className="text-xs font-bold uppercase tracking-wider mb-4" style={{ color: 'var(--text-muted)' }}>Weekly Consistency Trend</h4>
+                      <div className="rounded-2xl p-5 flex flex-col justify-between h-[235px]" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-subtle)' }}>
+                        <div className="flex justify-between items-end gap-2 flex-1 pb-4">
+                          {[
+                            { day: 'M', val: '40%' },
+                            { day: 'T', val: '65%' },
+                            { day: 'W', val: '80%' },
+                            { day: 'T', val: '55%' },
+                            { day: 'F', val: '90%' },
+                            { day: 'S', val: '75%' },
+                            { day: 'S', val: '95%' },
+                          ].map((bar, i) => (
+                            <div key={i} className="flex-1 flex flex-col items-center gap-2 h-full justify-end">
+                              <div className="w-full rounded-t-lg transition-all" style={{ height: bar.val, background: 'linear-gradient(to top, #6366f1, #a78bfa)', boxShadow: '0 0 10px rgba(139,92,246,0.3)' }} />
+                              <span className="text-[10px]" style={{ color: 'var(--text-muted)' }}>{bar.day}</span>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="flex items-center justify-between pt-3 border-t border-white/5 text-[10px]" style={{ color: 'var(--text-secondary)' }}>
+                          <span>Avg. Success: 71.4%</span>
+                          <span className="text-emerald-400 font-bold">Excellent (+5%)</span>
                         </div>
                       </div>
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${h.done ? 'text-emerald-400' : 'text-gray-600'}`}
-                        style={{ background: h.done ? 'rgba(16,185,129,0.2)' : 'rgba(255,255,255,0.05)', border: `1px solid ${h.done ? 'rgba(16,185,129,0.4)' : 'rgba(255,255,255,0.1)'}` }}>
-                        {h.done ? '✓' : '○'}
-                      </div>
-                    </motion.div>
-                  ))}
+                    </div>
+                  </div>
+
                 </div>
               </div>
+
             </div>
           </motion.div>
         </motion.div>
@@ -295,7 +363,7 @@ export default function LandingPage() {
                     <><AnimatedCounter target={s.value} suffix="%" /></>
                   ) : s.value}
                 </div>
-                <div className="text-sm" style={{ color: '#64748b' }}>{s.label}</div>
+                <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>{s.label}</div>
               </motion.div>
             ))}
           </div>
@@ -309,7 +377,7 @@ export default function LandingPage() {
             <h2 className="text-4xl md:text-5xl font-black mb-5 font-display">
               <span className="gradient-text">Supercharged</span> Habit Building
             </h2>
-            <p className="text-lg max-w-2xl mx-auto" style={{ color: '#94a3b8' }}>
+            <p className="text-lg max-w-2xl mx-auto" style={{ color: 'var(--text-secondary)' }}>
               Every feature you need to build lasting habits and achieve your goals — no fluff, just results.
             </p>
           </motion.div>
@@ -325,7 +393,7 @@ export default function LandingPage() {
                   <f.icon size={22} style={{ color: f.color }} />
                 </div>
                 <h3 className="text-base font-bold text-white mb-2">{f.title}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: '#94a3b8' }}>{f.desc}</p>
+                <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{f.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -337,7 +405,7 @@ export default function LandingPage() {
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
             <div className="badge badge-success mb-4 inline-flex">💬 Real Stories</div>
             <h2 className="text-4xl md:text-5xl font-black mb-5 font-display">Loved by <span className="gradient-text">Thousands</span></h2>
-            <p style={{ color: '#94a3b8' }}>Join 50,000+ achievers building better habits every day</p>
+            <p style={{ color: 'var(--text-secondary)' }}>Join 50,000+ achievers building better habits every day</p>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -350,7 +418,7 @@ export default function LandingPage() {
                     <FiStar key={j} size={13} className="fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
-                <p className="text-sm leading-relaxed mb-5" style={{ color: '#cbd5e1' }}>"{t.text}"</p>
+                <p className="text-sm leading-relaxed mb-5" style={{ color: 'var(--text-secondary)' }}>"{t.text}"</p>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white flex-shrink-0"
                     style={{ background: `linear-gradient(135deg,${t.color},${t.color}99)` }}>
@@ -358,7 +426,7 @@ export default function LandingPage() {
                   </div>
                   <div>
                     <div className="text-sm font-semibold text-white">{t.name}</div>
-                    <div className="text-xs" style={{ color: '#64748b' }}>{t.role}</div>
+                    <div className="text-xs" style={{ color: 'var(--text-muted)' }}>{t.role}</div>
                   </div>
                 </div>
               </motion.div>
@@ -389,11 +457,10 @@ export default function LandingPage() {
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            
             <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="glass-card p-6 sm:p-8">
               <div className="text-sm font-semibold text-gray-400 mb-2">Free Plan</div>
               <div className="text-5xl font-black text-white mb-1">$0</div>
-              <div className="text-sm mb-8" style={{ color: '#64748b' }}>Forever free, no credit card</div>
+              <div className="text-sm mb-8" style={{ color: 'var(--text-muted)' }}>Forever free, no credit card</div>
               {['Up to 5 habits', 'Basic analytics', 'Streak tracking', 'Journal access', 'Standard reminders'].map((f, i) => (
                 <div key={i} className="flex items-center gap-3 mb-3">
                   <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(16,185,129,0.15)' }}>
@@ -454,20 +521,20 @@ export default function LandingPage() {
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-5 font-display">
               Your Best Self Starts <span className="gradient-text">Today</span>
             </h2>
-            <p className="text-base sm:text-lg mb-8" style={{ color: '#94a3b8' }}>
+            <p className="text-base sm:text-lg mb-8" style={{ color: 'var(--text-secondary)' }}>
               Join 50,000+ people building extraordinary lives with HabitFlow. Free forever, no credit card required.
             </p>
             <Link to="/register" className="btn-primary text-sm sm:text-lg px-6 py-3.5 sm:px-10 sm:py-4 rounded-2xl inline-flex items-center justify-center gap-2">
               Start Your Journey Free <FiArrowRight size={18} />
             </Link>
-            <p className="mt-4 text-sm" style={{ color: '#475569' }}>
+            <p className="mt-4 text-sm" style={{ color: 'var(--text-muted)' }}>
               ⚡ Set up in 60 seconds · 🔒 Cancel anytime · 💎 Free plan forever
             </p>
           </div>
         </motion.div>
       </section>
 
-      <footer className="py-12 px-6" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+      <footer className="py-12 px-6" style={{ borderTop: '1px solid var(--border-subtle)' }}>
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 mb-10">
             <div>
@@ -477,15 +544,15 @@ export default function LandingPage() {
                 </div>
                 <span className="font-bold gradient-text">HabitFlow</span>
               </div>
-              <p className="text-sm leading-relaxed mb-4" style={{ color: '#64748b' }}>
+              <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--text-muted)' }}>
                 The premium habit tracker for serious achievers. Build better habits, build a better life.
               </p>
               <div className="flex gap-3">
                 {[FiTwitter, FiGithub, FiLinkedin].map((Icon, i) => (
-                  <button key={i} className="w-9 h-9 rounded-xl flex items-center justify-center transition-colors"
-                    style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: '#64748b' }}
+                  <button key={i} className="w-9 h-9 rounded-xl flex items-center justify-center transition-colors animate-fade-up"
+                    style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', color: 'var(--text-muted)' }}
                     onMouseEnter={e => e.currentTarget.style.color = '#f1f5f9'}
-                    onMouseLeave={e => e.currentTarget.style.color = '#64748b'}>
+                    onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}>
                     <Icon size={15} />
                   </button>
                 ))}
@@ -501,9 +568,9 @@ export default function LandingPage() {
                 <ul className="space-y-2.5">
                   {col.links.map((link, j) => (
                     <li key={j}>
-                      <a href="#" className="text-sm transition-colors" style={{ color: '#64748b' }}
+                      <a href="#" className="text-sm transition-colors" style={{ color: 'var(--text-muted)' }}
                         onMouseEnter={e => e.currentTarget.style.color = '#f1f5f9'}
-                        onMouseLeave={e => e.currentTarget.style.color = '#64748b'}>
+                        onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}>
                         {link}
                       </a>
                     </li>
@@ -513,7 +580,7 @@ export default function LandingPage() {
             ))}
           </div>
           <div className="divider" />
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm" style={{ color: '#475569' }}>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm" style={{ color: 'var(--text-muted)' }}>
             <span>© {new Date().getFullYear()} HabitFlow. All rights reserved.</span>
             <span>Made with ❤️ for habit builders worldwide</span>
           </div>
