@@ -5,7 +5,8 @@ import {
   FiCheck, FiArrowRight, FiZap, FiTrendingUp, FiAward,
   FiCalendar, FiUsers, FiStar, FiBarChart2, FiTarget,
   FiBookOpen, FiCpu, FiShield, FiSmile, FiChevronDown,
-  FiPlay, FiGithub, FiTwitter, FiLinkedin, FiFlag,
+  FiPlay, FiGithub, FiTwitter, FiLinkedin, FiGlobe,
+  FiInstagram, FiYoutube,
 } from 'react-icons/fi';
 import { MdEmojiEvents } from 'react-icons/md';
 
@@ -553,13 +554,18 @@ export default function LandingPage() {
                 The premium habit tracker for serious achievers. Build better habits, build a better life.
               </p>
               <div className="flex gap-3">
-                {[FiTwitter, FiGithub, FiLinkedin].map((Icon, i) => (
-                  <button key={i} className="w-9 h-9 rounded-xl flex items-center justify-center transition-colors animate-fade-up"
+                {[
+                  { Icon: FiGithub, url: "https://github.com/lokendrakkumar01" },
+                  { Icon: FiLinkedin, url: "https://linkedin.com/in/lokendrakumar13" },
+                  { Icon: FiInstagram, url: "https://www.instagram.com/loke_ndrakumar123/?__pwa=1#" },
+                  { Icon: FiYoutube, url: "http://www.youtube.com/@uaacademy9629" },
+                ].map((item, i) => (
+                  <a key={i} href={item.url} target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-xl flex items-center justify-center transition-colors animate-fade-up"
                     style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', color: 'var(--text-muted)' }}
                     onMouseEnter={e => e.currentTarget.style.color = '#f1f5f9'}
                     onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}>
-                    <Icon size={15} />
-                  </button>
+                    <item.Icon size={15} />
+                  </a>
                 ))}
               </div>
             </div>
@@ -586,7 +592,7 @@ export default function LandingPage() {
           </div>
           <div className="divider" />
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm" style={{ color: 'var(--text-muted)' }}>
-            <span>© {new Date().getFullYear()} HabitFlow. All rights reserved.</span>
+            <span>© {new Date().getFullYear()} HabitFlow. Created by Lokendra kumar.</span>
             <span>Made with ❤️ for habit builders worldwide</span>
           </div>
         </div>
