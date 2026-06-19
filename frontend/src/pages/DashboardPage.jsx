@@ -16,6 +16,7 @@ import {
   FiTrendingUp, FiAward, FiZap, FiActivity, FiClock,
   FiTarget, FiCheckCircle, FiArrowRight, FiPlus, FiBarChart2,
   FiBook, FiShield, FiArrowUp, FiArrowDown,
+  FiGithub, FiTwitter, FiLinkedin, FiGlobe,
 } from 'react-icons/fi';
 
 const MOCK_WEEKLY = [
@@ -459,6 +460,25 @@ export default function DashboardPage() {
   const [localHabits, setLocalHabits] = useState([]);
   const [completing, setCompleting]   = useState(null);
 
+  const [socialLinks, setSocialLinks] = useState({
+    github: "",
+    twitter: "",
+    linkedin: "",
+    website: "",
+  });
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("habitflow_social_links");
+      if (saved) {
+        setSocialLinks(JSON.parse(saved));
+      }
+    } catch (e) {
+    }
+  }, []);
+
+  const hasAnyLink = socialLinks.github || socialLinks.twitter || socialLinks.linkedin || socialLinks.website;
+
   useEffect(() => {
     dispatch(fetchHabits());
     dispatch(fetchDashboardStats());
@@ -624,6 +644,30 @@ export default function DashboardPage() {
               📅 {getDateString()} &nbsp;·&nbsp;
               <span style={{ color: 'var(--text-secondary)' }}>{completedToday}/{totalHabits} habits complete</span>
             </p>
+            {hasAnyLink && (
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 12 }}>
+                {socialLinks.github && (
+                  <a href={socialLinks.github.startsWith("http") ? socialLinks.github : `https://${socialLinks.github}`} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 30, height: 30, borderRadius: '50%', background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', color: 'var(--text-secondary)', cursor: 'pointer', transition: 'all 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#a78bfa'} onMouseLeave={e => e.currentTarget.style.color = 'var(--text-secondary)'}>
+                    <FiGithub size={13} />
+                  </a>
+                )}
+                {socialLinks.twitter && (
+                  <a href={socialLinks.twitter.startsWith("http") ? socialLinks.twitter : `https://${socialLinks.twitter}`} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 30, height: 30, borderRadius: '50%', background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', color: 'var(--text-secondary)', cursor: 'pointer', transition: 'all 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#0ea5e9'} onMouseLeave={e => e.currentTarget.style.color = 'var(--text-secondary)'}>
+                    <FiTwitter size={13} />
+                  </a>
+                )}
+                {socialLinks.linkedin && (
+                  <a href={socialLinks.linkedin.startsWith("http") ? socialLinks.linkedin : `https://${socialLinks.linkedin}`} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 30, height: 30, borderRadius: '50%', background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', color: 'var(--text-secondary)', cursor: 'pointer', transition: 'all 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#0284c7'} onMouseLeave={e => e.currentTarget.style.color = 'var(--text-secondary)'}>
+                    <FiLinkedin size={13} />
+                  </a>
+                )}
+                {socialLinks.website && (
+                  <a href={socialLinks.website.startsWith("http") ? socialLinks.website : `https://${socialLinks.website}`} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 30, height: 30, borderRadius: '50%', background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', color: 'var(--text-secondary)', cursor: 'pointer', transition: 'all 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#10b981'} onMouseLeave={e => e.currentTarget.style.color = 'var(--text-secondary)'}>
+                    <FiGlobe size={13} />
+                  </a>
+                )}
+              </div>
+            )}
           </motion.div>
           <LevelBadge level={userLevel} xp={xpPoints} />
         </div>
