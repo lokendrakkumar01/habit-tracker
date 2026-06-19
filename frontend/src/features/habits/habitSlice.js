@@ -130,10 +130,23 @@ const habitSlice = createSlice({
           state.habits[idx] = {
             ...state.habits[idx],
             ...habit,
-            completedToday: log.completed,  
-            todayCompleted: log.completed,  
+            completedToday: log.completed,
+            todayCompleted: log.completed,
             todayLog: log,
           };
+        }
+        if (state.selectedHabit && state.selectedHabit._id === habit._id) {
+          state.selectedHabit = {
+            ...state.selectedHabit,
+            ...habit,
+          };
+          const todayStr = new Date(log.date).toISOString().slice(0, 10);
+          const logIdx = state.habitLogs.findIndex((l) => new Date(l.date).toISOString().slice(0, 10) === todayStr);
+          if (logIdx !== -1) {
+            state.habitLogs[logIdx] = log;
+          } else {
+            state.habitLogs.unshift(log);
+          }
         }
       })
       .addCase(fetchHabitDetail.pending, (state) => { state.loading = true; })

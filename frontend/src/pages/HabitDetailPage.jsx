@@ -16,7 +16,11 @@ import {
   fetchHabitDetail,
   updateHabit,
   deleteHabit,
+  completeHabit,
 } from '../features/habits/habitSlice';
+import confetti from 'canvas-confetti';
+import toast from 'react-hot-toast';
+import { FiCheck } from 'react-icons/fi';
 
 const CATEGORIES = [
   { value: 'health', label: '💪 Health' },
@@ -111,7 +115,7 @@ const Heatmap = ({ logs = [], color = '#6366f1' }) => {
       d.setDate(d.getDate() - i);
       const dateStr = d.toISOString().slice(0, 10);
       const log = logs.find((l) => l.date?.slice(0, 10) === dateStr);
-      result.push({ date: dateStr, completed: log?.status === 'completed', day: d.getDate() });
+      result.push({ date: dateStr, completed: log?.completed || false, day: d.getDate() });
     }
     return result;
   }, [logs]);
@@ -155,7 +159,7 @@ const LogRow = ({ log, index }) => (
   >
     <div
       className={`mt-0.5 h-2.5 w-2.5 flex-shrink-0 rounded-full ${
-        log.status === 'completed' ? 'bg-emerald-400' : 'bg-rose-400'
+        log.completed ? 'bg-emerald-400' : 'bg-rose-400'
       }`}
     />
     <div className="flex-1 min-w-0">
@@ -169,12 +173,12 @@ const LogRow = ({ log, index }) => (
         </span>
         <span
           className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
-            log.status === 'completed'
+            log.completed
               ? 'bg-emerald-500/15 text-emerald-400'
               : 'bg-rose-500/15 text-rose-400'
           }`}
         >
-          {log.status === 'completed' ? '✓ Done' : '✗ Missed'}
+          {log.completed ? '✓ Done' : '✗ Missed'}
         </span>
       </div>
       {log.note && (
@@ -444,6 +448,49 @@ const HabitDetailPage = () => {
     if (id) dispatch(fetchHabitDetail(id));
   }, [dispatch, id]);
 
+  const isCompletedToday = useMemo(() => {
+    if (!logs?.length) return false;
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const todayLog = logs.find((l) => new Date(l.date).toISOString().slice(0, 10) === todayStr);
+    return todayLog?.completed ?? false;
+  }, [logs]);
+
+  const handleToggleComplete = (habitId) => {
+    dispatch(completeHabit(habitId))
+      .unwrap()
+      .then((res) => {
+        if (res.log?.completed) {
+          confetti({
+            particleCount: 130,
+            spread: 85,
+            origin: { y: 0.6 },
+            colors: ['#7c3aed', '#6366f1', '#10b981', '#f59e0b', '#ec4899'],
+          });
+          toast.success('🎉 Habit complete! +50 XP earned', {
+            duration: 3000,
+            style: {
+              background: '#0f172a',
+              color: '#f1f5f9',
+              border: '1px solid rgba(16,185,129,0.4)',
+              borderRadius: 12,
+            },
+            iconTheme: { primary: '#10b981', secondary: '#0f172a' },
+          });
+        } else {
+          toast.success('Habit marked incomplete', {
+            duration: 2000,
+            style: {
+              background: '#0f172a',
+              color: '#f1f5f9',
+              border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: 12,
+            },
+          });
+        }
+      })
+      .catch((err) => toast.error(err || 'Failed to update habit'));
+  };
+
   const handleSave = (formData) => {
     dispatch(updateHabit({ id, data: formData }));
     setEditOpen(false);
@@ -463,13 +510,13 @@ const HabitDetailPage = () => {
     if (!logs?.length) return [];
     return logs.slice(-14).map((log) => ({
       date: new Date(log.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-      value: log.status === 'completed' ? 100 : 0,
+      value: log.completed ? 100 : 0,
     }));
   }, [logs]);
 
   const completionRate = useMemo(() => {
     if (!logs?.length) return 0;
-    const completed = logs.filter((l) => l.status === 'completed').length;
+    const completed = logs.filter((l) => l.completed).length;
     return Math.round((completed / logs.length) * 100);
   }, [logs]);
 
@@ -574,14 +621,30 @@ const HabitDetailPage = () => {
               </div>
             </div>
 
-            <div className="flex flex-col items-center gap-1">
+            <div className="flex flex-col items-center gap-3">
               <div className="relative">
                 <CircularProgress value={completionRate} color={accentColor} />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <span className="text-xl font-bold text-white">{completionRate}%</span>
                 </div>
               </div>
-              <span className="text-xs text-gray-400">Completion Rate</span>
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => handleToggleComplete(habit._id)}
+                className={`flex items-center gap-1.5 rounded-xl border px-4 py-2 text-xs font-bold transition-all cursor-pointer ${
+                  isCompletedToday
+                    ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+                    : 'border-white/10 text-slate-400 hover:border-indigo-500/55 hover:text-indigo-300'
+                }`}
+              >
+                {isCompletedToday ? (
+                  <>
+                    <FiCheck size={12} /> Done Today
+                  </>
+                ) : (
+                  '○ Mark Done'
+                )}
+              </motion.button>
             </div>
           </div>
         </motion.div>
@@ -604,7 +667,7 @@ const HabitDetailPage = () => {
             },
             {
               label: 'Total Completions',
-              value: logs?.filter((l) => l.status === 'completed').length ?? 0,
+              value: logs?.filter((l) => l.completed).length ?? 0,
               unit: 'times',
               icon: '✅',
               accent: '#10b981',

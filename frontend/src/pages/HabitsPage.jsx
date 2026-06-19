@@ -15,6 +15,7 @@ import {
 import { FiPlus, FiSearch, FiEdit2, FiTrash2, FiArchive, FiX, FiCheck, FiRotateCcw, FiCalendar, FiClock, FiActivity, FiStar, FiChevronRight, FiDownload, FiBell, FiZap } from 'react-icons/fi';
 import { useNotifications } from '../hooks/useNotifications';
 import { exportHabitsToCSV } from '../utils/exportCSV';
+import confetti from 'canvas-confetti';
 
 const CATEGORIES = [
   { value: 'Health', label: '💪 Health' },
@@ -638,7 +639,36 @@ const HabitsPage = () => {
     (id) => {
       dispatch(completeHabit(id))
         .unwrap()
-        .then(() => toast.success('Habit checked off! 🔥'))
+        .then((res) => {
+          if (res.log?.completed) {
+            confetti({
+              particleCount: 130,
+              spread: 85,
+              origin: { y: 0.6 },
+              colors: ['#7c3aed', '#6366f1', '#10b981', '#f59e0b', '#ec4899'],
+            });
+            toast.success('🎉 Habit complete! +50 XP earned', {
+              duration: 3000,
+              style: {
+                background: '#0f172a',
+                color: '#f1f5f9',
+                border: '1px solid rgba(16,185,129,0.4)',
+                borderRadius: 12,
+              },
+              iconTheme: { primary: '#10b981', secondary: '#0f172a' },
+            });
+          } else {
+            toast.success('Habit marked incomplete', {
+              duration: 2000,
+              style: {
+                background: '#0f172a',
+                color: '#f1f5f9',
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: 12,
+              },
+            });
+          }
+        })
         .catch((err) => toast.error(err || 'Failed to complete'));
     },
     [dispatch]
