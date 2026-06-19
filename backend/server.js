@@ -25,6 +25,9 @@ const notificationRoutes  = require('./routes/notification.routes');
 
 const app = express();
 
+// Trust reverse proxy (Render, Vercel, etc.) to get correct client IP for rate limiting
+app.set('trust proxy', 1);
+
 // Connect Database
 connectDB();
 
