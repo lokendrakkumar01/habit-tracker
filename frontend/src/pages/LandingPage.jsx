@@ -100,7 +100,7 @@ function FAQItem({ q, a, index }) {
         onClick={() => setOpen(o => !o)}
         className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left"
       >
-        <span className="font-semibold text-white text-sm sm:text-base">{q}</span>
+        <span className="font-semibold text-sm sm:text-base" style={{ color: 'var(--text-primary)' }}>{q}</span>
         <motion.span
           animate={{ rotate: open ? 180 : 0 }}
           transition={{ duration: 0.25 }}
@@ -137,11 +137,11 @@ export default function LandingPage() {
   const annualTotal  = (monthlyPrice * 12).toFixed(0);
 
   return (
-    <div className="min-h-screen text-white overflow-x-hidden" style={{ background: 'var(--bg-primary)' }}>
+    <div className="min-h-screen overflow-x-hidden" style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
 
       <motion.nav
-        style={{ backgroundColor: navBg, borderBottomColor: navBorder }}
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 border-b backdrop-blur-xl transition-all"
+        style={{ background: 'var(--bg-header)', borderColor: 'var(--border-subtle)' }}
       >
         <Link to="/" className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-xl flex items-center justify-center text-lg flex-shrink-0" style={{ background: 'linear-gradient(135deg,#7c3aed,#4f46e5)', boxShadow: '0 4px 16px rgba(124,58,237,0.4)' }}>
@@ -151,10 +151,10 @@ export default function LandingPage() {
         </Link>
 
         <div className="hidden md:flex items-center gap-8 text-sm" style={{ color: 'var(--text-secondary)' }}>
-          <a href="#features" className="hover:text-white transition-colors">Features</a>
-          <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
-          <a href="#testimonials" className="hover:text-white transition-colors">Reviews</a>
-          <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
+          <a href="#features" className="hover:text-[var(--text-primary)] transition-colors">Features</a>
+          <a href="#pricing" className="hover:text-[var(--text-primary)] transition-colors">Pricing</a>
+          <a href="#testimonials" className="hover:text-[var(--text-primary)] transition-colors">Reviews</a>
+          <a href="#faq" className="hover:text-[var(--text-primary)] transition-colors">FAQ</a>
         </div>
 
         <div className="flex items-center gap-3">
@@ -183,9 +183,8 @@ export default function LandingPage() {
             ✨ AI-POWERED PRODUCTIVITY COACH — NOW ACTIVE
           </motion.div>
 
-          <motion.h1 variants={fade} className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-[1.1] tracking-tight font-display">
-            Build Habits That<br />
-            <span className="gradient-text">Actually Stick</span>
+          <motion.h1 variants={fade} className="text-4xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-8xl font-black mb-6 leading-[1.1] tracking-tight font-display max-w-4xl mx-auto" style={{ color: 'var(--text-primary)' }}>
+            Build Habits That <span className="gradient-text block sm:inline">Actually Stick</span>
           </motion.h1>
 
           <motion.p variants={fade} className="text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
@@ -228,7 +227,7 @@ export default function LandingPage() {
                 <div className="w-full md:w-56 p-5 hidden md:flex flex-col gap-6" style={{ borderRight: '1px solid var(--border-subtle)', background: 'rgba(255,255,255,0.01)' }}>
                   <div className="flex items-center gap-3 px-3 py-2 rounded-xl" style={{ background: 'rgba(124,58,237,0.1)' }}>
                     <div className="w-6 h-6 rounded-lg flex items-center justify-center bg-violet-600 text-xs">📊</div>
-                    <span className="text-xs font-semibold text-white">Dashboard</span>
+                    <span className="text-xs font-semibold" style={{ color: 'var(--text-primary)' }}>Dashboard</span>
                   </div>
                   <div className="flex flex-col gap-2">
                     {[
@@ -252,7 +251,7 @@ export default function LandingPage() {
                 <div className="flex-1 p-6 md:p-8">
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
                     <div>
-                      <h3 className="text-xl font-bold text-white">Welcome back, Priya! 👋</h3>
+                      <h3 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>Welcome back, Priya! 👋</h3>
                       <p className="text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>Here is your daily habit breakdown</p>
                     </div>
                     <div className="flex items-center gap-2 px-4 py-2 rounded-full" style={{ background: 'rgba(124,58,237,0.12)', border: '1px solid rgba(124,58,237,0.3)' }}>
@@ -271,9 +270,9 @@ export default function LandingPage() {
                       { label: 'Total XP Earned', value: '⚡ 2,840 XP', change: '+180 Today', up: true, color: '#fbbf24' },
                       { label: 'Focus Score', value: '📈 94% Consistency', change: '+2% vs LW', up: true, color: '#34d399' },
                     ].map((stat, i) => (
-                      <div key={i} className="rounded-2xl p-4" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-subtle)' }}>
+                      <div key={i} className="rounded-2xl p-4" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)' }}>
                         <div className="text-[10px] uppercase font-bold tracking-wider mb-2.5" style={{ color: 'var(--text-muted)' }}>{stat.label}</div>
-                        <div className="text-base font-extrabold text-white mb-1.5" style={{ color: stat.color }}>{stat.value}</div>
+                        <div className="text-base font-extrabold mb-1.5" style={{ color: stat.color }}>{stat.value}</div>
                         <div className="text-[10px] font-medium" style={{ color: 'var(--text-secondary)' }}>{stat.change}</div>
                       </div>
                     ))}
@@ -396,7 +395,7 @@ export default function LandingPage() {
                   style={{ background: `${f.color}18`, border: `1px solid ${f.color}30` }}>
                   <f.icon size={22} style={{ color: f.color }} />
                 </div>
-                <h3 className="text-base font-bold text-white mb-2">{f.title}</h3>
+                <h3 className="text-base font-bold mb-2" style={{ color: 'var(--text-primary)' }}>{f.title}</h3>
                 <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{f.desc}</p>
               </motion.div>
             ))}
@@ -429,7 +428,7 @@ export default function LandingPage() {
                     {t.initials}
                   </div>
                   <div>
-                    <div className="text-sm font-semibold text-white">{t.name}</div>
+                    <div className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{t.name}</div>
                     <div className="text-xs" style={{ color: 'var(--text-muted)' }}>{t.role}</div>
                   </div>
                 </div>
@@ -463,7 +462,7 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-2 gap-6">
             <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="glass-card p-6 sm:p-8">
               <div className="text-sm font-semibold text-gray-400 mb-2">Free Plan</div>
-              <div className="text-5xl font-black text-white mb-1">$0</div>
+              <div className="text-5xl font-black mb-1" style={{ color: 'var(--text-primary)' }}>$0</div>
               <div className="text-sm mb-8" style={{ color: 'var(--text-muted)' }}>Forever free, no credit card</div>
               {['Up to 5 habits', 'Basic analytics', 'Streak tracking', 'Journal access', 'Standard reminders'].map((f, i) => (
                 <div key={i} className="flex items-center gap-3 mb-3">
@@ -477,14 +476,14 @@ export default function LandingPage() {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}
-              className="glass-card p-6 sm:p-8 glow-brand relative" style={{ border: '1px solid rgba(139,92,246,0.4)' }}>
-              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 badge badge-primary text-xs px-4 py-1.5">⭐ MOST POPULAR</div>
-              <div className="text-sm font-semibold mb-2 gradient-text">Premium Plan</div>
+              className="bg-white dark:bg-white/[0.03] p-6 sm:p-8 rounded-3xl relative border border-indigo-500/30">
+              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-indigo-600 text-white text-xs font-bold">⭐ MOST POPULAR</div>
+              <div className="text-sm font-semibold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-500">Premium Plan</div>
               <div className="flex items-end gap-2 mb-1">
-                <div className="text-5xl font-black text-white">${monthlyPrice}</div>
-                <div className="text-gray-400 mb-2">/month</div>
+                <div className="text-5xl font-black text-gray-900 dark:text-white">${monthlyPrice}</div>
+                <div className="text-gray-500 mb-2">/month</div>
               </div>
-              {pricingAnnual && <div className="text-sm text-emerald-400 mb-8">Billed ${annualTotal}/year — save 30%!</div>}
+              {pricingAnnual && <div className="text-sm text-emerald-600 dark:text-emerald-400 mb-8 font-medium">Billed ${annualTotal}/year — save 30%!</div>}
               {!pricingAnnual && <div className="text-sm text-gray-500 mb-8">Billed monthly</div>}
               {['Unlimited habits', 'Advanced analytics & reports', 'AI Productivity Coach', 'Unlimited reminders', 'Goal management', 'Social & communities', 'Export CSV & PDF', 'Priority support', 'Streak Freeze'].map((f, i) => (
                 <div key={i} className="flex items-center gap-3 mb-3">

@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react';
 
 export function useDarkMode() {
   const [darkMode, setDarkMode] = useState(() => {
-    const saved = localStorage.getItem('habitflow-theme');
-    if (saved) return saved === 'dark';
-    return true; 
+    try {
+      const saved = localStorage.getItem('habitflow-theme');
+      if (saved) return saved === 'dark';
+    } catch {}
+    return true;
   });
 
   useEffect(() => {
@@ -12,11 +14,15 @@ export function useDarkMode() {
     if (darkMode) {
       root.classList.add('dark');
       root.classList.remove('light');
-      localStorage.setItem('habitflow-theme', 'dark');
+      try {
+        localStorage.setItem('habitflow-theme', 'dark');
+      } catch {}
     } else {
       root.classList.add('light');
       root.classList.remove('dark');
-      localStorage.setItem('habitflow-theme', 'light');
+      try {
+        localStorage.setItem('habitflow-theme', 'light');
+      } catch {}
     }
   }, [darkMode]);
 

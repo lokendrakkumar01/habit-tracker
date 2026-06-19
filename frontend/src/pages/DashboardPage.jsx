@@ -80,8 +80,8 @@ const GlassCard = ({ children, className = '', style = {}, ...rest }) => (
   <div
     className={className}
     style={{
-      background: 'rgba(255,255,255,0.04)',
-      border: '1px solid rgba(255,255,255,0.08)',
+      background: 'var(--bg-card)',
+      border: '1px solid var(--border-default)',
       backdropFilter: 'blur(12px)',
       WebkitBackdropFilter: 'blur(12px)',
       borderRadius: 20,
@@ -106,7 +106,7 @@ function CircularRing({ value = 0, max = 100, color = '#10b981', size = 88, stro
         <circle
           cx={size / 2} cy={size / 2} r={r}
           fill="none"
-          stroke="rgba(255,255,255,0.06)"
+          stroke="var(--border-subtle)"
           strokeWidth={stroke}
         />
         
@@ -161,7 +161,7 @@ function LevelBadge({ level = 1, xp = 0 }) {
         <p style={{ color: '#a78bfa', fontSize: 10, fontWeight: 800, letterSpacing: '0.1em', margin: 0, lineHeight: 1 }}>
           LEVEL {level}
         </p>
-        <p style={{ color: '#f1f5f9', fontSize: 13, fontWeight: 700, margin: 0, lineHeight: 1.3 }}>
+        <p style={{ color: 'var(--text-primary)', fontSize: 13, fontWeight: 700, margin: 0, lineHeight: 1.3 }}>
           ⚡ {xp.toLocaleString()} XP
         </p>
       </div>
@@ -189,14 +189,14 @@ function StatCard({ icon, label, value, accent, delay = 0 }) {
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <p style={{
-              color: '#475569', fontSize: 10, fontWeight: 800,
+              color: 'var(--text-secondary)', fontSize: 10, fontWeight: 800,
               letterSpacing: '0.12em', textTransform: 'uppercase',
               marginBottom: 10, margin: '0 0 10px',
             }}>
               {label}
             </p>
             <p style={{
-              color: '#f1f5f9', fontSize: 28, fontWeight: 900,
+              color: 'var(--text-primary)', fontSize: 28, fontWeight: 900,
               lineHeight: 1, margin: 0, letterSpacing: '-0.02em',
             }}>
               {value ?? '—'}
@@ -231,16 +231,16 @@ function WellnessTile({ label, value, max = 100, color, unit = '%', trend, delay
         alignItems: 'center', gap: 12,
       }}>
         <p style={{
-          color: '#475569', fontSize: 10, fontWeight: 800,
+          color: 'var(--text-secondary)', fontSize: 10, fontWeight: 800,
           letterSpacing: '0.1em', textTransform: 'uppercase', margin: 0,
         }}>
           {label}
         </p>
         <CircularRing value={value} max={max} color={color} size={88} stroke={7}>
-          <span style={{ color: '#f1f5f9', fontSize: 19, fontWeight: 900, lineHeight: 1 }}>
+          <span style={{ color: 'var(--text-primary)', fontSize: 19, fontWeight: 900, lineHeight: 1 }}>
             {value}
           </span>
-          <span style={{ color: '#475569', fontSize: 11 }}>{unit}</span>
+          <span style={{ color: 'var(--text-secondary)', fontSize: 11 }}>{unit}</span>
         </CircularRing>
         {trend !== undefined && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
@@ -265,13 +265,13 @@ function CustomBarTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null;
   return (
     <div style={{
-      background: 'rgba(10,16,36,0.97)',
-      border: '1px solid rgba(99,102,241,0.45)',
+      background: 'var(--bg-tertiary)',
+      border: '1px solid var(--border-default)',
       borderRadius: 12, padding: '10px 16px',
-      color: '#f1f5f9', fontSize: 13,
+      color: 'var(--text-primary)', fontSize: 13,
       boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
     }}>
-      <p style={{ color: '#64748b', fontSize: 11, margin: '0 0 4px' }}>{label}</p>
+      <p style={{ color: 'var(--text-muted)', fontSize: 11, margin: '0 0 4px' }}>{label}</p>
       <p style={{ fontWeight: 800, color: '#a78bfa', margin: 0 }}>{payload[0].value} pts</p>
     </div>
   );
@@ -307,8 +307,8 @@ function HabitRow({ habit, onComplete }) {
 
       <div style={{
         width: 42, height: 42, borderRadius: 13, flexShrink: 0,
-        background: 'rgba(255,255,255,0.055)',
-        border: '1px solid rgba(255,255,255,0.07)',
+        background: 'var(--bg-card)',
+        border: '1px solid var(--border-subtle)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         fontSize: 21,
       }}>
@@ -317,7 +317,7 @@ function HabitRow({ habit, onComplete }) {
 
       <div style={{ flex: 1, minWidth: 0 }}>
         <p style={{
-          color: done ? '#475569' : '#f1f5f9',
+          color: done ? 'var(--text-secondary)' : 'var(--text-primary)',
           fontSize: 14, fontWeight: 650,
           textDecoration: done ? 'line-through' : 'none',
           whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
@@ -406,8 +406,8 @@ function QuickAction({ icon, label, sublabel, accent, onClick, delay = 0 }) {
         {icon}
       </div>
       <div>
-        <p style={{ color: '#f1f5f9', fontSize: 13, fontWeight: 700, margin: '0 0 2px' }}>{label}</p>
-        {sublabel && <p style={{ color: '#475569', fontSize: 11, margin: 0 }}>{sublabel}</p>}
+        <p style={{ color: 'var(--text-primary)', fontSize: 13, fontWeight: 700, margin: '0 0 2px' }}>{label}</p>
+        {sublabel && <p style={{ color: 'var(--text-secondary)', fontSize: 11, margin: 0 }}>{sublabel}</p>}
       </div>
     </motion.button>
   );
@@ -570,7 +570,7 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div style={{ minHeight: '100vh', background: '#020617', padding: '24px 24px 48px', overflowX: 'hidden' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', color: 'var(--text-primary)', padding: '24px 24px 48px', overflowX: 'hidden' }}>
 
       <div aria-hidden style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
         <div style={{
@@ -606,7 +606,7 @@ export default function DashboardPage() {
             transition={{ duration: 0.55, ease: 'easeOut' }}
           >
             <h1 style={{
-              color: '#f1f5f9', margin: 0,
+              color: 'var(--text-primary)', margin: 0,
               fontSize: 'clamp(22px, 3.2vw, 32px)',
               fontWeight: 900, letterSpacing: '-0.025em', lineHeight: 1.15,
             }}>
@@ -620,9 +620,9 @@ export default function DashboardPage() {
               </span>
               ! 👋
             </h1>
-            <p style={{ color: '#475569', fontSize: 14, marginTop: 6, fontWeight: 500 }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: 14, marginTop: 6, fontWeight: 500 }}>
               📅 {getDateString()} &nbsp;·&nbsp;
-              <span style={{ color: '#94a3b8' }}>{completedToday}/{totalHabits} habits complete</span>
+              <span style={{ color: 'var(--text-secondary)' }}>{completedToday}/{totalHabits} habits complete</span>
             </p>
           </motion.div>
           <LevelBadge level={userLevel} xp={xpPoints} />
@@ -652,10 +652,10 @@ export default function DashboardPage() {
               gap: 10, marginBottom: 22,
             }}>
               <div>
-                <h2 style={{ color: '#f1f5f9', fontSize: 16, fontWeight: 800, margin: 0, letterSpacing: '-0.01em' }}>
+                <h2 style={{ color: 'var(--text-primary)', fontSize: 16, fontWeight: 800, margin: 0, letterSpacing: '-0.01em' }}>
                   🧬 Wellness Dashboard
                 </h2>
-                <p style={{ color: '#475569', fontSize: 12, marginTop: 4 }}>
+                <p style={{ color: 'var(--text-secondary)', fontSize: 12, marginTop: 4 }}>
                   Holistic health snapshot · auto-calculated from your habits
                 </p>
               </div>
@@ -702,10 +702,10 @@ export default function DashboardPage() {
                   gap: 10, marginBottom: 18,
                 }}>
                   <div>
-                    <h2 style={{ color: '#f1f5f9', fontSize: 16, fontWeight: 800, margin: 0 }}>
+                    <h2 style={{ color: 'var(--text-primary)', fontSize: 16, fontWeight: 800, margin: 0 }}>
                       📋 Today's Habits
                     </h2>
-                    <p style={{ color: '#475569', fontSize: 12, marginTop: 4 }}>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: 12, marginTop: 4 }}>
                       {completedToday} of {totalHabits} completed
                     </p>
                   </div>
@@ -713,7 +713,7 @@ export default function DashboardPage() {
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 5 }}>
                     <div style={{
                       width: 120, height: 6, borderRadius: 99,
-                      background: 'rgba(255,255,255,0.06)', overflow: 'hidden',
+                      background: 'var(--border-subtle)', overflow: 'hidden',
                     }}>
                       <motion.div
                         initial={{ width: 0 }}
@@ -725,7 +725,7 @@ export default function DashboardPage() {
                         }}
                       />
                     </div>
-                    <span style={{ color: '#475569', fontSize: 11 }}>{productivityScore}% done</span>
+                    <span style={{ color: 'var(--text-secondary)', fontSize: 11 }}>{productivityScore}% done</span>
                   </div>
                 </div>
 
@@ -747,10 +747,10 @@ export default function DashboardPage() {
                       }}
                     >
                       <div style={{ fontSize: 60 }}>🌱</div>
-                      <p style={{ color: '#f1f5f9', fontWeight: 800, fontSize: 17, margin: 0 }}>
+                      <p style={{ color: 'var(--text-primary)', fontWeight: 800, fontSize: 17, margin: 0 }}>
                         No habits yet
                       </p>
-                      <p style={{ color: '#475569', fontSize: 13, maxWidth: 230, margin: 0 }}>
+                      <p style={{ color: 'var(--text-secondary)', fontSize: 13, maxWidth: 230, margin: 0 }}>
                         Start your journey by adding your first habit!
                       </p>
                       <motion.button
@@ -787,19 +787,19 @@ export default function DashboardPage() {
                   gap: 10, marginBottom: 20,
                 }}>
                   <div>
-                    <h2 style={{ color: '#f1f5f9', fontSize: 16, fontWeight: 800, margin: 0 }}>
+                    <h2 style={{ color: 'var(--text-primary)', fontSize: 16, fontWeight: 800, margin: 0 }}>
                       📈 Weekly Progress
                     </h2>
-                    <p style={{ color: '#475569', fontSize: 12, marginTop: 4 }}>Your activity this week</p>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: 12, marginTop: 4 }}>Your activity this week</p>
                   </div>
                   <div style={{ display: 'flex', gap: 6 }}>
                     {['W', 'M', 'Y'].map((t, i) => (
                       <button key={t} style={{
                         padding: '4px 11px', borderRadius: 8,
                         fontSize: 11, fontWeight: 800, cursor: 'pointer',
-                        background: i === 0 ? 'rgba(99,102,241,0.22)' : 'rgba(255,255,255,0.04)',
-                        border: i === 0 ? '1px solid rgba(99,102,241,0.5)' : '1px solid rgba(255,255,255,0.07)',
-                        color: i === 0 ? '#a78bfa' : '#475569',
+                        background: i === 0 ? 'rgba(99,102,241,0.22)' : 'var(--bg-card)',
+                        border: i === 0 ? '1px solid rgba(99,102,241,0.5)' : '1px solid var(--border-default)',
+                        color: i === 0 ? '#a78bfa' : 'var(--text-secondary)',
                       }}>{t}</button>
                     ))}
                   </div>
@@ -815,19 +815,19 @@ export default function DashboardPage() {
                           <stop offset="100%" stopColor="#6366f1" stopOpacity={0.65} />
                         </linearGradient>
                       </defs>
-                      <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.04)" strokeDasharray="3 3" />
+                      <CartesianGrid vertical={false} stroke="var(--border-subtle)" strokeDasharray="3 3" />
                       <XAxis
                         dataKey="day"
-                        tick={{ fill: '#475569', fontSize: 12, fontWeight: 700 }}
+                        tick={{ fill: 'var(--text-secondary)', fontSize: 12, fontWeight: 700 }}
                         axisLine={false} tickLine={false}
                       />
                       <YAxis
-                        tick={{ fill: '#334155', fontSize: 11 }}
+                        tick={{ fill: 'var(--text-muted)', fontSize: 11 }}
                         axisLine={false} tickLine={false}
                       />
                       <Tooltip
                         content={<CustomBarTooltip />}
-                        cursor={{ fill: 'rgba(255,255,255,0.025)', radius: 6 }}
+                        cursor={{ fill: 'var(--bg-card-hover)', radius: 6 }}
                       />
                       <Bar dataKey="value" radius={[8, 8, 0, 0]} fill="url(#barGradient)">
                         {chartData.map((_, idx) => (
@@ -842,8 +842,8 @@ export default function DashboardPage() {
                 <div style={{
                   display: 'flex', gap: 12, marginTop: 16,
                   padding: '12px 16px',
-                  background: 'rgba(255,255,255,0.025)',
-                  border: '1px solid rgba(255,255,255,0.05)',
+                  background: 'var(--bg-card)',
+                  border: '1px solid var(--border-subtle)',
                   borderRadius: 12,
                 }}>
                   {[
@@ -853,7 +853,7 @@ export default function DashboardPage() {
                   ].map(({ label, value, color }, i) => (
                     <div key={i} style={{ flex: 1, textAlign: 'center' }}>
                       <p style={{
-                        color: '#334155', fontSize: 10, fontWeight: 800,
+                        color: 'var(--text-secondary)', fontSize: 10, fontWeight: 800,
                         letterSpacing: '0.1em', textTransform: 'uppercase', margin: '0 0 5px',
                       }}>{label}</p>
                       <p style={{ color, fontSize: 20, fontWeight: 900, margin: 0 }}>{value}</p>
@@ -884,7 +884,7 @@ export default function DashboardPage() {
           style={{ marginBottom: 22 }}
         >
           <p style={{
-            color: '#334155', fontSize: 11, fontWeight: 800,
+            color: 'var(--text-secondary)', fontSize: 11, fontWeight: 800,
             letterSpacing: '0.12em', textTransform: 'uppercase',
             marginBottom: 12,
           }}>
@@ -941,10 +941,10 @@ export default function DashboardPage() {
               gap: 10, marginBottom: 18,
             }}>
               <div>
-                <h2 style={{ color: '#f1f5f9', fontSize: 16, fontWeight: 800, margin: 0 }}>
+                <h2 style={{ color: 'var(--text-primary)', fontSize: 16, fontWeight: 800, margin: 0 }}>
                   🏆 Achievement Badges
                 </h2>
-                <p style={{ color: '#475569', fontSize: 12, marginTop: 4 }}>
+                <p style={{ color: 'var(--text-secondary)', fontSize: 12, marginTop: 4 }}>
                   {displayBadges.length} badges earned · keep going!
                 </p>
               </div>
