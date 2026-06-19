@@ -12,7 +12,7 @@ import {
   restoreHabit,
   completeHabit,
 } from '../features/habits/habitSlice';
-import { FiPlus, FiSearch, FiEdit2, FiTrash2, FiArchive, FiX, FiCheck, FiRotateCcw, FiCalendar, FiClock, FiActivity, FiStar, FiChevronRight, FiDownload, FiBell } from 'react-icons/fi';
+import { FiPlus, FiSearch, FiEdit2, FiTrash2, FiArchive, FiX, FiCheck, FiRotateCcw, FiCalendar, FiClock, FiActivity, FiStar, FiChevronRight, FiDownload, FiBell, FiZap } from 'react-icons/fi';
 import { useNotifications } from '../hooks/useNotifications';
 import { exportHabitsToCSV } from '../utils/exportCSV';
 
