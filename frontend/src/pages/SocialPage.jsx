@@ -22,6 +22,10 @@ import {
   FiActivity,
   FiClock,
   FiSmile,
+  FiGithub,
+  FiTwitter,
+  FiLinkedin,
+  FiGlobe,
 } from "react-icons/fi";
 
 const MOCK_FEED = [
@@ -1070,6 +1074,7 @@ const TABS = [
   { id: "feed",        label: "Feed",        icon: <FiActivity size={15} />    },
   { id: "leaderboard",label: "Leaderboard",  icon: <FiTrendingUp size={15} />  },
   { id: "challenges",  label: "Challenges",  icon: <FiAward size={15} />       },
+  { id: "accounts",    label: "Social Links", icon: <FiShare2 size={15} />       },
 ];
 
 const LB_FILTERS = ["All Time", "This Week", "This Month"];
@@ -1091,6 +1096,48 @@ export default function SocialPage() {
   const [animateLb, setAnimateLb]        = useState(true);
 
   const leaderboardData = LB_DATA_MAP[lbFilter];
+
+  const currentUser = useSelector((state) => state?.auth?.user);
+  const [socialLinks, setSocialLinks] = useState({
+    github: "",
+    twitter: "",
+    linkedin: "",
+    website: "",
+  });
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("habitflow_social_links");
+      if (saved) {
+        setSocialLinks(JSON.parse(saved));
+      }
+    } catch (e) {
+    }
+  }, []);
+
+  const handleSaveLinks = (e) => {
+    e.preventDefault();
+    try {
+      localStorage.setItem("habitflow_social_links", JSON.stringify(socialLinks));
+      toast.success("Social links saved successfully! ✨");
+    } catch (err) {
+      toast.error("Failed to save social links");
+    }
+  };
+
+  const hasAnyLink = socialLinks.github || socialLinks.twitter || socialLinks.linkedin || socialLinks.website;
+
+  const inputStyle = {
+    width: "100%",
+    background: "rgba(255,255,255,0.05)",
+    border: "1px solid rgba(255,255,255,0.12)",
+    borderRadius: 10,
+    padding: "10px 14px",
+    color: "#f8fafc",
+    fontSize: 14,
+    outline: "none",
+    boxSizing: "border-box",
+  };
 
   useEffect(() => {
     setAnimateLb(false);
@@ -1577,6 +1624,285 @@ export default function SocialPage() {
                   Create One
                 </motion.button>
               </motion.div>
+            </motion.div>
+          )}
+
+          {activeTab === "accounts" && (
+            <motion.div key="accounts" variants={fadeScale} initial="hidden" animate="visible" exit="exit">
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+                <h2 style={{ color: "#f1f5f9", fontWeight: 700, fontSize: 18, margin: 0 }}>
+                  Social Profiles
+                </h2>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 24 }}>
+                <motion.div
+                  variants={itemVariants}
+                  style={{
+                    background: "rgba(255,255,255,0.03)",
+                    border: "1px solid rgba(255,255,255,0.07)",
+                    borderRadius: 18,
+                    padding: "24px",
+                    backdropFilter: "blur(12px)",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 16,
+                  }}
+                >
+                  <h3 style={{ color: "#f1f5f9", fontWeight: 700, fontSize: 15, margin: 0 }}>Link Accounts</h3>
+                  <p style={{ color: "#475569", fontSize: 12, margin: 0, lineHeight: 1.5 }}>
+                    Connect your profiles to display them on your dashboard and sharing card.
+                  </p>
+
+                  <form onSubmit={handleSaveLinks} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                    <div>
+                      <label style={{ color: "#64748b", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", display: "flex", alignItems: "center", gap: 6, marginBottom: 7 }}>
+                        <FiGithub size={12} style={{ color: "#a78bfa" }} /> GitHub
+                      </label>
+                      <input
+                        style={inputStyle}
+                        placeholder="e.g. github.com/username"
+                        value={socialLinks.github}
+                        onChange={(e) => setSocialLinks(s => ({ ...s, github: e.target.value }))}
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{ color: "#64748b", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", display: "flex", alignItems: "center", gap: 6, marginBottom: 7 }}>
+                        <FiTwitter size={12} style={{ color: "#0ea5e9" }} /> Twitter / X
+                      </label>
+                      <input
+                        style={inputStyle}
+                        placeholder="e.g. twitter.com/username"
+                        value={socialLinks.twitter}
+                        onChange={(e) => setSocialLinks(s => ({ ...s, twitter: e.target.value }))}
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{ color: "#64748b", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", display: "flex", alignItems: "center", gap: 6, marginBottom: 7 }}>
+                        <FiLinkedin size={12} style={{ color: "#0284c7" }} /> LinkedIn
+                      </label>
+                      <input
+                        style={inputStyle}
+                        placeholder="e.g. linkedin.com/in/username"
+                        value={socialLinks.linkedin}
+                        onChange={(e) => setSocialLinks(s => ({ ...s, linkedin: e.target.value }))}
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{ color: "#64748b", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", display: "flex", alignItems: "center", gap: 6, marginBottom: 7 }}>
+                        <FiGlobe size={12} style={{ color: "#10b981" }} /> Personal Website
+                      </label>
+                      <input
+                        style={inputStyle}
+                        placeholder="e.g. yourwebsite.com"
+                        value={socialLinks.website}
+                        onChange={(e) => setSocialLinks(s => ({ ...s, website: e.target.value }))}
+                      />
+                    </div>
+
+                    <motion.button
+                      whileTap={{ scale: 0.97 }}
+                      type="submit"
+                      style={{
+                        width: "100%",
+                        padding: "12px 0",
+                        marginTop: 8,
+                        borderRadius: 12,
+                        border: "none",
+                        background: "linear-gradient(135deg,#7c3aed,#6366f1)",
+                        color: "#fff",
+                        fontWeight: 800,
+                        fontSize: 14,
+                        cursor: "pointer",
+                        boxShadow: "0 6px 20px rgba(99,102,241,0.35)",
+                      }}
+                    >
+                      💾 Save Connections
+                    </motion.button>
+                  </form>
+                </motion.div>
+
+                <motion.div
+                  variants={itemVariants}
+                  style={{
+                    background: "rgba(255,255,255,0.03)",
+                    border: "1px solid rgba(255,255,255,0.07)",
+                    borderRadius: 18,
+                    padding: "24px",
+                    backdropFilter: "blur(12px)",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    position: "relative",
+                    minHeight: 320,
+                  }}
+                >
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: "0 0 auto 0",
+                      height: 3,
+                      background: "linear-gradient(90deg, #7c3aed, #6366f1, #38bdf8)",
+                    }}
+                  />
+
+                  <div
+                    style={{
+                      width: 74,
+                      height: 74,
+                      borderRadius: "50%",
+                      background: "linear-gradient(135deg, #6366f1cc, #6366f144)",
+                      border: "3px solid #6366f177",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: 24,
+                      fontWeight: 800,
+                      color: "#fff",
+                      marginBottom: 16,
+                      boxShadow: "0 0 24px rgba(99,102,241,0.3)",
+                    }}
+                  >
+                    {currentUser?.name ? currentUser.name.substring(0, 2).toUpperCase() : "ME"}
+                  </div>
+
+                  <h3 style={{ color: "#f1f5f9", fontWeight: 700, fontSize: 18, margin: 0 }}>
+                    {currentUser?.name || "Habit Builder"}
+                  </h3>
+                  
+                  <div style={{ display: "flex", gap: 8, alignItems: "center", marginTop: 6 }}>
+                    <span style={{ background: "rgba(99,102,241,0.18)", border: "1px solid rgba(99,102,241,0.35)", borderRadius: 6, padding: "2px 8px", fontSize: 11, color: "#a5b4fc", fontWeight: 600 }}>
+                      Lv {currentUser?.level || 14}
+                    </span>
+                    <span style={{ color: "#475569", fontSize: 12 }}>
+                      🔥 {currentUser?.streak || 15}d streak
+                    </span>
+                  </div>
+
+                  <p style={{ color: "#64748b", fontSize: 13, margin: "16px 0 20px", maxWidth: 280, lineHeight: 1.5 }}>
+                    "Building better habits, step by step, day by day."
+                  </p>
+
+                  <div style={{ display: "flex", gap: 12, justifyContent: "center", alignItems: "center", minHeight: 40 }}>
+                    {hasAnyLink ? (
+                      <>
+                        {socialLinks.github && (
+                          <motion.a
+                            href={socialLinks.github.startsWith("http") ? socialLinks.github : `https://${socialLinks.github}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            whileHover={{ y: -3, scale: 1.1 }}
+                            style={{
+                              width: 38,
+                              height: 38,
+                              borderRadius: "50%",
+                              background: "rgba(255,255,255,0.05)",
+                              border: "1px solid rgba(255,255,255,0.1)",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              color: "#e2e8f0",
+                              cursor: "pointer",
+                              transition: "background 0.2s",
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.backgroundColor = "rgba(167,139,250,0.15)"}
+                            onMouseLeave={e => e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.05)"}
+                          >
+                            <FiGithub size={18} />
+                          </motion.a>
+                        )}
+
+                        {socialLinks.twitter && (
+                          <motion.a
+                            href={socialLinks.twitter.startsWith("http") ? socialLinks.twitter : `https://${socialLinks.twitter}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            whileHover={{ y: -3, scale: 1.1 }}
+                            style={{
+                              width: 38,
+                              height: 38,
+                              borderRadius: "50%",
+                              background: "rgba(255,255,255,0.05)",
+                              border: "1px solid rgba(255,255,255,0.1)",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              color: "#e2e8f0",
+                              cursor: "pointer",
+                              transition: "background 0.2s",
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.backgroundColor = "rgba(14,165,233,0.15)"}
+                            onMouseLeave={e => e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.05)"}
+                          >
+                            <FiTwitter size={18} />
+                          </motion.a>
+                        )}
+
+                        {socialLinks.linkedin && (
+                          <motion.a
+                            href={socialLinks.linkedin.startsWith("http") ? socialLinks.linkedin : `https://${socialLinks.linkedin}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            whileHover={{ y: -3, scale: 1.1 }}
+                            style={{
+                              width: 38,
+                              height: 38,
+                              borderRadius: "50%",
+                              background: "rgba(255,255,255,0.05)",
+                              border: "1px solid rgba(255,255,255,0.1)",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              color: "#e2e8f0",
+                              cursor: "pointer",
+                              transition: "background 0.2s",
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.backgroundColor = "rgba(2,132,199,0.15)"}
+                            onMouseLeave={e => e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.05)"}
+                          >
+                            <FiLinkedin size={18} />
+                          </motion.a>
+                        )}
+
+                        {socialLinks.website && (
+                          <motion.a
+                            href={socialLinks.website.startsWith("http") ? socialLinks.website : `https://${socialLinks.website}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            whileHover={{ y: -3, scale: 1.1 }}
+                            style={{
+                              width: 38,
+                              height: 38,
+                              borderRadius: "50%",
+                              background: "rgba(255,255,255,0.05)",
+                              border: "1px solid rgba(255,255,255,0.1)",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              color: "#e2e8f0",
+                              cursor: "pointer",
+                              transition: "background 0.2s",
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.backgroundColor = "rgba(16,185,129,0.15)"}
+                            onMouseLeave={e => e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.05)"}
+                          >
+                            <FiGlobe size={18} />
+                          </motion.a>
+                        )}
+                      </>
+                    ) : (
+                      <span style={{ color: "#334155", fontSize: 12, fontStyle: "italic" }}>
+                        No profiles linked
+                      </span>
+                    )}
+                  </div>
+                </motion.div>
+              </div>
             </motion.div>
           )}
 
