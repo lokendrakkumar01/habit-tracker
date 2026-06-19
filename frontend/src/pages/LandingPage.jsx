@@ -148,11 +148,11 @@ export default function LandingPage() {
         style={{ backgroundColor: navBg, borderBottomColor: navBorder }}
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 border-b backdrop-blur-xl"
       >
-        <Link to="/" className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl flex items-center justify-center text-lg" style={{ background: 'linear-gradient(135deg,#7c3aed,#4f46e5)', boxShadow: '0 4px 16px rgba(124,58,237,0.4)' }}>
+        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '6px' }} className="sm:gap-2.5">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center text-base sm:text-lg flex-shrink-0" style={{ background: 'linear-gradient(135deg,#7c3aed,#4f46e5)', boxShadow: '0 4px 16px rgba(124,58,237,0.4)' }}>
             🎯
           </div>
-          <span className="text-lg font-bold gradient-text">HabitFlow</span>
+          <span className="text-base sm:text-lg font-bold gradient-text">HabitFlow</span>
         </Link>
 
         <div className="hidden md:flex items-center gap-8 text-sm" style={{ color: '#94a3b8' }}>
@@ -162,9 +162,12 @@ export default function LandingPage() {
           <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
         </div>
 
-        <div className="flex items-center gap-3">
-          <Link to="/login" className="btn-secondary text-sm px-4 py-2">Sign In</Link>
-          <Link to="/register" className="btn-primary text-sm px-4 py-2">Get Started Free</Link>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Link to="/login" className="btn-secondary text-xs sm:text-sm px-2.5 py-1.5 sm:px-4 sm:py-2 whitespace-nowrap">Sign In</Link>
+          <Link to="/register" className="btn-primary text-xs sm:text-sm px-2.5 py-1.5 sm:px-4 sm:py-2 whitespace-nowrap">
+            <span className="hidden sm:inline">Get Started Free</span>
+            <span className="sm:hidden">Sign Up</span>
+          </Link>
         </div>
       </motion.nav>
 
@@ -193,22 +196,22 @@ export default function LandingPage() {
           </motion.div>
 
           {/* Headline */}
-          <motion.h1 variants={fade} className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-[1.05] tracking-tight font-display">
+          <motion.h1 variants={fade} className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-[1.1] tracking-tight font-display">
             Build Habits That{' '}
             <span className="block gradient-text">Actually Stick</span>
           </motion.h1>
 
           {/* Sub */}
-          <motion.p variants={fade} className="text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed" style={{ color: '#94a3b8' }}>
+          <motion.p variants={fade} className="text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed" style={{ color: '#94a3b8' }}>
             The most powerful habit tracker for serious achievers. Track habits, crush streaks, achieve goals, and transform your life with AI coaching.
           </motion.p>
 
           {/* CTAs */}
           <motion.div variants={fade} className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
-            <Link to="/register" className="btn-primary text-base px-8 py-4 rounded-2xl">
+            <Link to="/register" className="btn-primary text-sm sm:text-base px-6 py-3.5 sm:px-8 sm:py-4 rounded-2xl">
               Start Free Today <FiArrowRight size={16} />
             </Link>
-            <button className="btn-secondary text-base px-8 py-4 rounded-2xl flex items-center gap-2 justify-center">
+            <button className="btn-secondary text-sm sm:text-base px-6 py-3.5 sm:px-8 sm:py-4 rounded-2xl flex items-center gap-2 justify-center">
               <FiPlay size={16} /> Watch Demo
             </button>
           </motion.div>
@@ -403,7 +406,7 @@ export default function LandingPage() {
 
           <div className="grid md:grid-cols-2 gap-6">
             {/* Free */}
-            <motion.div initial={{ opacity: 0, x: -24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="glass-card p-8">
+            <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="glass-card p-6 sm:p-8">
               <div className="text-sm font-semibold text-gray-400 mb-2">Free Plan</div>
               <div className="text-5xl font-black text-white mb-1">$0</div>
               <div className="text-sm mb-8" style={{ color: '#64748b' }}>Forever free, no credit card</div>
@@ -419,8 +422,8 @@ export default function LandingPage() {
             </motion.div>
 
             {/* Premium */}
-            <motion.div initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
-              className="glass-card p-8 glow-brand relative" style={{ border: '1px solid rgba(139,92,246,0.4)' }}>
+            <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}
+              className="glass-card p-6 sm:p-8 glow-brand relative" style={{ border: '1px solid rgba(139,92,246,0.4)' }}>
               <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 badge badge-primary text-xs px-4 py-1.5">⭐ MOST POPULAR</div>
               <div className="text-sm font-semibold mb-2 gradient-text">Premium Plan</div>
               <div className="flex items-end gap-2 mb-1">
@@ -461,19 +464,19 @@ export default function LandingPage() {
       {/* ── Final CTA ─────────────────────────────────── */}
       <section className="py-24 px-6">
         <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-          className="max-w-3xl mx-auto text-center glass-card p-12 relative overflow-hidden">
+          className="max-w-3xl mx-auto text-center glass-card p-6 sm:p-12 relative overflow-hidden">
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute inset-0 opacity-30" style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(139,92,246,0.4) 0%, transparent 70%)' }} />
           </div>
           <div className="relative">
-            <div className="text-6xl mb-6">🚀</div>
-            <h2 className="text-4xl md:text-5xl font-black mb-5 font-display">
+            <div className="text-5xl sm:text-6xl mb-6">🚀</div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-5 font-display">
               Your Best Self Starts <span className="gradient-text">Today</span>
             </h2>
-            <p className="text-lg mb-8" style={{ color: '#94a3b8' }}>
+            <p className="text-base sm:text-lg mb-8" style={{ color: '#94a3b8' }}>
               Join 50,000+ people building extraordinary lives with HabitFlow. Free forever, no credit card required.
             </p>
-            <Link to="/register" className="btn-primary text-lg px-10 py-4 rounded-2xl">
+            <Link to="/register" className="btn-primary text-sm sm:text-lg px-6 py-3.5 sm:px-10 sm:py-4 rounded-2xl inline-flex items-center justify-center gap-2">
               Start Your Journey Free <FiArrowRight size={18} />
             </Link>
             <p className="mt-4 text-sm" style={{ color: '#475569' }}>
