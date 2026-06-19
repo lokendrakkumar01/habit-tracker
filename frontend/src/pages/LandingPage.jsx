@@ -204,10 +204,11 @@ export default function LandingPage() {
             Free forever · No credit card required · 5 habits included
           </motion.p>
 
-          <motion.div variants={fade} className="mt-20 relative max-w-5xl mx-auto">
-            <div className="absolute -inset-8 rounded-full opacity-25 blur-3xl pointer-events-none"
-              style={{ background: 'linear-gradient(135deg,rgba(139,92,246,0.5),rgba(56,189,248,0.3))' }} />
-            <div className="relative rounded-3xl overflow-hidden glass-card-static" style={{ border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-lg)' }}>
+          <div className="w-full flex justify-center mt-20 px-4 md:px-0">
+            <motion.div variants={fade} className="relative w-full max-w-5xl">
+              <div className="absolute -inset-8 rounded-full opacity-25 blur-3xl pointer-events-none"
+                style={{ background: 'linear-gradient(135deg,rgba(139,92,246,0.5),rgba(56,189,248,0.3))' }} />
+              <div className="relative rounded-3xl overflow-hidden glass-card-static" style={{ border: '1px solid var(--border-default)', boxShadow: 'var(--shadow-lg)' }}>
               
               <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: '1px solid var(--border-subtle)', background: 'rgba(255,255,255,0.01)' }}>
                 <div className="flex items-center gap-2">
@@ -276,7 +277,7 @@ export default function LandingPage() {
                     ))}
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div>
                       <h4 className="text-xs font-bold uppercase tracking-wider mb-4" style={{ color: 'var(--text-muted)' }}>Today's Habit Checklist</h4>
                       <div className="space-y-3">
@@ -341,7 +342,8 @@ export default function LandingPage() {
 
             </div>
           </motion.div>
-        </motion.div>
+        </div>
+      </motion.div>
       </section>
 
       <section className="py-20 px-6">

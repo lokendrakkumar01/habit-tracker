@@ -47,12 +47,18 @@ const MOCK_BADGES = [
 ];
 
 const CATEGORY_COLORS = {
-  Mindfulness:  '#a78bfa',
-  Learning:     '#6366f1',
-  Health:       '#10b981',
-  Fitness:      '#f59e0b',
+  Health: '#10b981',
+  Fitness: '#f59e0b',
+  Study: '#6366f1',
+  Coding: '#a78bfa',
+  Reading: '#38bdf8',
+  Meditation: '#ec4899',
   Productivity: '#38bdf8',
-  Sleep:        '#ec4899',
+  'Personal Development': '#fb923c',
+  Custom: '#818cf8',
+  Mindfulness: '#a78bfa',
+  Learning: '#6366f1',
+  Sleep: '#ec4899',
 };
 
 const BAR_PALETTE = ['#6366f1', '#7c3aed', '#8b5cf6', '#6366f1', '#7c3aed', '#8b5cf6', '#a78bfa'];
@@ -306,7 +312,7 @@ function HabitRow({ habit, onComplete }) {
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         fontSize: 21,
       }}>
-        {habit.emoji || '✨'}
+        {habit.icon || habit.emoji || '✨'}
       </div>
 
       <div style={{ flex: 1, minWidth: 0 }}>
@@ -337,16 +343,15 @@ function HabitRow({ habit, onComplete }) {
       </div>
 
       <motion.button
-        whileHover={done ? {} : { scale: 1.1 }}
-        whileTap={done ? {} : { scale: 0.88 }}
-        onClick={() => !done && onComplete(habit._id)}
-        disabled={done}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.88 }}
+        onClick={() => onComplete(habit._id)}
         style={{
           width: 36, height: 36, borderRadius: '50%', flexShrink: 0,
           border: done ? '2px solid #10b981' : '2px solid rgba(255,255,255,0.14)',
           background: done ? 'rgba(16,185,129,0.22)' : 'transparent',
           color: done ? '#10b981' : '#334155',
-          cursor: done ? 'default' : 'pointer',
+          cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontSize: 17, transition: 'all 0.25s',
         }}
@@ -489,35 +494,51 @@ export default function DashboardPage() {
     if (completing) return;
     setCompleting(habitId);
 
-    setLocalHabits(prev =>
-      prev.map(h => h._id === habitId ? { ...h, completedToday: true } : h)
+    const habit = localHabits.find((h) => h._id === habitId);
+    const willComplete = habit ? !habit.completedToday : true;
+
+    setLocalHabits((prev) =>
+      prev.map((h) => (h._id === habitId ? { ...h, completedToday: willComplete } : h))
     );
 
-    confetti({
-      particleCount: 130,
-      spread: 85,
-      origin: { y: 0.6 },
-      colors: ['#7c3aed', '#6366f1', '#10b981', '#f59e0b', '#ec4899'],
-    });
+    if (willComplete) {
+      confetti({
+        particleCount: 130,
+        spread: 85,
+        origin: { y: 0.6 },
+        colors: ['#7c3aed', '#6366f1', '#10b981', '#f59e0b', '#ec4899'],
+      });
 
-    toast.success('🎉 Habit complete! +50 XP earned', {
-      duration: 3000,
-      style: {
-        background: '#0f172a',
-        color: '#f1f5f9',
-        border: '1px solid rgba(16,185,129,0.4)',
-        borderRadius: 12,
-      },
-      iconTheme: { primary: '#10b981', secondary: '#0f172a' },
-    });
+      toast.success('🎉 Habit complete! +50 XP earned', {
+        duration: 3000,
+        style: {
+          background: '#0f172a',
+          color: '#f1f5f9',
+          border: '1px solid rgba(16,185,129,0.4)',
+          borderRadius: 12,
+        },
+        iconTheme: { primary: '#10b981', secondary: '#0f172a' },
+      });
+    } else {
+      toast.success('Habit marked incomplete', {
+        duration: 2000,
+        style: {
+          background: '#0f172a',
+          color: '#f1f5f9',
+          border: '1px solid rgba(255,255,255,0.1)',
+          borderRadius: 12,
+        },
+      });
+    }
 
     try {
       await dispatch(completeHabit(habitId)).unwrap();
+      dispatch(fetchDashboardStats());
     } catch (_) {
       
     }
     setCompleting(null);
-  }, [completing, dispatch]);
+  }, [completing, dispatch, localHabits]);
 
   const handleStreakFreeze = useCallback(async () => {
     if (streakFreezes <= 0) {

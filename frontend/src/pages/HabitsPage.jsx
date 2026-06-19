@@ -87,12 +87,16 @@ const HabitModal = ({ open, onClose, initialData, onSave }) => {
   useEffect(() => {
     if (open) {
       if (initialData) {
-        
+        const numToDay = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const targetDays = (initialData.targetDays || []).map((d) => {
+          if (typeof d === 'number') return numToDay[d];
+          return d;
+        });
         const mappedData = {
           ...initialData,
-          
           category: initialData.category || 'Health',
           priority: initialData.priority || 'Medium',
+          targetDays,
           startDate: initialData.startDate ? new Date(initialData.startDate).toISOString().slice(0, 10) : EMPTY_FORM.startDate,
           endDate: initialData.endDate ? new Date(initialData.endDate).toISOString().slice(0, 10) : '',
         };
@@ -375,7 +379,7 @@ const HabitCard = ({ habit, tab, onEdit, onDelete, onArchive, onRestore, onCompl
   const [hovering, setHovering] = useState(false);
   const done = habit.completedToday;
   const pm = PRIORITY_META[habit.priority?.toLowerCase()] ?? PRIORITY_META.medium;
-  const catLabel = CATEGORIES.find((c) => c.value === habit.category?.toLowerCase())?.label ?? habit.category;
+  const catLabel = CATEGORIES.find((c) => c.value.toLowerCase() === habit.category?.toLowerCase())?.label ?? habit.category;
 
   return (
     <motion.div
@@ -463,7 +467,7 @@ const HabitCard = ({ habit, tab, onEdit, onDelete, onArchive, onRestore, onCompl
             whileTap={{ scale: 0.9 }}
             onClick={(e) => {
               e.stopPropagation();
-              if (!done) onComplete(habit._id);
+              onComplete(habit._id);
             }}
             className={`flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-bold transition-all ${
               done
