@@ -38,9 +38,7 @@ export const fetchMe = createAsyncThunk('auth/fetchMe', async (_, { rejectWithVa
 export const logoutUser = createAsyncThunk('auth/logout', async () => {
   try {
     await api.post('/auth/logout');
-  } catch (_) {
-    
-  } finally {
+  } catch { /* ignore logout API errors, token cleanup happens in finally */ } finally {
     localStorage.removeItem('token');
   }
 });
@@ -79,7 +77,7 @@ const authSlice = createSlice({
     token: token || null,
     isAuthenticated: !!token,
     loading: false,
-    initializing: !!token, 
+    initializing: !!token,
     error: null,
     successMessage: null,
   },
@@ -94,7 +92,7 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      
+
       .addCase(registerUser.pending, (state) => { state.loading = true; state.error = null; })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
@@ -104,7 +102,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
+
       .addCase(loginUser.pending, (state) => { state.loading = true; state.error = null; })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
@@ -116,7 +114,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
+
       .addCase(fetchMe.pending, (state) => { state.initializing = true; })
       .addCase(fetchMe.fulfilled, (state, action) => {
         state.initializing = false;
@@ -135,7 +133,7 @@ const authSlice = createSlice({
           state.user = null;
         }
       })
-      
+
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
         state.token = null;
@@ -148,7 +146,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.initializing = false;
       })
-      
+
       .addCase(updateProfile.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.successMessage = 'Profile updated successfully';
@@ -156,7 +154,7 @@ const authSlice = createSlice({
       .addCase(updateProfile.rejected, (state, action) => {
         state.error = action.payload;
       })
-      
+
       .addCase(forgotPassword.pending, (state) => { state.loading = true; state.error = null; })
       .addCase(forgotPassword.fulfilled, (state, action) => {
         state.loading = false;
@@ -166,7 +164,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
+
       .addCase(resetPassword.pending, (state) => { state.loading = true; state.error = null; })
       .addCase(resetPassword.fulfilled, (state, action) => {
         state.loading = false;

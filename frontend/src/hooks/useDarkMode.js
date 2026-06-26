@@ -5,7 +5,7 @@ export function useDarkMode() {
     try {
       const saved = localStorage.getItem('habitflow-theme');
       if (saved) return saved === 'dark';
-    } catch {}
+    } catch { /* localStorage may be unavailable in private browsing */ }
     return true;
   });
 
@@ -16,13 +16,13 @@ export function useDarkMode() {
       root.classList.remove('light');
       try {
         localStorage.setItem('habitflow-theme', 'dark');
-      } catch {}
+      } catch { /* localStorage may be unavailable */ }
     } else {
       root.classList.add('light');
       root.classList.remove('dark');
       try {
         localStorage.setItem('habitflow-theme', 'light');
-      } catch {}
+      } catch { /* localStorage may be unavailable */ }
     }
   }, [darkMode]);
 

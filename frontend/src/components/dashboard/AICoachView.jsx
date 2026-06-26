@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, AlertTriangle, ShieldAlert, CheckCircle, Plus, ChevronRight, HelpCircle, Compass, Zap } from 'lucide-react';
+import { Sparkles, AlertTriangle, ShieldAlert, Plus, Compass, Zap } from 'lucide-react';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
 

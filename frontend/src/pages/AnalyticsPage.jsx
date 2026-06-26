@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import {
   AreaChart,
@@ -709,7 +708,6 @@ const YearlyTab = ({ yearlyData }) => (
 
 export default function AnalyticsPage() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState('Overview');
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -742,9 +740,7 @@ export default function AnalyticsPage() {
       toast.success('Analytics refreshed!', {
         style: { background: 'rgba(10,10,20,0.95)', border: '1px solid rgba(255,255,255,0.1)', color: '#f8fafc', borderRadius: 12 },
       });
-    } catch (_) {
-      
-    } finally {
+    } catch { /* toast already shown on success; silently ignore refresh errors */ } finally {
       setIsRefreshing(false);
     }
   };

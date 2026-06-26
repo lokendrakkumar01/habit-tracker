@@ -25,18 +25,18 @@ const notificationRoutes  = require('./routes/notification.routes');
 
 const app = express();
 
-// Trust reverse proxy (Render, Vercel, etc.) to get correct client IP for rate limiting
+
 app.set('trust proxy', 1);
 
-// Connect Database
+
 connectDB();
 
-// Security Middleware
+
 app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' },
 }));
 
-// CORS
+
 const allowedOrigins = [
   process.env.FRONTEND_URL,
   'http://localhost:5173',
@@ -46,15 +46,15 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (mobile apps, curl, Postman, etc.)
+
     if (!origin) return callback(null, true);
-    // Allow any onrender.com subdomain (backend hosting)
+
     if (origin.endsWith('.onrender.com')) return callback(null, true);
-    // Allow Vercel deployments
+
     if (origin.endsWith('.vercel.app')) return callback(null, true);
-    // Allow Netlify deployments
+
     if (origin.endsWith('.netlify.app')) return callback(null, true);
-    // Allow configured origins from .env
+
     if (allowedOrigins.includes(origin)) return callback(null, true);
     callback(new Error(`CORS: origin ${origin} not allowed`));
   },
@@ -63,7 +63,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
 }));
 
-// Rate Limiting
+
 const limiter = rateLimit({
   windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000,
   max: parseInt(process.env.RATE_LIMIT_MAX) || 100,
@@ -73,7 +73,7 @@ const limiter = rateLimit({
 });
 app.use('/api/', limiter);
 
-// Auth rate limiter (stricter)
+
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 10,
@@ -82,26 +82,26 @@ const authLimiter = rateLimit({
 app.use('/api/auth/login', authLimiter);
 app.use('/api/auth/register', authLimiter);
 
-// Body parsing
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 
-// Sanitize against NoSQL injection
+
 app.use(mongoSanitize());
 
-// Compression
+
 app.use(compression());
 
-// Logging
+
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-// Passport
+
 app.use(passport.initialize());
 
-// Health check
+ 
 app.get('/health', (req, res) => {
   const mongoose = require('mongoose');
   const dbStatus = mongoose.connection.readyState;

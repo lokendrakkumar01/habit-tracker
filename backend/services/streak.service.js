@@ -1,15 +1,14 @@
 const HabitLog = require('../models/HabitLog');
 
-/**
- * Update streak for a habit based on completion
- * @param {Object} habit - Habit document
- * @param {Date} completionDate - Date of completion (normalized to midnight)
- */
+
+  @param {Object} habit - Habit document
+  @param {Date} completionDate - Date of completion (normalized to midnight)
+
 exports.updateStreak = async (habit, completionDate) => {
   const yesterday = new Date(completionDate);
   yesterday.setDate(yesterday.getDate() - 1);
 
-  // Check if completed yesterday
+
   const yesterdayStart = new Date(yesterday);
   yesterdayStart.setHours(0, 0, 0, 0);
   const yesterdayEnd = new Date(yesterday);
@@ -25,16 +24,16 @@ exports.updateStreak = async (habit, completionDate) => {
   if (yesterdayLog || habit.currentStreak === 0) {
     newStreak = habit.currentStreak + 1;
   } else {
-    // Check if it's the same day (just a refresh)
+
     const todayStart = new Date(completionDate);
     todayStart.setHours(0, 0, 0, 0);
     if (habit.lastCompletedDate) {
       const lastCompleted = new Date(habit.lastCompletedDate);
       lastCompleted.setHours(0, 0, 0, 0);
       if (lastCompleted.getTime() === todayStart.getTime()) {
-        newStreak = habit.currentStreak; // same day, no change
+        newStreak = habit.currentStreak; //
       } else {
-        newStreak = 1; // streak broken, restart
+        newStreak = 1; /
       }
     } else {
       newStreak = 1;
@@ -45,9 +44,7 @@ exports.updateStreak = async (habit, completionDate) => {
   return { newStreak, longestStreak };
 };
 
-/**
- * Recalculate streak from logs (used when uncompleting a habit)
- */
+ 
 exports.recalculateStreak = async (habit) => {
   const logs = await HabitLog.find({ habit: habit._id, completed: true })
     .sort({ date: -1 })

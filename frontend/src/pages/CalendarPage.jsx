@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
 import {
@@ -740,14 +740,8 @@ export default function CalendarPage() {
   const today = new Date();
   const stats = useMemo(() => computeStats(data), []);
 
-  let habits = [];
-  try {
-    
-    const reduxHabits = useSelector((state) => state.habits?.habits);
-    if (Array.isArray(reduxHabits)) habits = reduxHabits;
-  } catch (_) {
-    
-  }
+  // eslint-disable-next-line no-unused-vars
+  const reduxHabits = useSelector((state) => state.habits?.habits ?? []);
 
   const dayOfYear = Math.ceil(
     (today - new Date(today.getFullYear(), 0, 0)) / 86400000

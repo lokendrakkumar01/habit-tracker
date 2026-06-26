@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import api from '../services/api';
-import { FiUsers, FiShield, FiSearch, FiTrash2, FiEdit2, FiCheck, FiStar, FiTarget, FiBarChart2, FiCalendar, FiClock, FiX } from 'react-icons/fi';
+import { FiUsers, FiShield, FiSearch, FiTrash2, FiEdit2, FiCheck, FiStar, FiTarget, FiBarChart2, FiCalendar, FiX } from 'react-icons/fi';
 import { format } from 'date-fns';
 
 export default function AdminPage() {
@@ -14,14 +14,6 @@ export default function AdminPage() {
   const [total, setTotal] = useState(0);
   const [editUser, setEditUser] = useState(null);
   const [editForm, setEditForm] = useState({ role: 'user', 'subscription.plan': 'free' });
-
-  useEffect(() => {
-    fetchStats();
-  }, []);
-
-  useEffect(() => {
-    fetchUsers();
-  }, [search, page]);
 
   const fetchStats = async () => {
     try {
@@ -44,6 +36,18 @@ export default function AdminPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchStats();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchUsers();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search, page]);
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you absolutely sure you want to delete this user? This will delete all of their habits, stats, and logs permanently.')) return;

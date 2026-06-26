@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -6,16 +6,16 @@ import confetti from 'canvas-confetti';
 import toast from 'react-hot-toast';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, Cell, AreaChart, Area,
+  ResponsiveContainer, Cell,
 } from 'recharts';
 import { fetchDashboardStats, fetchWeeklyData } from '../features/analytics/analyticsSlice';
 import { fetchHabits, completeHabit } from '../features/habits/habitSlice';
 import api from '../services/api';
 import AICoachView from '../components/dashboard/AICoachView';
 import {
-  FiTrendingUp, FiAward, FiZap, FiActivity, FiClock,
-  FiTarget, FiCheckCircle, FiArrowRight, FiPlus, FiBarChart2,
-  FiBook, FiShield, FiArrowUp, FiArrowDown,
+  FiTrendingUp, FiActivity,
+  FiCheckCircle, FiArrowRight, FiPlus, FiBarChart2,
+  FiBook, FiArrowUp, FiArrowDown,
   FiGithub, FiTwitter, FiLinkedin, FiGlobe,
 } from 'react-icons/fi';
 
@@ -471,10 +471,10 @@ export default function DashboardPage() {
     try {
       const saved = localStorage.getItem("habitflow_social_links");
       if (saved) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSocialLinks(JSON.parse(saved));
       }
-    } catch (e) {
-    }
+    } catch { /* ignore */ }
   }, []);
 
   const hasAnyLink = socialLinks.github || socialLinks.twitter || socialLinks.linkedin || socialLinks.website;
@@ -486,6 +486,7 @@ export default function DashboardPage() {
   }, [dispatch]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLocalHabits(habits.length > 0 ? habits : MOCK_HABITS);
   }, [habits]);
 
@@ -554,9 +555,7 @@ export default function DashboardPage() {
     try {
       await dispatch(completeHabit(habitId)).unwrap();
       dispatch(fetchDashboardStats());
-    } catch (_) {
-      
-    }
+    } catch { /* ignore */ }
     setCompleting(null);
   }, [completing, dispatch, localHabits]);
 
@@ -573,7 +572,7 @@ export default function DashboardPage() {
           border: '1px solid rgba(56,189,248,0.4)', borderRadius: 12,
         },
       });
-    } catch (_) {
+    } catch {
       toast.error('Could not activate streak freeze.');
     }
   }, [streakFreezes]);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -152,7 +152,7 @@ const Heatmap = ({ logs = [], color = '#6366f1' }) => {
   );
 };
 
-const LogRow = ({ log, index }) => (
+const LogRow = ({ log, _index }) => (
   <motion.div
     variants={itemVariants}
     className="flex items-start gap-3 rounded-xl border border-white/8 bg-white/3 px-4 py-3"
@@ -194,6 +194,7 @@ const EditModal = ({ open, onClose, initialData, onSave }) => {
 
   useEffect(() => {
     if (open && initialData) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setForm({ ...EMPTY_FORM, ...initialData });
       setErrors({});
     }

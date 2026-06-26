@@ -26,7 +26,7 @@ export function useNotifications() {
       localStorage.setItem('habitflow-reminder-time', time);
       localStorage.setItem('habitflow-reminder-message', message);
       localStorage.setItem('habitflow-reminder-enabled', 'true');
-    } catch {}
+    } catch { /* ignore */ }
     scheduleNext(time, message);
   };
 
@@ -35,7 +35,7 @@ export function useNotifications() {
       localStorage.removeItem('habitflow-reminder-time');
       localStorage.removeItem('habitflow-reminder-message');
       localStorage.setItem('habitflow-reminder-enabled', 'false');
-    } catch {}
+    } catch { /* ignore */ }
     if (activeTimeout) {
       clearTimeout(activeTimeout);
       activeTimeout = null;
@@ -89,7 +89,7 @@ function scheduleNext(time, message) {
     let enabled = false;
     try {
       enabled = localStorage.getItem('habitflow-reminder-enabled') === 'true';
-    } catch {}
+    } catch { /* ignore */ }
 
     if (enabled) {
       if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted') {
@@ -113,4 +113,4 @@ try {
       scheduleNext(time, message);
     }
   }
-} catch {}
+} catch { /* ignore notification errors in environments without notification support */ }

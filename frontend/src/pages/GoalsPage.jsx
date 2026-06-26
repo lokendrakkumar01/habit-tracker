@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { FiTarget, FiPlus, FiEdit2, FiTrash2, FiChevronDown, FiChevronUp, FiCheck, FiFlag, FiX, FiCalendar, FiList } from 'react-icons/fi';
-import { MdTrendingUp, MdOutlineCelebration } from 'react-icons/md';
+import { FiPlus, FiEdit2, FiTrash2, FiChevronDown, FiChevronUp, FiCheck, FiX, FiCalendar, FiList } from 'react-icons/fi';
+
 import api from '../services/api';
 import confetti from 'canvas-confetti';
 
@@ -38,14 +38,17 @@ export default function GoalsPage() {
     try {
       const res = await api.get('/goals');
       setGoals(res.data.goals || []);
-    } catch (err) {
+    } catch {
       toast.error('Failed to load goals');
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => { fetchGoals(); }, []);
+  useEffect(() => { 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchGoals(); 
+  }, []);
 
   const openCreate = () => { setForm(EMPTY_FORM); setEditGoal(null); setModalOpen(true); };
   const openEdit = (g) => { setForm({ ...EMPTY_FORM, ...g }); setEditGoal(g); setModalOpen(true); };

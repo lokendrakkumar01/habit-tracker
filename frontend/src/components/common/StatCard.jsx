@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { motion } from 'framer-motion';
 import { FiTrendingUp, FiTrendingDown, FiMinus } from 'react-icons/fi';
 

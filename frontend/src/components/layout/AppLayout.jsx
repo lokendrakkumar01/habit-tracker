@@ -9,7 +9,7 @@ import {
 import {
   FiActivity, FiBarChart2, FiCalendar, FiFlag, FiBook,
   FiUsers, FiStar, FiUser, FiShield, FiBell, FiSun, FiMoon, FiLogOut, FiDownload,
-  FiCheck, FiCheckCircle, FiInfo, FiAlertCircle, FiX, FiZap,
+  FiCheckCircle, FiInfo, FiAlertCircle, FiZap,
 } from 'react-icons/fi';
 import { toggleSidebarCollapse } from '../../features/ui/uiSlice';
 import { logoutUser } from '../../features/auth/authSlice';
@@ -92,7 +92,7 @@ function NotificationDropdown({ onClose, setUnreadCount }) {
   const markAllRead = async () => {
     try {
       await api.put('/notifications/mark-all-read');
-    } catch {}
+    } catch { /* swallow error, state is updated optimistically */ }
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
     setUnreadCount(0);
     toast.success('All notifications marked as read');
@@ -102,7 +102,7 @@ function NotificationDropdown({ onClose, setUnreadCount }) {
     const wasUnread = notifications.find((n) => n._id === id && !n.read);
     try {
       await api.put(`/notifications/${id}/read`);
-    } catch {}
+    } catch { /* swallow error, state is updated optimistically */ }
     setNotifications((prev) => prev.map((n) => n._id === id ? { ...n, read: true } : n));
     if (wasUnread) {
       setUnreadCount((prev) => Math.max(0, prev - 1));
@@ -271,6 +271,7 @@ export default function AppLayout() {
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setNotifOpen(false);
     setMobileOpen(false);
   }, [location.pathname]);
@@ -291,7 +292,9 @@ export default function AppLayout() {
 
   const toggleNotif = useCallback(() => setNotifOpen((o) => !o), []);
 
-  const SidebarContent = ({ isMobile = false }) => (
+  const sidebarProps = { collapsed, user, handleLogout };
+
+  const renderSidebarContent = (isMobile = false) => (
     <div className="flex h-full flex-col">
       
       <div className={`flex items-center gap-3 px-4 py-5 ${collapsed && !isMobile ? 'justify-center' : ''}`}>
@@ -328,15 +331,15 @@ export default function AppLayout() {
             style={{ background: 'var(--bg-card)', border: '1px solid var(--border-default)' }}>
             <div className="h-9 w-9 rounded-full flex items-center justify-center text-sm font-bold text-white flex-shrink-0 overflow-hidden"
               style={{ background: 'linear-gradient(135deg,#7c3aed,#4f46e5)' }}>
-              {user?.avatar
-                ? <img src={user.avatar} alt={user.name} className="w-full h-full rounded-full object-cover" />
-                : user?.name?.charAt(0)?.toUpperCase() || 'U'}
+              {sidebarProps.user?.avatar
+                ? <img src={sidebarProps.user.avatar} alt={sidebarProps.user.name} className="w-full h-full rounded-full object-cover" />
+                : sidebarProps.user?.name?.charAt(0)?.toUpperCase() || 'U'}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold truncate" style={{ color: 'var(--text-primary)' }}>{user?.name || 'User'}</p>
-              <p className="text-xs truncate" style={{ color: 'var(--text-secondary)', opacity: 0.85 }}>Level {user?.level || 1} · {(user?.xp || 0).toLocaleString()} XP</p>
+              <p className="text-sm font-semibold truncate" style={{ color: 'var(--text-primary)' }}>{sidebarProps.user?.name || 'User'}</p>
+              <p className="text-xs truncate" style={{ color: 'var(--text-secondary)', opacity: 0.85 }}>Level {sidebarProps.user?.level || 1} · {(sidebarProps.user?.xp || 0).toLocaleString()} XP</p>
             </div>
-            <button onClick={handleLogout} title="Logout"
+            <button onClick={sidebarProps.handleLogout} title="Logout"
               className="text-red-400 hover:text-red-300 transition-colors p-1 rounded-lg hover:bg-red-500/10 cursor-pointer">
               <FiLogOut size={15} />
             </button>
@@ -347,9 +350,9 @@ export default function AppLayout() {
         <div className="flex justify-center mb-4">
           <div className="h-9 w-9 rounded-full flex items-center justify-center text-sm font-bold text-white overflow-hidden"
             style={{ background: 'linear-gradient(135deg,#7c3aed,#4f46e5)' }}>
-            {user?.avatar
-              ? <img src={user.avatar} alt={user.name} className="w-full h-full rounded-full object-cover" />
-              : user?.name?.charAt(0)?.toUpperCase() || 'U'}
+            {sidebarProps.user?.avatar
+              ? <img src={sidebarProps.user.avatar} alt={sidebarProps.user.name} className="w-full h-full rounded-full object-cover" />
+              : sidebarProps.user?.name?.charAt(0)?.toUpperCase() || 'U'}
           </div>
         </div>
       )}
@@ -365,7 +368,7 @@ export default function AppLayout() {
         className="hidden lg:flex flex-col relative z-30 overflow-hidden flex-shrink-0"
         style={{ background: 'var(--bg-secondary)', borderRight: '1px solid var(--border-subtle)' }}
       >
-        <SidebarContent />
+        {renderSidebarContent()}
         
         <button onClick={() => dispatch(toggleSidebarCollapse())}
           className="absolute top-5 -right-3 z-40 flex h-6 w-6 items-center justify-center rounded-full text-white/40 shadow-lg hover:text-white transition-all cursor-pointer"
@@ -390,7 +393,7 @@ export default function AppLayout() {
                 className="absolute right-4 top-4 text-white/40 hover:text-white transition-colors cursor-pointer">
                 <MdClose size={22} />
               </button>
-              <SidebarContent isMobile />
+              {renderSidebarContent(true)}
             </motion.aside>
           </>
         )}
