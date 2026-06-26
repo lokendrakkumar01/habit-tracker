@@ -26,6 +26,8 @@ import {
   FiTwitter,
   FiLinkedin,
   FiGlobe,
+  FiInstagram,
+  FiYoutube,
 } from "react-icons/fi";
 
 const MOCK_FEED = [
@@ -1102,6 +1104,8 @@ export default function SocialPage() {
     github: "",
     twitter: "",
     linkedin: "",
+    instagram: "",
+    youtube: "",
     website: "",
   });
 
@@ -1125,7 +1129,7 @@ export default function SocialPage() {
     }
   };
 
-  const hasAnyLink = socialLinks.github || socialLinks.twitter || socialLinks.linkedin || socialLinks.website;
+  const hasAnyLink = socialLinks.github || socialLinks.twitter || socialLinks.linkedin || socialLinks.instagram || socialLinks.youtube || socialLinks.website;
 
   const inputStyle = {
     width: "100%",
@@ -1688,6 +1692,30 @@ export default function SocialPage() {
                         placeholder="e.g. linkedin.com/in/username"
                         value={socialLinks.linkedin}
                         onChange={(e) => setSocialLinks(s => ({ ...s, linkedin: e.target.value }))}
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{ color: "#64748b", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", display: "flex", alignItems: "center", gap: 6, marginBottom: 7 }}>
+                        <FiInstagram size={12} style={{ color: "#ec4899" }} /> Instagram
+                      </label>
+                      <input
+                        style={inputStyle}
+                        placeholder="e.g. instagram.com/username"
+                        value={socialLinks.instagram}
+                        onChange={(e) => setSocialLinks(s => ({ ...s, instagram: e.target.value }))}
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{ color: "#64748b", fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", display: "flex", alignItems: "center", gap: 6, marginBottom: 7 }}>
+                        <FiYoutube size={12} style={{ color: "#ef4444" }} /> YouTube
+                      </label>
+                      <input
+                        style={inputStyle}
+                        placeholder="e.g. youtube.com/@channel"
+                        value={socialLinks.youtube}
+                        onChange={(e) => setSocialLinks(s => ({ ...s, youtube: e.target.value }))}
                       />
                     </div>
 

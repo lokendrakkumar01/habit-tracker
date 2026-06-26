@@ -1,9 +1,9 @@
 const HabitLog = require('../models/HabitLog');
 
-
-  @param {Object} habit - Habit document
-  @param {Date} completionDate - Date of completion (normalized to midnight)
-
+/**
+ * @param {Object} habit - Habit document
+ * @param {Date} completionDate - Date of completion (normalized to midnight)
+ */
 exports.updateStreak = async (habit, completionDate) => {
   const yesterday = new Date(completionDate);
   yesterday.setDate(yesterday.getDate() - 1);
@@ -33,7 +33,7 @@ exports.updateStreak = async (habit, completionDate) => {
       if (lastCompleted.getTime() === todayStart.getTime()) {
         newStreak = habit.currentStreak; //
       } else {
-        newStreak = 1; /
+        newStreak = 1; // reset streak
       }
     } else {
       newStreak = 1;

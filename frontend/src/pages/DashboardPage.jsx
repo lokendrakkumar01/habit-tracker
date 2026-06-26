@@ -16,7 +16,7 @@ import {
   FiTrendingUp, FiActivity,
   FiCheckCircle, FiArrowRight, FiPlus, FiBarChart2,
   FiBook, FiArrowUp, FiArrowDown,
-  FiGithub, FiTwitter, FiLinkedin, FiGlobe,
+  FiGithub, FiTwitter, FiLinkedin, FiGlobe, FiInstagram, FiYoutube,
 } from 'react-icons/fi';
 
 const MOCK_WEEKLY = [
@@ -464,6 +464,8 @@ export default function DashboardPage() {
     github: "",
     twitter: "",
     linkedin: "",
+    instagram: "",
+    youtube: "",
     website: "",
   });
 
@@ -477,7 +479,17 @@ export default function DashboardPage() {
     } catch { /* ignore */ }
   }, []);
 
-  const hasAnyLink = socialLinks.github || socialLinks.twitter || socialLinks.linkedin || socialLinks.website;
+  const hasAnyLink = socialLinks.github || socialLinks.twitter || socialLinks.linkedin || socialLinks.instagram || socialLinks.youtube || socialLinks.website;
+
+  // Social icons config for reuse
+  const SOCIAL_ICONS = [
+    { key: 'github',    Icon: FiGithub,    color: '#a78bfa', label: 'GitHub'    },
+    { key: 'linkedin',  Icon: FiLinkedin,  color: '#0284c7', label: 'LinkedIn'  },
+    { key: 'instagram', Icon: FiInstagram, color: '#ec4899', label: 'Instagram' },
+    { key: 'youtube',   Icon: FiYoutube,   color: '#ef4444', label: 'YouTube'   },
+    { key: 'twitter',   Icon: FiTwitter,   color: '#0ea5e9', label: 'Twitter'   },
+    { key: 'website',   Icon: FiGlobe,     color: '#10b981', label: 'Website'   },
+  ];
 
   useEffect(() => {
     dispatch(fetchHabits());
@@ -644,32 +656,70 @@ export default function DashboardPage() {
               <span style={{ color: 'var(--text-secondary)' }}>{completedToday}/{totalHabits} habits complete</span>
             </p>
             {hasAnyLink && (
-              <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 12 }}>
-                {socialLinks.github && (
-                  <a href={socialLinks.github.startsWith("http") ? socialLinks.github : `https://${socialLinks.github}`} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 30, height: 30, borderRadius: '50%', background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', color: 'var(--text-secondary)', cursor: 'pointer', transition: 'all 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#a78bfa'} onMouseLeave={e => e.currentTarget.style.color = 'var(--text-secondary)'}>
-                    <FiGithub size={13} />
-                  </a>
-                )}
-                {socialLinks.twitter && (
-                  <a href={socialLinks.twitter.startsWith("http") ? socialLinks.twitter : `https://${socialLinks.twitter}`} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 30, height: 30, borderRadius: '50%', background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', color: 'var(--text-secondary)', cursor: 'pointer', transition: 'all 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#0ea5e9'} onMouseLeave={e => e.currentTarget.style.color = 'var(--text-secondary)'}>
-                    <FiTwitter size={13} />
-                  </a>
-                )}
-                {socialLinks.linkedin && (
-                  <a href={socialLinks.linkedin.startsWith("http") ? socialLinks.linkedin : `https://${socialLinks.linkedin}`} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 30, height: 30, borderRadius: '50%', background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', color: 'var(--text-secondary)', cursor: 'pointer', transition: 'all 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#0284c7'} onMouseLeave={e => e.currentTarget.style.color = 'var(--text-secondary)'}>
-                    <FiLinkedin size={13} />
-                  </a>
-                )}
-                {socialLinks.website && (
-                  <a href={socialLinks.website.startsWith("http") ? socialLinks.website : `https://${socialLinks.website}`} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 30, height: 30, borderRadius: '50%', background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', color: 'var(--text-secondary)', cursor: 'pointer', transition: 'all 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#10b981'} onMouseLeave={e => e.currentTarget.style.color = 'var(--text-secondary)'}>
-                    <FiGlobe size={13} />
-                  </a>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 12, flexWrap: 'wrap' }}>
+                {SOCIAL_ICONS.map(({ key, Icon, color, label }) =>
+                  socialLinks[key] ? (
+                    <a
+                      key={key}
+                      href={socialLinks[key].startsWith('http') ? socialLinks[key] : `https://${socialLinks[key]}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={label}
+                      style={{
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        width: 32, height: 32, borderRadius: '50%',
+                        background: 'var(--bg-card)',
+                        border: `1px solid ${color}44`,
+                        color: 'var(--text-secondary)',
+                        cursor: 'pointer', transition: 'all 0.2s',
+                        textDecoration: 'none',
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.color = color; e.currentTarget.style.borderColor = color; e.currentTarget.style.background = `${color}1A`; }}
+                      onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.borderColor = `${color}44`; e.currentTarget.style.background = 'var(--bg-card)'; }}
+                    >
+                      <Icon size={14} />
+                    </a>
+                  ) : null
                 )}
               </div>
             )}
           </motion.div>
           <LevelBadge level={userLevel} xp={xpPoints} />
         </div>
+
+        {/* MOBILE SOCIAL LINKS BAR — always visible on small screens */}
+        {hasAnyLink && (
+          <div className="dashboard-social-mobile" style={{ marginBottom: 18 }}>
+            <GlassCard style={{ padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+              <span style={{ color: 'var(--text-secondary)', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', flexShrink: 0 }}>🔗 My Links</span>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                {SOCIAL_ICONS.map(({ key, Icon, color, label }) =>
+                  socialLinks[key] ? (
+                    <a
+                      key={key}
+                      href={socialLinks[key].startsWith('http') ? socialLinks[key] : `https://${socialLinks[key]}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={label}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 5,
+                        padding: '5px 12px', borderRadius: 99,
+                        background: `${color}14`,
+                        border: `1px solid ${color}44`,
+                        color, fontSize: 12, fontWeight: 700,
+                        textDecoration: 'none', transition: 'all 0.2s',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      <Icon size={13} />
+                      {label}
+                    </a>
+                  ) : null
+                )}
+              </div>
+            </GlassCard>
+          </div>
+        )}
 
         <div style={{
           display: 'grid',
@@ -1025,6 +1075,18 @@ export default function DashboardPage() {
         @media (max-width: 540px) {
           .dashboard-main-grid {
             grid-template-columns: 1fr !important;
+          }
+        }
+        /* On desktop, hide the mobile social bar since the header already shows links */
+        @media (min-width: 769px) {
+          .dashboard-social-mobile {
+            display: none !important;
+          }
+        }
+        /* On mobile, hide the inline social links in the greeting (they're in the bar below) */
+        @media (max-width: 768px) {
+          .dashboard-greeting-social {
+            display: none !important;
           }
         }
       `}</style>
